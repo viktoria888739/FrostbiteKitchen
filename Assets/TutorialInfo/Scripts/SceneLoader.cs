@@ -3,18 +3,47 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
+    [Header("UI Panels (Only for Main Menu)")]
     [SerializeField] private GameObject settingsPanel;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    private void Start()
     {
-        settingsPanel.SetActive(false);
+        if (settingsPanel != null)
+        {
+            settingsPanel.SetActive(false);
+        }
     }
 
-    // Update is called once per frame
     public void OpenScene(int sceneIndex)
     {
+        Debug.Log($"[SceneLoader] Загрузка сцены с индексом: {sceneIndex}");
         SceneManager.LoadScene(sceneIndex);
+        
+        if (GameStateMachine.Instance != null)
+        {
+            if (sceneIndex == 0)
+            {
+                GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.MainMenu);
+            }
+            else
+            {
+                GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Gameplay);
+            }
+        }
     }
+
+    public void RestartCurrentScene()
+    {
+        Debug.Log("[SceneLoader] Перезапуск текущего уровня...");
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex);
+        
+        if (GameStateMachine.Instance != null)
+        {
+            GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Gameplay);
+        }
+    }
+
     public void OpenSettings()
     {
         if (settingsPanel != null)
@@ -22,6 +51,7 @@ public class SceneLoader : MonoBehaviour
             settingsPanel.SetActive(true);
         }
     }
+
     public void CloseSetting()
     {
         if (settingsPanel != null)

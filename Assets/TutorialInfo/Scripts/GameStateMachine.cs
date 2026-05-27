@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System; // Нужно для работы с Action
+using System;
 
 public class GameStateMachine : MonoBehaviour
 {

@@ -1,20 +1,23 @@
 using UnityEngine;
 using System.Collections.Generic;
+using FrostbiteKitchen.Data;
 
 public class OrderManager : MonoBehaviour
 {
     public static OrderManager Instance { get; private set; }
 
     [Header("Settings")]
-    [SerializeField] private List<RecipeData> allRecipes; // Список всех рецептов из папки Assets
-    [SerializeField] private float timeBetweenOrders = 5f; // Пауза перед новым заказом
+    [Tooltip("РЎСЃС‹Р»РєР° РЅР° РѕР±С‰СѓСЋ Р±Р°Р·Сѓ РґР°РЅРЅС‹С… СЂРµС†РµРїС‚РѕРІ (RecipeCatalog)")]
+    [SerializeField] private RecipeCatalog recipeCatalog;
+    
+    [SerializeField] private List<RecipeData> allRecipes;
+    [SerializeField] private float timeBetweenOrders = 5f;
 
     [Header("Current Order Info")]
     [SerializeField] private RecipeData activeRecipe;
     private float currentOrderTimer;
     private bool isOrderActive = false;
 
-    // События для Василисы (UI) и Анастасии (Звуки/Эффекты)
     public static System.Action<RecipeData> OnNewOrderStarted;
     public static System.Action OnOrderExpired;
 
@@ -25,8 +28,7 @@ public class OrderManager : MonoBehaviour
 
     private void Update()
     {
-        // Заказы работают только когда состояние игры "Gameplay"
-        if (GameStateMachine.Instance.CurrentState != GameStateMachine.GameState.Gameplay) return;
+        if (GameStateMachine.Instance == null || GameStateMachine.Instance.CurrentState != GameStateMachine.GameState.Gameplay) return;
 
         if (isOrderActive)
         {
@@ -34,25 +36,31 @@ public class OrderManager : MonoBehaviour
         }
         else
         {
-            // Если заказа нет, можно реализовать логику ожидания следующего
-            // Для прототипа пока просто запускаем первый заказ
-            if (activeRecipe == null) StartNewRandomOrder();
+            if (activeRecipe == null && !IsInvoking(nameof(StartNewRandomOrder)))
+            {
+                StartNewRandomOrder();
+            }
         }
     }
-
+    public RecipeData GetActiveRecipe()
+    {
+        return activeRecipe;
+    }   
     public void StartNewRandomOrder()
     {
-        if (allRecipes.Count == 0) return;
+        if (recipeCatalog == null || recipeCatalog.AllRecipes == null || recipeCatalog.AllRecipes.Count == 0) 
+        {
+            Debug.LogWarning("[OrderManager] RecipeCatalog РЅРµ РЅР°Р·РЅР°С‡РµРЅ РІ РёРЅСЃРїРµРєС‚РѕСЂРµ РёР»Рё РїСѓСЃС‚!");
+            return;
+        }
 
-        // Выбираем случайный рецепт из списка
-        activeRecipe = allRecipes[Random.Range(0, allRecipes.Count)];
+        List<RecipeData> availableRecipes = recipeCatalog.AllRecipes;
+
+        activeRecipe = availableRecipes[Random.Range(0, availableRecipes.Count)];
         currentOrderTimer = activeRecipe.timeLimit;
         isOrderActive = true;
-
-        // Оповещаем всех (UI обновит текст и картинку блюда)
         OnNewOrderStarted?.Invoke(activeRecipe);
-
-        Debug.Log($"[OrderManager] Новый заказ: {activeRecipe.displayName}");
+        Debug.Log($"[OrderManager] РќРѕРІС‹Р№ Р·Р°РєР°Р· Р·Р°РїСѓС‰РµРЅ РёР· РєР°С‚Р°Р»РѕРіР°: {activeRecipe.recipeName}");
     }
 
     private void UpdateOrderTimer()
@@ -70,9 +78,17 @@ public class OrderManager : MonoBehaviour
         activeRecipe = null;
         OnOrderExpired?.Invoke();
 
-        Debug.Log("[OrderManager] Время вышло! Заказ провален.");
+        Debug.Log("[OrderManager] Р’СЂРµРјСЏ РІС‹С€Р»Рѕ! Р—Р°РєР°Р· РїСЂРѕРІР°Р»РµРЅ.");
 
-        // Через небольшую паузу запускаем новый заказ
+        Invoke(nameof(StartNewRandomOrder), timeBetweenOrders);
+    }
+
+    public void CompleteActiveOrder()
+    {
+        if (!isOrderActive) return;
+        Debug.Log($"[OrderManager] Р—Р°РєР°Р· {activeRecipe.recipeName} СѓСЃРїРµС€РЅРѕ РІС‹РїРѕР»РЅРµРЅ!");
+        isOrderActive = false;
+        activeRecipe = null;
         Invoke(nameof(StartNewRandomOrder), timeBetweenOrders);
     }
 }
