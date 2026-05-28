@@ -772,6 +772,7 @@ GameObject:
   - component: {fileID: 293504124}
   - component: {fileID: 293504126}
   - component: {fileID: 293504125}
+  - component: {fileID: 293504127}
   m_Layer: 5
   m_Name: Env_Blinds
   m_TagString: Untagged
@@ -795,9 +796,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.9432, y: 194.29172}
+  m_AnchoredPosition: {x: 429.51178, y: 211.91003}
   m_SizeDelta: {x: 862.91, y: 35.2366}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 1}
 --- !u!114 &293504125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -836,6 +837,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 293504123}
   m_CullTransparentMesh: 1
+--- !u!114 &293504127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293504123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb49820d6ec8f8c4c8a13f32e02f9a26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBlindsToggle
+  openHeight: 35
+  closedHeight: 424
 --- !u!1 &349413311
 GameObject:
   m_ObjectHideFlags: 0
@@ -1677,7 +1692,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 11.3401, y: -20.8589}
+  m_AnchoredPosition: {x: 11.3401, y: -40.8589}
   m_SizeDelta: {x: 222.6802, y: 51.7179}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &966216225
@@ -2288,9 +2303,9 @@ RectTransform:
   - {fileID: 966216224}
   - {fileID: 584276060}
   - {fileID: 1332359143}
-  - {fileID: 293504124}
   - {fileID: 349413312}
   - {fileID: 756000003}
+  - {fileID: 293504124}
   m_Father: {fileID: 730087695}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
