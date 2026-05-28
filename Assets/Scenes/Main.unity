@@ -984,10 +984,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 279467165}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 513e3418f46e41d418cffecbe77595d7, type: 3}
+  m_Script: {fileID: 11500000, guid: 29645b6cb9f709047baff9055d6edf10, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestCookingStation
-  logMessage: "\u041F\u043B\u0438\u0442\u04302"
+  m_EditorClassIdentifier: Assembly-CSharp::TestStove
 --- !u!1 &293504123
 GameObject:
   m_ObjectHideFlags: 0
@@ -1624,10 +1623,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 508835433}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 513e3418f46e41d418cffecbe77595d7, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e2b51d18c5d5aa4592897e496d750b4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestCookingStation
-  logMessage: "\u041E\u0433\u043D\u0435\u0442\u0443\u0448\u0438\u0442\u0435\u043B\u044C"
+  m_EditorClassIdentifier: Assembly-CSharp::TestFireExtinguisher
 --- !u!1 &552464497 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
@@ -2433,10 +2431,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 795922335}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 513e3418f46e41d418cffecbe77595d7, type: 3}
+  m_Script: {fileID: 11500000, guid: 29645b6cb9f709047baff9055d6edf10, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestCookingStation
-  logMessage: "\u041F\u043B\u0438\u0442\u04301"
+  m_EditorClassIdentifier: Assembly-CSharp::TestStove
 --- !u!1 &845354149
 GameObject:
   m_ObjectHideFlags: 0
@@ -2682,10 +2679,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 936061972}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 513e3418f46e41d418cffecbe77595d7, type: 3}
+  m_Script: {fileID: 11500000, guid: e518dbfdd03bbc243b31016df354935e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestCookingStation
-  logMessage: "\u0420\u0430\u0431\u043E\u0447\u0430\u044F \u0437\u043E\u043D\u0430"
+  m_EditorClassIdentifier: Assembly-CSharp::TestAssemblyTable
 --- !u!1 &966216223
 GameObject:
   m_ObjectHideFlags: 0
@@ -3639,10 +3635,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1325556343}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 513e3418f46e41d418cffecbe77595d7, type: 3}
+  m_Script: {fileID: 11500000, guid: 97544a7c10f10ec48b849e147d19a522, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestCookingStation
-  logMessage: "\u0417\u0430\u043A\u0430\u0437 \u0441\u043E\u0431\u0440\u0430\u043D"
+  m_EditorClassIdentifier: Assembly-CSharp::TestOrderCompleteBtn
 --- !u!1 &1332359142
 GameObject:
   m_ObjectHideFlags: 0
