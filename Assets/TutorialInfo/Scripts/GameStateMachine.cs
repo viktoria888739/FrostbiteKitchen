@@ -68,7 +68,6 @@ public class GameStateMachine : MonoBehaviour
 
     public void TogglePause()
     {
-        Debug.Log($"[TogglePause] Текущее состояние: {currentState}");
         if (currentState == GameState.Gameplay)
         {
             Debug.Log("[TogglePause] Переключаю в Pause");
@@ -88,7 +87,6 @@ public class GameStateMachine : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("Escape нажата! Текущее состояние: " + currentState);
             if (currentState == GameState.Gameplay || currentState == GameState.Pause)
             {
                 Debug.Log("Вызываю TogglePause()");

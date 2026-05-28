@@ -6,27 +6,42 @@ public class OrderManager : MonoBehaviour
     public static OrderManager Instance { get; private set; }
 
     [Header("Settings")]
-    [SerializeField] private List<RecipeData> allRecipes; // Список всех рецептов из папки Assets
-    [SerializeField] private float timeBetweenOrders = 5f; // Пауза перед новым заказом
+    [SerializeField] private List<RecipeData> allRecipes;
+    [SerializeField] private float timeBetweenOrders = 5f;
 
     [Header("Current Order Info")]
     [SerializeField] private RecipeData activeRecipe;
     private float currentOrderTimer;
     private bool isOrderActive = false;
 
-    // События для Василисы (UI) и Анастасии (Звуки/Эффекты)
     public static System.Action<RecipeData> OnNewOrderStarted;
     public static System.Action OnOrderExpired;
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance != null && Instance != this)
+            Destroy(gameObject);
+        else
+            Instance = this;
+        Debug.Log("[OrderManager] Awake, Instance СѓСЃС‚Р°РЅРѕРІР»РµРЅ");
+    }
+
+    private void Start()
+    {
+        Debug.Log($"[OrderManager] Start, РєРѕР»РёС‡РµСЃС‚РІРѕ СЂРµС†РµРїС‚РѕРІ: {allRecipes?.Count ?? 0}");
+        if (allRecipes == null || allRecipes.Count == 0)
+            Debug.LogError("[OrderManager] РЎРїРёСЃРѕРє allRecipes РїСѓСЃС‚! Р”РѕР±Р°РІСЊС‚Рµ СЂРµС†РµРїС‚С‹ РІ РёРЅСЃРїРµРєС‚РѕСЂРµ.");
     }
 
     private void Update()
     {
-        // Заказы работают только когда состояние игры "Gameplay"
-        if (GameStateMachine.Instance.CurrentState != GameStateMachine.GameState.Gameplay) return;
+
+        // Р’СЂРµРјРµРЅРЅРѕ РґР»СЏ С‚РµСЃС‚Р° РјРѕР¶РЅРѕ Р·Р°РєРѕРјРјРµРЅС‚РёСЂРѕРІР°С‚СЊ РїСЂРѕРІРµСЂРєСѓ СЃРѕСЃС‚РѕСЏРЅРёСЏ
+        if (GameStateMachine.Instance != null && GameStateMachine.Instance.CurrentState != GameStateMachine.GameState.Gameplay)
+        {
+            Debug.Log("[OrderManager] РЎРѕСЃС‚РѕСЏРЅРёРµ РЅРµ Gameplay, Р·Р°РєР°Р·С‹ РЅРµ СЃРѕР·РґР°СЋС‚СЃСЏ");
+            return;
+        }
 
         if (isOrderActive)
         {
@@ -34,31 +49,34 @@ public class OrderManager : MonoBehaviour
         }
         else
         {
-            // Если заказа нет, можно реализовать логику ожидания следующего
-            // Для прототипа пока просто запускаем первый заказ
-            if (activeRecipe == null) StartNewRandomOrder();
+            if (activeRecipe == null)
+            {
+                Debug.Log("[OrderManager] РђРєС‚РёРІРЅРѕРіРѕ Р·Р°РєР°Р·Р° РЅРµС‚, Р·Р°РїСѓСЃРєР°СЋ РЅРѕРІС‹Р№ СЃР»СѓС‡Р°Р№РЅС‹Р№ Р·Р°РєР°Р·");
+                StartNewRandomOrder();
+            }
         }
     }
 
     public void StartNewRandomOrder()
     {
-        if (allRecipes.Count == 0) return;
+        if (allRecipes == null || allRecipes.Count == 0)
+        {
+            Debug.LogError("[OrderManager] РќРµРІРѕР·РјРѕР¶РЅРѕ СЃРѕР·РґР°С‚СЊ Р·Р°РєР°Р·: СЃРїРёСЃРѕРє СЂРµС†РµРїС‚РѕРІ РїСѓСЃС‚!");
+            return;
+        }
 
-        // Выбираем случайный рецепт из списка
         activeRecipe = allRecipes[Random.Range(0, allRecipes.Count)];
         currentOrderTimer = activeRecipe.timeLimit;
         isOrderActive = true;
 
-        // Оповещаем всех (UI обновит текст и картинку блюда)
         OnNewOrderStarted?.Invoke(activeRecipe);
-
-        Debug.Log($"[OrderManager] Новый заказ: {activeRecipe.displayName}");
+        Debug.Log($"[OrderManager] РќРѕРІС‹Р№ Р·Р°РєР°Р·: {activeRecipe.displayName}, Р»РёРјРёС‚ РІСЂРµРјРµРЅРё: {activeRecipe.timeLimit} СЃРµРє.");
     }
 
     private void UpdateOrderTimer()
     {
         currentOrderTimer -= Time.deltaTime;
-        if (currentOrderTimer <= 0)
+        if (currentOrderTimer <= 0f)
         {
             OrderFailed();
         }
@@ -70,9 +88,10 @@ public class OrderManager : MonoBehaviour
         activeRecipe = null;
         OnOrderExpired?.Invoke();
 
-        Debug.Log("[OrderManager] Время вышло! Заказ провален.");
-
-        // Через небольшую паузу запускаем новый заказ
+        Debug.Log("[OrderManager] Р—Р°РєР°Р· РїСЂРѕСЃСЂРѕС‡РµРЅ! Р–РґСѓ РїР°СѓР·Сѓ РїРµСЂРµРґ СЃР»РµРґСѓСЋС‰РёРј.");
         Invoke(nameof(StartNewRandomOrder), timeBetweenOrders);
     }
+
+    public bool IsOrderActive => isOrderActive;
+    public float GetCurrentOrderRemainingTime() => isOrderActive ? currentOrderTimer : 0f;
 }
