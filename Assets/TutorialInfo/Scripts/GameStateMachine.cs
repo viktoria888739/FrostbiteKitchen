@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System; // ����� ��� ������ � Action
+using System; // ����� ��� ������ � Action
 
 public class GameStateMachine : MonoBehaviour
 {
@@ -34,7 +34,12 @@ public class GameStateMachine : MonoBehaviour
 
     public void ChangeState(GameState newState)
     {
-        if (currentState == newState) return;
+        Debug.Log($"[ChangeState] Попытка сменить состояние с {currentState} на {newState}");
+        if (currentState == newState)
+        {
+            Debug.Log("[ChangeState] Состояние не изменилось, так как оно уже такое же");
+            return;
+        }
 
         ExitState(currentState);
         currentState = newState;
@@ -45,6 +50,7 @@ public class GameStateMachine : MonoBehaviour
 
     private void EnterState(GameState state)
     {
+        Debug.Log($"[EnterState] Вход в состояние {state}");
         switch (state)
         {
             case GameState.Pause:
@@ -62,7 +68,32 @@ public class GameStateMachine : MonoBehaviour
 
     public void TogglePause()
     {
-        if (currentState == GameState.Gameplay) ChangeState(GameState.Pause);
-        else if (currentState == GameState.Pause) ChangeState(GameState.Gameplay);
+        Debug.Log($"[TogglePause] Текущее состояние: {currentState}");
+        if (currentState == GameState.Gameplay)
+        {
+            Debug.Log("[TogglePause] Переключаю в Pause");
+            ChangeState(GameState.Pause);
+        }
+        else if (currentState == GameState.Pause)
+        {
+            Debug.Log("[TogglePause] Переключаю в Gameplay");
+            ChangeState(GameState.Gameplay);
+        }
+        else
+        {
+            Debug.LogWarning($"[TogglePause] Нельзя переключить паузу из состояния {currentState}");
+        }
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("Escape нажата! Текущее состояние: " + currentState);
+            if (currentState == GameState.Gameplay || currentState == GameState.Pause)
+            {
+                Debug.Log("Вызываю TogglePause()");
+                TogglePause();
+            }
+        }
     }
 }
