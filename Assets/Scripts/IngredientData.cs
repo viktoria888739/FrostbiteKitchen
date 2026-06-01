@@ -1,6 +1,5 @@
 using UnityEngine;
 
-<<<<<<< HEAD:Assets/Scripts/IngredientData.cs
 namespace FrostbiteKitchen.Data
 {
     [CreateAssetMenu(fileName = "NewIngredient", menuName = "Frostbite Kitchen/Data/Ingredient")]
@@ -21,13 +20,3 @@ namespace FrostbiteKitchen.Data
         public Color debugColor = Color.white; 
     }
 }
-=======
-[CreateAssetMenu(fileName = "New Ingredient", menuName = "Frostbite/Ingredient")]
-public class IngredientData : ScriptableObject
-{
-    public string ingredientName; // �������� ��� ����
-    public string displayName;    // �������� ��� ������ (�� �������)
-    public Sprite icon;           // ��������, ������� �������� ������
-    public Color debugColor = Color.white; // ����, ���� �������� ��� ���
-}
->>>>>>> origin/ui:Assets/TutorialInfo/Scripts/IngredientData.cs
