@@ -11,14 +11,24 @@ public class ThreatSpawner : MonoBehaviour
     [Tooltip("Максимальное время ожидания перед появлением монстра (в секундах)")]
     [SerializeField] private float maxSpawnDelay = 15f;
 
+    [Header("Ссылки на внешние системы")]
+    [Tooltip("Менеджер визуальных предупреждений (мигание UI)")]
+    [SerializeField] private VisualWarningManager warningManager;
+
     // Список (хэш-таблица) для хранения сторон, где сейчас уже ЕСТЬ угроза
     private HashSet<KitchenSide> activeThreatSides = new HashSet<KitchenSide>();
 
-    // Флаг, управляющий работой спавнера (можно отключить, если игрок проиграл или игра на паузе)
+    // Флаг, управляющий работой спавнера (можно отключить при паузе или проигрыше)
     private bool isSpawningActive = true;
 
     private void Start()
     {
+        // Автоматически находим компонент на этом же объекте, если забыли привязать в Инспекторе
+        if (warningManager == null)
+        {
+            warningManager = GetComponent<VisualWarningManager>();
+        }
+
         // Как только игра запускается, мы включаем бесконечный таймер спавна
         StartCoroutine(SpawnTimerRoutine());
     }
@@ -44,9 +54,9 @@ public class ThreatSpawner : MonoBehaviour
     /// <summary>
     /// Метод выбирает случайную сторону кухни
     /// </summary>
-    private void SpawnRandomThreat()
+    public void SpawnRandomThreat()
     {
-        // Получаем массив всех доступных сторон из нашего Enum (Front, Right, Left, Back)
+        // Получаем массив всех доступных сторон из нашего Enum (исправлено на System.Enum)
         System.Array sides = System.Enum.GetValues(typeof(KitchenSide));
 
         // Выбираем случайный индекс из этого массива
@@ -60,8 +70,7 @@ public class ThreatSpawner : MonoBehaviour
         }
         else
         {
-            // Если на этой стороне монстр уже есть, лог не сработает, 
-            // таймер просто уйдет на следующий круг ожидания.
+            // Если на этой стороне монстр уже есть, таймер просто уйдет на следующий круг
             Debug.Log($"Спавнер выбрал сторону {randomSide}, но там уже есть угроза.");
         }
     }
@@ -79,10 +88,16 @@ public class ThreatSpawner : MonoBehaviour
 
         // Выводим требуемый текст в консоль Unity
         Debug.Log($"Monster spawned on {sideNameUpper} side");
+
+        // Передаем конкретную сторону в менеджер предупреждений
+        if (warningManager != null)
+        {
+            warningManager.ShowWarning(side);
+        }
     }
 
     /// <summary>
-    /// Публичный метод, который пригодится на следующих этапах, чтобы убирать угрозу
+    /// Публичный метод для очистки угрозы, когда игрок её ликвидировал
     /// </summary>
     public void ClearThreat(KitchenSide side)
     {
@@ -90,6 +105,12 @@ public class ThreatSpawner : MonoBehaviour
         {
             activeThreatSides.Remove(side);
             Debug.Log($"Threat cleared on {side.ToString().ToUpper()} side");
+
+            // Если активных угроз больше не осталось, выключаем мигание предупреждения
+            if (activeThreatSides.Count == 0 && warningManager != null)
+            {
+                warningManager.HideWarning();
+            }
         }
     }
 }
