@@ -9,7 +9,7 @@ public class OrderManager : MonoBehaviour
     [Header("Settings")]
     [Tooltip("Ссылка на общую базу данных рецептов (RecipeCatalog)")]
     [SerializeField] private RecipeCatalog recipeCatalog;
-    
+
     [SerializeField] private List<RecipeData> allRecipes;
     [SerializeField] private float timeBetweenOrders = 5f;
 
@@ -45,10 +45,10 @@ public class OrderManager : MonoBehaviour
     public RecipeData GetActiveRecipe()
     {
         return activeRecipe;
-    }   
+    }
     public void StartNewRandomOrder()
     {
-        if (recipeCatalog == null || recipeCatalog.AllRecipes == null || recipeCatalog.AllRecipes.Count == 0) 
+        if (recipeCatalog == null || recipeCatalog.AllRecipes == null || recipeCatalog.AllRecipes.Count == 0)
         {
             Debug.LogWarning("[OrderManager] RecipeCatalog не назначен в инспекторе или пуст!");
             return;

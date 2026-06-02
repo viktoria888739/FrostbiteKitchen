@@ -18,7 +18,7 @@ public class SceneLoader : MonoBehaviour
     {
         Debug.Log($"[SceneLoader] Загрузка сцены с индексом: {sceneIndex}");
         SceneManager.LoadScene(sceneIndex);
-        
+
         if (GameStateMachine.Instance != null)
         {
             if (sceneIndex == 0)
@@ -37,7 +37,7 @@ public class SceneLoader : MonoBehaviour
         Debug.Log("[SceneLoader] Перезапуск текущего уровня...");
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
-        
+
         if (GameStateMachine.Instance != null)
         {
             GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Gameplay);
