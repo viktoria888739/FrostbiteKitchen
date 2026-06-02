@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: MainRecipeCatalog
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.RecipeCatalog
   allRecipes:
-  - {fileID: 11400000, guid: 90afba360e115cc428ee4479fbdf0778, type: 2}
+  - {fileID: 11400000, guid: 3eda133383f52c54b8d705275084513e, type: 2}
+  - {fileID: 11400000, guid: 529629fe97a445449a7b26dd2041299e, type: 2}
+  - {fileID: 11400000, guid: d1414a90dcdb96d4ab2023cf9e7239f7, type: 2}
+  - {fileID: 11400000, guid: 962ac2efe0fa78e4694730276e44060b, type: 2}
+  - {fileID: 11400000, guid: 4b129635496b5cb44989ae250d6fc63b, type: 2}
