@@ -8,6 +8,17 @@ public class DishAssembler : MonoBehaviour
 
     public static System.Action<List<IngredientData>> OnPlateUpdated;
     public static System.Action OnPlateCleared;
+    public static DishAssembler Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
     public void AddIngredient(IngredientData newIngredient)
     {
         if (newIngredient == null) return;
@@ -19,15 +30,15 @@ public class DishAssembler : MonoBehaviour
     {
         ingredientsOnPlate.Clear();
         Debug.Log("[DishAssembler] Тарелка полностью очищена.");
-        
+
         OnPlateCleared?.Invoke();
     }
     public void TrySubmitOrder()
     {
         if (OrderManager.Instance == null) return;
-        
+
         RecipeData activeRecipe = OrderManager.Instance.GetActiveRecipe();
-        
+
         if (activeRecipe == null)
         {
             Debug.LogWarning("[DishAssembler] Нет активного заказа для сдачи!");
@@ -37,9 +48,9 @@ public class DishAssembler : MonoBehaviour
         if (ValidateRecipe(activeRecipe))
         {
             Debug.Log($"[DishAssembler] Успех! Блюдо {activeRecipe.recipeName} собрано правильно.");
-            
+
             OrderManager.Instance.CompleteActiveOrder();
-            
+
             ClearPlate();
         }
         else
