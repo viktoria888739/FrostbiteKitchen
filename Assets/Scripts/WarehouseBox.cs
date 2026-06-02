@@ -3,30 +3,28 @@ using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
 using FrostbiteKitchen.Data;
 
-namespace FrostbiteKitchen.Warehouse
+public class WarehouseBox : MonoBehaviour, IInteractable
 {
-    public class WarehouseBox : MonoBehaviour, IPointerClickHandler, IInteractable
+    [Header("Настройки склада")]
+    [SerializeField] private IngredientData ingredientData;
+    [SerializeField] private int amountToGive = 5;
+    [SerializeField] private bool isEmpty = false;
+
+    public void Interact()
     {
-        [Header("Настройки коробки")]
-        [SerializeField] private bool isEmpty = false;
-        
-        [SerializeField] private IngredientData ingredientData; 
-
-        public void OnPointerClick(PointerEventData eventData)
+        if (isEmpty || ingredientData == null)
         {
-            Interact();
+            Debug.Log($"[СКЛАД] Коробка {gameObject.name} пуста или не настроена.");
+            return;
         }
 
-        public void Interact()
+        if (PlayerInventory.Instance.CurrentHeldItem != null)
         {
-            if (isEmpty || ingredientData == null)
-            {
-                Debug.Log("<color=gray>[СКЛАД]</color> Коробка пустая.");
-            }
-            else
-            {
-                Debug.Log($"<color=orange>[СКЛАД]</color> Взят ингредиент: <b>{ingredientData.displayName}</b> (ID: {ingredientData.ingredientId})");
-            }
+            Debug.Log("<color=yellow>[СКЛАД]</color> Руки заняты! Сначала отнеси предмет на рабочий стол.");
+            return;
         }
+
+        PlayerInventory.Instance.SetHeldItem(ingredientData, amountToGive);
+        Debug.Log($"<color=orange>[СКЛАД]</color> Взято со склада: {ingredientData.displayName} x{amountToGive}");
     }
 }
