@@ -1,24 +1,59 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
+using FrostbiteKitchen.Data;
 
 namespace FrostbiteKitchen.UI
 {
-    public class OrderCompleteBtn : MonoBehaviour, IPointerClickHandler, IInteractable
+    public class OrderCompleteBtn : MonoBehaviour, IInteractable
     {
-        public void OnPointerClick(PointerEventData eventData)
+        [Header("Зона выдачи")]
+        [Tooltip("Ссылка на сборщик (если не найдёт автоматически)")]
+        [SerializeField] private DishAssembler dishAssembler;
+
+        private void Awake()
+        {
+            if (dishAssembler == null)
+            {
+                dishAssembler = DishAssembler.Instance;
+            }
+        }
+
+        public void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData)
         {
             Interact();
         }
 
         public void Interact()
         {
-            if (!gameObject.activeInHierarchy) return;
-
-            Debug.Log("<color=#33FFF3>[КНОПКА]</color> Запрос на завершение и отдачу текущего заказа.");
-            if (OrderManager.Instance != null)
+            if (dishAssembler == null)
             {
+                Debug.LogError("[ЗОНА ВЫДАЧИ] DishAssembler не найден!");
+                return;
+            }
+
+            if (OrderManager.Instance == null)
+            {
+                Debug.LogError("[ЗОНА ВЫДАЧИ] OrderManager не найден!");
+                return;
+            }
+
+            RecipeData activeRecipe = OrderManager.Instance.GetActiveRecipe();
+            if (activeRecipe == null)
+            {
+                Debug.LogWarning("<color=yellow>[ЗОНА ВЫДАЧИ]</color> Нет активного заказа.");
+                return;
+            }
+
+            if (dishAssembler.ValidateRecipe(activeRecipe))
+            {
+                Debug.Log($"<color=green>[ЗОНА ВЫДАЧИ]</color> Заказ '{activeRecipe.recipeName}' успешно сдан!");
+
                 OrderManager.Instance.CompleteActiveOrder();
+                dishAssembler.ClearPlate();
+            }
+            else
+            {
+                Debug.Log("<color=red>[ЗОНА ВЫДАЧИ]</color> Блюдо не соответствует заказу! Проверьте ингредиенты.");
             }
         }
     }

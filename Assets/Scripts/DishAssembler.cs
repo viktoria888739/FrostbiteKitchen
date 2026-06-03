@@ -1,13 +1,19 @@
 using UnityEngine;
 using System.Collections.Generic;
 using FrostbiteKitchen.Data;
+
 public class DishAssembler : MonoBehaviour
 {
     [Header("Current Plate Status")]
     [SerializeField] private List<IngredientData> ingredientsOnPlate = new();
+    
+    // Новое: текущее собранное блюдо
+    public DishData CurrentDish { get; private set; }
 
     public static System.Action<List<IngredientData>> OnPlateUpdated;
+    public static System.Action<DishData> OnDishUpdated;     // Новое событие
     public static System.Action OnPlateCleared;
+
     public static DishAssembler Instance { get; private set; }
 
     private void Awake()
@@ -19,81 +25,85 @@ public class DishAssembler : MonoBehaviour
         }
         Instance = this;
     }
+
+    public int GetCurrentIngredientCount() => ingredientsOnPlate.Count;
+
     public void AddIngredient(IngredientData newIngredient)
     {
         if (newIngredient == null) return;
-        ingredientsOnPlate.Add(newIngredient);
-        Debug.Log($"[DishAssembler] Добавлен ингредиент: {newIngredient.displayName}. Всего на тарелке: {ingredientsOnPlate.Count}");
-        OnPlateUpdated?.Invoke(ingredientsOnPlate);
-    }
-    public void ClearPlate()
-    {
-        ingredientsOnPlate.Clear();
-        Debug.Log("[DishAssembler] Тарелка полностью очищена.");
 
-        OnPlateCleared?.Invoke();
+        ingredientsOnPlate.Add(newIngredient);
+        
+        Debug.Log($"[DishAssembler] Добавлен: {newIngredient.displayName}. Всего: {ingredientsOnPlate.Count}");
+
+        OnPlateUpdated?.Invoke(ingredientsOnPlate);
+        TryFormDish(); // Пытаемся сформировать блюдо
     }
-    public void TrySubmitOrder()
+
+    // Пытаемся сопоставить текущие ингредиенты с каким-то рецептом
+    private void TryFormDish()
     {
         if (OrderManager.Instance == null) return;
 
         RecipeData activeRecipe = OrderManager.Instance.GetActiveRecipe();
-
-        if (activeRecipe == null)
-        {
-            Debug.LogWarning("[DishAssembler] Нет активного заказа для сдачи!");
-            return;
-        }
+        if (activeRecipe == null) return;
 
         if (ValidateRecipe(activeRecipe))
         {
-            Debug.Log($"[DishAssembler] Успех! Блюдо {activeRecipe.recipeName} собрано правильно.");
+            // Создаём "блюдо" из текущих ингредиентов
+            CurrentDish = ScriptableObject.CreateInstance<DishData>();
+            CurrentDish.dishName = activeRecipe.recipeName + " (Assembled)";
+            CurrentDish.ingredients = new List<IngredientData>(ingredientsOnPlate);
+            CurrentDish.correspondingRecipe = activeRecipe;
 
-            OrderManager.Instance.CompleteActiveOrder();
-
-            ClearPlate();
-        }
-        else
-        {
-            Debug.Log("[DishAssembler] Ошибка! Состав на тарелке не совпадает с рецептом.");
+            OnDishUpdated?.Invoke(CurrentDish);
+            Debug.Log($"<color=cyan>[DishAssembler] Блюдо сформировано: {CurrentDish.dishName}</color>");
         }
     }
-    private bool ValidateRecipe(RecipeData recipe)
+
+    public bool ValidateRecipe(RecipeData recipe)
     {
-        Dictionary<string, int> requiredCounts = new();
+        if (recipe == null || recipe.requiredIngredients == null)
+            return false;
+
+        Dictionary<string, int> requiredCounts = new Dictionary<string, int>();
         foreach (var req in recipe.requiredIngredients)
         {
-            if (req.ingredient != null)
+            if (req.ingredient != null && !string.IsNullOrEmpty(req.ingredient.id))
             {
-                requiredCounts[req.ingredient.ingredientId] = req.count;
+                string id = req.ingredient.id;
+                requiredCounts[id] = requiredCounts.ContainsKey(id) ? requiredCounts[id] + req.count : req.count;
             }
         }
 
-        Dictionary<string, int> currentCounts = new();
+        Dictionary<string, int> currentCounts = new Dictionary<string, int>();
         foreach (var ing in ingredientsOnPlate)
         {
-            if (ing != null)
+            if (ing != null && !string.IsNullOrEmpty(ing.id))
             {
-                if (currentCounts.ContainsKey(ing.ingredientId))
-                    currentCounts[ing.ingredientId]++;
-                else
-                    currentCounts[ing.ingredientId] = 1;
+                string id = ing.id;
+                currentCounts[id] = currentCounts.ContainsKey(id) ? currentCounts[id] + 1 : 1;
             }
         }
 
-        if (requiredCounts.Count != currentCounts.Count) return false;
+        if (requiredCounts.Count != currentCounts.Count)
+            return false;
 
         foreach (var pair in requiredCounts)
         {
-            string ingId = pair.Key;
-            int reqCount = pair.Value;
-
-            if (!currentCounts.ContainsKey(ingId) || currentCounts[ingId] != reqCount)
-            {
+            if (!currentCounts.TryGetValue(pair.Key, out int count) || count != pair.Value)
                 return false;
-            }
         }
 
         return true;
+    }
+
+    public void ClearPlate()
+    {
+        ingredientsOnPlate.Clear();
+        CurrentDish = null;
+
+        Debug.Log("[DishAssembler] Тарелка очищена.");
+        OnPlateCleared?.Invoke();
     }
 }
