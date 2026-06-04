@@ -5,10 +5,13 @@ using FrostbiteKitchen.Data;
 
 public class HudPresenter : MonoBehaviour
 {
-    [SerializeField] private GameObject panelOrder;
-    [SerializeField] private TextMeshProUGUI textOrderTime;
-    [SerializeField] private Image imageOrder;
+    [SerializeField] private GameObject orderCardPrefab;
+    [SerializeField] private Transform orderContainer;
     [SerializeField] private TextMeshProUGUI textNumberPeople;
+
+    private GameObject currentOrderCard;
+    private Image imageOrder;
+    private TextMeshProUGUI textOrderTime;
 
     private float currentOrderTimer;
     private bool isOrderActive;
@@ -17,6 +20,7 @@ public class HudPresenter : MonoBehaviour
 
     private void OnEnable()
     {
+        Debug.Log("HudPresenter: Скрипт включен и подписан на события.");
         OrderManager.OnNewOrderStarted += ShowNewOrder;
         OrderManager.OnOrderExpired += HandleOrderExpired;
     }
@@ -29,8 +33,14 @@ public class HudPresenter : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("HudPresenter: Метод Start.");
         UpdateCustomersUi();
-        panelOrder.SetActive(false);
+
+        if (OrderManager.Instance != null && OrderManager.Instance.GetActiveRecipe() != null)
+        {
+            Debug.Log("HudPresenter: Обнаружен активный заказ при старте, запускаю отображение вручную.");
+            ShowNewOrder(OrderManager.Instance.GetActiveRecipe());
+        }
     }
 
     private void Update()
@@ -39,60 +49,53 @@ public class HudPresenter : MonoBehaviour
 
         if (OrderManager.Instance != null && OrderManager.Instance.GetActiveRecipe() == null)
         {
-            if (isOrderActive)
-            {
-                servedCount++;
-                UpdateCustomersUi();
-            }
+            servedCount++;
+            UpdateCustomersUi();
             HandleOrderExpired();
             return;
         }
 
         currentOrderTimer -= Time.deltaTime;
-        if (currentOrderTimer < 0)
-        {
-            currentOrderTimer = 0;
-        }
+        if (currentOrderTimer < 0) currentOrderTimer = 0;
 
-        int minutes = Mathf.FloorToInt(currentOrderTimer / 60f);
-        int seconds = Mathf.FloorToInt(currentOrderTimer % 60f);
-        textOrderTime.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        if (textOrderTime != null)
+        {
+            int minutes = Mathf.FloorToInt(currentOrderTimer / 60f);
+            int seconds = Mathf.FloorToInt(currentOrderTimer % 60f);
+            textOrderTime.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
     }
 
     private void ShowNewOrder(RecipeData newRecipe)
     {
-        currentOrderTimer = newRecipe.timeLimit;
-        
-        if (newRecipe.icon != null)
+        if (orderCardPrefab == null || orderContainer == null)
         {
-            imageOrder.sprite = newRecipe.icon;
+            Debug.LogError("HudPresenter: Ошибка! Не задан префаб или контейнер.");
+            return;
         }
-        
+
+        if (currentOrderCard != null) Destroy(currentOrderCard);
+
+        currentOrderCard = Instantiate(orderCardPrefab, orderContainer);
+        Debug.Log("HudPresenter: Префаб успешно инстанцирован.");
+
+        imageOrder = currentOrderCard.GetComponentInChildren<Image>();
+        textOrderTime = currentOrderCard.GetComponentInChildren<TextMeshProUGUI>();
+
+        if (newRecipe.icon != null) imageOrder.sprite = newRecipe.icon;
+        currentOrderTimer = newRecipe.timeLimit;
         isOrderActive = true;
-        panelOrder.SetActive(true);
     }
 
     private void HandleOrderExpired()
     {
+        Debug.Log("HudPresenter: Заказ завершен/истек.");
         isOrderActive = false;
-        panelOrder.SetActive(false);
+        if (currentOrderCard != null) Destroy(currentOrderCard);
     }
 
     private void UpdateCustomersUi()
     {
         textNumberPeople.text = $"{servedCount}/{totalOrdersTarget}";
-    }
-
-    public void OnRecipeListToggle()
-    {
-        Debug.Log("Список рецептов");
-    }
-
-    public void OnPauseToggle()
-    {
-        if (GameStateMachine.Instance != null)
-        {
-            GameStateMachine.Instance.TogglePause();
-        }
     }
 }
