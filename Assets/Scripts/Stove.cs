@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using FrostbiteKitchen.Data;
-using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
 
 public class Stove : MonoBehaviour, IInteractable
@@ -9,25 +8,58 @@ public class Stove : MonoBehaviour, IInteractable
     [Header("Состояние плиты")]
     [SerializeField] private IngredientData currentIngredientOnStove;
     [SerializeField] private bool isCooking = false;
-    [SerializeField] private float cookingProgress = 0f;
 
-    // События для UI (полоска прогресса)
-    public delegate void OnCookingProgressChanged(float current, float max);
-    public event OnCookingProgressChanged OnProgressUpdated;
+    [Header("Анимация")]
+    [SerializeField] private Animator animator;
+
+    [Header("Порча во время угрозы")]
+    [Tooltip("Время (сек), после которого блюдо начинает портиться во время угрозы")]
+    [SerializeField] private float criticalOvercookTime = 6f;
+    
+    [Tooltip("Время (сек), через которое блюдо полностью сгорает")]
+    [SerializeField] private float burnTime = 11f;
+
+    private float overcookTimer = 0f;
+    private bool isUnderThreat = false;
+
+    public event System.Action OnDishBurned;
+
+    private void Awake()
+    {
+        if (animator == null)
+            animator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        if (!isCooking && currentIngredientOnStove != null && isUnderThreat)
+        {
+            HandleOvercooking();
+        }
+    }
+
+    public void SetThreatState(bool underThreat)
+    {
+        isUnderThreat = underThreat;
+        if (animator != null)
+            animator.SetBool("IsUnderThreat", underThreat);
+
+        if (!underThreat) 
+            overcookTimer = 0f;
+    }
 
     public void Interact()
     {
-        // ВАРИАНТ 1: Кладём ингредиент на пустую плиту
+        // Положить ингредиент
         if (!isCooking && currentIngredientOnStove == null && PlayerInventory.Instance.CurrentHeldItem != null)
         {
             if (PlayerInventory.Instance.CurrentAmount == 1)
             {
                 IngredientData input = PlayerInventory.Instance.CurrentHeldItem;
-
                 if (input.RequiresCooking)
                 {
-                    PlayerInventory.Instance.ClearInventory(); // Забираем у игрока
-                    Process(input);
+                    PlayerInventory.Instance.ClearInventory();
+                    StartCooking(input);
                 }
                 else
                 {
@@ -37,49 +69,69 @@ public class Stove : MonoBehaviour, IInteractable
             return;
         }
 
-        // ВАРИАНТ 2: Забираем готовый продукт
+        // Забрать готовое блюдо
         if (!isCooking && currentIngredientOnStove != null && PlayerInventory.Instance.CurrentHeldItem == null)
         {
-            Debug.Log($"<color=yellow>[ПЛИТА]</color> Игрок забрал: {currentIngredientOnStove.displayName}");
-
             PlayerInventory.Instance.SetHeldItem(currentIngredientOnStove, 1);
-            currentIngredientOnStove = null;
+            ResetStove();
         }
     }
 
-    public void Process(IngredientData input)
+    private void StartCooking(IngredientData input)
     {
         currentIngredientOnStove = input;
+        isCooking = true;
+
+        if (animator != null) animator.SetTrigger("StartCooking");
         StartCoroutine(CookCoroutine(input));
     }
 
     private IEnumerator CookCoroutine(IngredientData input)
     {
-        isCooking = true;
-        cookingProgress = 0f;
         float targetTime = input.CookingTime;
+        yield return new WaitForSeconds(targetTime);
 
-        Debug.Log($"<color=yellow>[ПЛИТА]</color> Начата жарка: {input.displayName} ({targetTime} сек.)");
-
-        while (cookingProgress < targetTime)
-        {
-            cookingProgress += Time.deltaTime;
-            OnProgressUpdated?.Invoke(cookingProgress, targetTime);
-            yield return null;
-        }
-
-        // Жарка завершена
         if (input.CookedVersion != null)
         {
             currentIngredientOnStove = input.CookedVersion;
-            Debug.Log($"<color=green>[ПЛИТА]</color> Готово! Получено: {currentIngredientOnStove.displayName}");
-        }
-        else
-        {
-            Debug.LogError($"[ПЛИТА] У {input.displayName} не назначена CookedVersion!");
+            if (animator != null) animator.SetTrigger("CookingDone");
         }
 
         isCooking = false;
-        OnProgressUpdated?.Invoke(0f, targetTime); // Сброс UI
+    }
+
+    private void HandleOvercooking()
+    {
+        overcookTimer += Time.deltaTime;
+
+        // Используем criticalOvercookTime — warning убран
+        if (overcookTimer >= criticalOvercookTime && overcookTimer >= burnTime)
+        {
+            BurnDish();
+        }
+    }
+
+    private void BurnDish()
+    {
+        if (currentIngredientOnStove == null) return;
+
+        Debug.Log($"<color=red>[ПЛИТА] 🔥 БЛЮДО СГОРЕЛО: {currentIngredientOnStove.displayName}</color>");
+
+        if (SessionStatistics.Instance != null)
+            SessionStatistics.Instance.AddSpoiledDish();
+
+        if (animator != null) animator.SetTrigger("Burned");
+
+        OnDishBurned?.Invoke();
+        ResetStove();
+    }
+
+    private void ResetStove()
+    {
+        currentIngredientOnStove = null;
+        overcookTimer = 0f;
+        isCooking = false;
+
+        if (animator != null) animator.SetTrigger("ResetStove");
     }
 }

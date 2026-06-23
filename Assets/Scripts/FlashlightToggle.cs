@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
+
 public class FlashlightToggle : MonoBehaviour, IInteractable
 {
     [Header("Объект света")]
@@ -22,11 +23,15 @@ public class FlashlightToggle : MonoBehaviour, IInteractable
 
             if (isOn)
             {
-                Debug.Log("<color=yellow>[ФОНАРИК]</color> Свет включен в вентиляции");
+                Debug.Log("<color=yellow>[ФОНАРИК] Свет включён в вентиляции</color>");
+
+                // Успешная защита (если фонарик используется против угрозы)
+                if (ThreatManager.Instance != null)
+                    ThreatManager.Instance.PlayerDefendedThreat(null);
             }
             else
             {
-                Debug.Log("<color=white>[ФОНАРИК]</color> Свет выключен");
+                Debug.Log("<color=white>[ФОНАРИК] Свет выключен</color>");
             }
         }
     }

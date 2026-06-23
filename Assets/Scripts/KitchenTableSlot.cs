@@ -1,65 +1,75 @@
 using UnityEngine;
 using FrostbiteKitchen.Data;
-using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
 
 public class KitchenTableSlot : MonoBehaviour, IInteractable
 {
-    [Header("Что сейчас лежит на этой точке стола")]
-    [SerializeField] private IngredientData storedIngredient;
-    [SerializeField] private int currentStock = 0;
+    [Header("Настройки слота")]
+    [SerializeField] private IngredientData allowedIngredient;
+    [SerializeField] private int maxCount = 3;           // Теперь используется
+
+    [Header("Текущее состояние")]
+    [SerializeField] private int currentCount = 0;
 
     public delegate void OnStockChanged(int count);
     public event OnStockChanged OnStockUpdated;
 
     public void Interact()
     {
-        if (PlayerInventory.Instance.CurrentHeldItem != null && PlayerInventory.Instance.CurrentAmount > 1)
-        {
-            IngredientData itemsInHand = PlayerInventory.Instance.CurrentHeldItem;
+        var inventory = PlayerInventory.Instance;
 
-            if (storedIngredient == null || storedIngredient == itemsInHand)
+        // === Разгрузка пачки (3 шт.) ===
+        if (inventory.CurrentHeldItem != null && inventory.CurrentAmount == 3)
+        {
+            if (currentCount > 0)
             {
-                storedIngredient = itemsInHand;
-                currentStock += PlayerInventory.Instance.CurrentAmount;
-                
-                Debug.Log($"<color=green>[РАБОЧИЙ СТОЛ]</color> Разгрузили со склада {PlayerInventory.Instance.CurrentAmount} шт. {storedIngredient.displayName}. Всего на столе: {currentStock}");
-                
-                PlayerInventory.Instance.ClearInventory(); 
-                OnStockUpdated?.Invoke(currentStock);
+                Debug.LogWarning("[РАБОЧИЙ СТОЛ] Слот уже занят!");
+                return;
+            }
+
+            if (allowedIngredient == null || inventory.CurrentHeldItem == allowedIngredient)
+            {
+                currentCount = maxCount;                    // ← Используем maxCount
+                allowedIngredient = inventory.CurrentHeldItem;
+
+                inventory.ClearInventory();
+
+                Debug.Log($"<color=green>[РАБОЧИЙ СТОЛ]</color> Разгружено {maxCount} шт. {allowedIngredient.displayName}");
+                OnStockUpdated?.Invoke(currentCount);
             }
             else
             {
-                Debug.LogWarning("[РАБОЧИЙ СТОЛ] Сюда нельзя положить этот ингредиент, место занято другим!");
+                Debug.LogWarning("[РАБОЧИЙ СТОЛ] Неверный тип ингредиента для этого слота!");
             }
             return;
         }
 
-        if (PlayerInventory.Instance.CurrentHeldItem == null && currentStock > 0)
+        // === Взять 1 шт. ===
+        if (inventory.CurrentHeldItem == null && currentCount > 0)
         {
-            currentStock--;
-            PlayerInventory.Instance.SetHeldItem(storedIngredient, 1);
-            
-            Debug.Log($"<color=green>[РАБОЧИЙ СТОЛ]</color> Взяли 1 шт {storedIngredient.displayName} для готовки. Осталось на столе: {currentStock}");
-            
-            if (currentStock <= 0)
-            {
-                storedIngredient = null;
-            }
-            
-            OnStockUpdated?.Invoke(currentStock);
+            currentCount--;
+            inventory.SetHeldItem(allowedIngredient, 1);
+
+            Debug.Log($"<color=green>[РАБОЧИЙ СТОЛ]</color> Взят 1 шт. {allowedIngredient.displayName}. Осталось: {currentCount}");
+
+            if (currentCount <= 0)
+                allowedIngredient = null;
+
+            OnStockUpdated?.Invoke(currentCount);
             return;
         }
 
-        if (PlayerInventory.Instance.CurrentHeldItem != null && PlayerInventory.Instance.CurrentAmount == 1)
+        // Отправить в сборщик, если в руках 1 шт.
+        if (inventory.CurrentHeldItem != null && inventory.CurrentAmount == 1)
         {
             if (DishAssembler.Instance != null)
             {
-                Debug.Log($"<color=green>[ГОТОВКА]</color> Ингредиент {PlayerInventory.Instance.CurrentHeldItem.displayName} отправлен в сборщик блюда!");
-                
-                DishAssembler.Instance.AddIngredient(PlayerInventory.Instance.CurrentHeldItem);
-                PlayerInventory.Instance.ClearInventory();
+                DishAssembler.Instance.AddIngredient(inventory.CurrentHeldItem);
+                inventory.ClearInventory();
             }
         }
     }
+
+    public int CurrentCount => currentCount;
+    public int MaxCount => maxCount;
 }
