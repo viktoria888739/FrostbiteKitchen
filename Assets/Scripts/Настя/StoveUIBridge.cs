@@ -16,7 +16,7 @@ public class StoveUIBridge : MonoBehaviour
     {
         if (targetStove != null)
         {
-            // Подписываемся на событие жарки плиты
+            // Подписываемся на событие прогресса жарки плиты
             targetStove.OnProgressUpdated += UpdateProgressBar;
         }
     }
@@ -25,19 +25,19 @@ public class StoveUIBridge : MonoBehaviour
     {
         if (targetStove != null)
         {
+            // Отписываемся при выключении объекта во избежание утечек памяти
             targetStove.OnProgressUpdated -= UpdateProgressBar;
         }
     }
 
-    private void UpdateProgressBar(float current, float max)
+    private void UpdateProgressBar(float progress)
     {
-        if (fillImage == null || max <= 0) return;
+        if (fillImage == null) return;
 
-        // Считаем прогресс от 0 до 1
-        float progress = current / max;
-        fillImage.fillAmount = progress;
+        // Задаем заполнение полоски (слайдера)
+        fillImage.fillAmount = Mathf.Clamp01(progress);
 
-        // Меняем цвет полоски (в точности как логика Василисы, но в сторону увеличения)
+        // Интерполяция цвета в зависимости от этапа готовки (красный -> желтый -> зеленый)
         if (progress > 0.5f)
         {
             fillImage.color = Color.Lerp(yellowColor, greenColor, (progress - 0.5f) * 2f);

@@ -15,6 +15,12 @@ public class ThreatSpawner : MonoBehaviour
     [Tooltip("Менеджер визуальных предупреждений (мигание UI)")]
     [SerializeField] private VisualWarningManager warningManager;
 
+    [Header("Визуалы (Для совместимости с ThreatManager)")]
+    [Tooltip("Имя стороны текстом (осталось от старого скрипта)")]
+    public string sideName = "Сторона";
+    [SerializeField] private GameObject monsterVisual;
+    [SerializeField] private GameObject warningEffect;
+
     // Список (хэш-таблица) для хранения сторон, где сейчас уже ЕСТЬ угроза
     private HashSet<KitchenSide> activeThreatSides = new HashSet<KitchenSide>();
 
@@ -76,7 +82,7 @@ public class ThreatSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// Метод активации угрозы на конкретной стороне
+    /// Метод активации угрозы на конкретной стороне (Ваш основной метод)
     /// </summary>
     public void ActivateThreat(KitchenSide side)
     {
@@ -89,6 +95,10 @@ public class ThreatSpawner : MonoBehaviour
         // Выводим требуемый текст в консоль Unity
         Debug.Log($"Monster spawned on {sideNameUpper} side");
 
+        // Включаем старые визуалы Вики для совместимости
+        if (monsterVisual != null) monsterVisual.SetActive(true);
+        if (warningEffect != null) warningEffect.SetActive(true);
+
         // Передаем конкретную сторону в менеджер предупреждений
         if (warningManager != null)
         {
@@ -97,7 +107,16 @@ public class ThreatSpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// Публичный метод для очистки угрозы, когда игрок её ликвидировал
+    /// Старый метод без параметров (Вызывается из старого кода Вики)
+    /// </summary>
+    public void ActivateThreat()
+    {
+        // Так как сторона не передана, берем дефолтную (например, первую из Enum)
+        ActivateThreat(KitchenSide.Left);
+    }
+
+    /// <summary>
+    /// Публичный метод для очистки угрозы, когда игрок её ликвидировал (Ваш основной метод)
     /// </summary>
     public void ClearThreat(KitchenSide side)
     {
@@ -106,11 +125,26 @@ public class ThreatSpawner : MonoBehaviour
             activeThreatSides.Remove(side);
             Debug.Log($"Threat cleared on {side.ToString().ToUpper()} side");
 
-            // Если активных угроз больше не осталось, выключаем мигание предупреждения
-            if (activeThreatSides.Count == 0 && warningManager != null)
+            // Если активных угроз больше не осталось, выключаем визуалы и мигание
+            if (activeThreatSides.Count == 0)
             {
-                warningManager.HideWarning();
+                if (monsterVisual != null) monsterVisual.SetActive(false);
+                if (warningEffect != null) warningEffect.SetActive(false);
+
+                if (warningManager != null)
+                {
+                    warningManager.HideWarning();
+                }
             }
         }
+    }
+
+    /// <summary>
+    /// Старый метод выключения (Вызывается из старого кода Вики как DeactivateThreat)
+    /// </summary>
+    public void DeactivateThreat()
+    {
+        // Очищаем угрозу для дефолтной стороны
+        ClearThreat(KitchenSide.Left);
     }
 }
