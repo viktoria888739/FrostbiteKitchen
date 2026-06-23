@@ -2227,7 +2227,7 @@ GameObject:
   - component: {fileID: 578057742}
   - component: {fileID: 578057745}
   - component: {fileID: 578057744}
-  - component: {fileID: 578057743}
+  - component: {fileID: 578057746}
   m_Layer: 5
   m_Name: Slot_Order2
   m_TagString: Untagged
@@ -2254,19 +2254,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 176.42, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &578057743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 578057741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e6b3bf647ee63049b9e27fcd0a5922a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DeliverySlotLog
-  slotIndex: 2
 --- !u!114 &578057744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2305,6 +2292,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 578057741}
   m_CullTransparentMesh: 1
+--- !u!114 &578057746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578057741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a1110060cbd4c640998c15af608eff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.UI.OrderCompleteBtn
+  dishAssembler: {fileID: 1544562638}
 --- !u!1 &584276059
 GameObject:
   m_ObjectHideFlags: 0
@@ -2607,7 +2607,7 @@ GameObject:
   - component: {fileID: 718416796}
   - component: {fileID: 718416799}
   - component: {fileID: 718416798}
-  - component: {fileID: 718416797}
+  - component: {fileID: 718416800}
   m_Layer: 5
   m_Name: Slot_Order1
   m_TagString: Untagged
@@ -2634,19 +2634,6 @@ RectTransform:
   m_AnchoredPosition: {x: -227, y: 0}
   m_SizeDelta: {x: 176.4209, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &718416797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 718416795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e6b3bf647ee63049b9e27fcd0a5922a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DeliverySlotLog
-  slotIndex: 1
 --- !u!114 &718416798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2685,6 +2672,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 718416795}
   m_CullTransparentMesh: 1
+--- !u!114 &718416800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718416795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a1110060cbd4c640998c15af608eff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.UI.OrderCompleteBtn
+  dishAssembler: {fileID: 1544562638}
 --- !u!1 &730087694
 GameObject:
   m_ObjectHideFlags: 0
@@ -3000,7 +3000,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &845354150
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6102,6 +6102,53 @@ RectTransform:
   m_AnchoredPosition: {x: 1.8767, y: -2.5023}
   m_SizeDelta: {x: 401.5269, y: 382.7598}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1544562637
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1544562639}
+  - component: {fileID: 1544562638}
+  m_Layer: 0
+  m_Name: _DishAssembler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1544562638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544562637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d6363538eff5b1408951a867bee4097, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DishAssembler
+  ingredientsOnPlate: []
+  frozenIngredientsBuffer: []
+  isFrozen: 0
+--- !u!4 &1544562639
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544562637}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1579306053
 GameObject:
   m_ObjectHideFlags: 0
@@ -6480,7 +6527,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1615904561
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7299,7 +7346,7 @@ GameObject:
   - component: {fileID: 1921247979}
   - component: {fileID: 1921247982}
   - component: {fileID: 1921247981}
-  - component: {fileID: 1921247980}
+  - component: {fileID: 1921247983}
   m_Layer: 5
   m_Name: Slot_Order3
   m_TagString: Untagged
@@ -7326,19 +7373,6 @@ RectTransform:
   m_AnchoredPosition: {x: 229, y: 0}
   m_SizeDelta: {x: 176.42, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1921247980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921247978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e6b3bf647ee63049b9e27fcd0a5922a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DeliverySlotLog
-  slotIndex: 3
 --- !u!114 &1921247981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7377,6 +7411,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1921247978}
   m_CullTransparentMesh: 1
+--- !u!114 &1921247983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921247978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a1110060cbd4c640998c15af608eff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.UI.OrderCompleteBtn
+  dishAssembler: {fileID: 1544562638}
 --- !u!1 &1941766620
 GameObject:
   m_ObjectHideFlags: 0
@@ -8754,3 +8801,4 @@ SceneRoots:
   - {fileID: 1717249736}
   - {fileID: 1681075203}
   - {fileID: 876820153}
+  - {fileID: 1544562639}
