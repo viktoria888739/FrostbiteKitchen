@@ -7,24 +7,24 @@ public class WarehouseBox : MonoBehaviour, IInteractable
 {
     [Header("Настройки склада")]
     [SerializeField] private IngredientData ingredientData;
-    [SerializeField] private int amountToGive = 5;
+    [SerializeField] private int amountToGive = 3;     // По ТЗ — пачка из 3 шт.
     [SerializeField] private bool isEmpty = false;
 
     public void Interact()
     {
         if (isEmpty || ingredientData == null)
         {
-            Debug.Log($"[СКЛАД] Коробка {gameObject.name} пуста или не настроена.");
+            Debug.Log($"[СКЛАД] Коробка {gameObject.name} пуста.");
             return;
         }
 
         if (PlayerInventory.Instance.CurrentHeldItem != null)
         {
-            Debug.Log("<color=yellow>[СКЛАД]</color> Руки заняты! Сначала отнеси предмет на рабочий стол.");
+            Debug.Log("<color=yellow>[СКЛАД]</color> Руки заняты! Сначала разгрузи на стол.");
             return;
         }
 
         PlayerInventory.Instance.SetHeldItem(ingredientData, amountToGive);
-        Debug.Log($"<color=orange>[СКЛАД]</color> Взято со склада: {ingredientData.displayName} x{amountToGive}");
+        Debug.Log($"<color=orange>[СКЛАД]</color> Взята пачка: {ingredientData.displayName} x{amountToGive}");
     }
 }

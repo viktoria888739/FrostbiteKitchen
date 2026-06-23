@@ -28,11 +28,11 @@ public class PlayerInventory : MonoBehaviour
     public void SetHeldItem(IngredientData item, int amount)
     {
         currentHeldItem = item;
-        currentAmount = amount;
+        currentAmount = Mathf.Max(0, amount);
         
         OnHandUpdated?.Invoke(currentHeldItem, currentAmount);
         
-        Debug.Log($"<color=cyan>[ИНВЕНТАРЬ]</color> В руках теперь: {item.displayName} ({amount} шт.)");
+        Debug.Log($"<color=cyan>[ИНВЕНТАРЬ]</color> В руках: { (item != null ? item.displayName : "Nothing") } ({currentAmount} шт.)");
     }
 
     public bool TryUseOneItem()
@@ -50,6 +50,25 @@ public class PlayerInventory : MonoBehaviour
             OnHandUpdated?.Invoke(currentHeldItem, currentAmount);
         }
         return true;
+    }
+
+    /// <summary>
+    /// Новый метод по ТЗ — уменьшить количество на N штук
+    /// </summary>
+    public void RemoveItem(int amount)
+    {
+        if (currentHeldItem == null) return;
+        
+        currentAmount -= Mathf.Max(0, amount);
+        
+        if (currentAmount <= 0)
+        {
+            ClearInventory();
+        }
+        else
+        {
+            OnHandUpdated?.Invoke(currentHeldItem, currentAmount);
+        }
     }
 
     public void ClearInventory()

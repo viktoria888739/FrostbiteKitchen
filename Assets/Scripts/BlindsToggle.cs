@@ -31,12 +31,16 @@ namespace FrostbiteKitchen.Threats
             if (isClosed)
             {
                 SetBlindsHeight(closedHeight);
-                Debug.Log("<color=red>[ЖАЛЮЗИ]</color> Окно выдачи ЗАКРЫТО. Защита от Левиафана активна.");
+                Debug.Log("<color=red>[ЖАЛЮЗИ] Окно ЗАКРЫТО. Защита от монстра активна!</color>");
+
+                // Успешная защита угрозы
+                if (ThreatManager.Instance != null)
+                    ThreatManager.Instance.PlayerDefendedThreat(null); // null = не важно какой спавнер
             }
             else
             {
                 SetBlindsHeight(openHeight);
-                Debug.Log("<color=green>[ЖАЛЮЗИ]</color> Окно выдачи ОТКРЫТО.");
+                Debug.Log("<color=green>[ЖАЛЮЗИ] Окно ОТКРЫТО.</color>");
             }
         }
 
