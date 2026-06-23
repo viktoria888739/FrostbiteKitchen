@@ -15,14 +15,16 @@ public class Stove : MonoBehaviour, IInteractable
     [Header("Порча во время угрозы")]
     [Tooltip("Время (сек), после которого блюдо начинает портиться во время угрозы")]
     [SerializeField] private float criticalOvercookTime = 6f;
-    
+
     [Tooltip("Время (сек), через которое блюдо полностью сгорает")]
     [SerializeField] private float burnTime = 11f;
 
     private float overcookTimer = 0f;
     private bool isUnderThreat = false;
 
+    // События для внешних систем (UI и статистики)
     public event System.Action OnDishBurned;
+    public event System.Action<float> OnProgressUpdated; // Передает прогресс от 0.0f до 1.0f
 
     private void Awake()
     {
@@ -44,7 +46,7 @@ public class Stove : MonoBehaviour, IInteractable
         if (animator != null)
             animator.SetBool("IsUnderThreat", underThreat);
 
-        if (!underThreat) 
+        if (!underThreat)
             overcookTimer = 0f;
     }
 
@@ -89,7 +91,18 @@ public class Stove : MonoBehaviour, IInteractable
     private IEnumerator CookCoroutine(IngredientData input)
     {
         float targetTime = input.CookingTime;
-        yield return new WaitForSeconds(targetTime);
+        float elapsedTime = 0f;
+
+        // Покуда идет готовка, каждый кадр обновляем UI шкалы
+        while (elapsedTime < targetTime)
+        {
+            elapsedTime += Time.deltaTime;
+
+            float progress = Mathf.Clamp01(elapsedTime / targetTime);
+            OnProgressUpdated?.Invoke(progress);
+
+            yield return null;
+        }
 
         if (input.CookedVersion != null)
         {
@@ -98,13 +111,15 @@ public class Stove : MonoBehaviour, IInteractable
         }
 
         isCooking = false;
+
+        // Сбрасываем шкалу в ноль по окончании жарки
+        OnProgressUpdated?.Invoke(0f);
     }
 
     private void HandleOvercooking()
     {
         overcookTimer += Time.deltaTime;
 
-        // Используем criticalOvercookTime — warning убран
         if (overcookTimer >= criticalOvercookTime && overcookTimer >= burnTime)
         {
             BurnDish();
@@ -131,6 +146,9 @@ public class Stove : MonoBehaviour, IInteractable
         currentIngredientOnStove = null;
         overcookTimer = 0f;
         isCooking = false;
+
+        // Принудительно очищаем UI при сбросе плиты
+        OnProgressUpdated?.Invoke(0f);
 
         if (animator != null) animator.SetTrigger("ResetStove");
     }
