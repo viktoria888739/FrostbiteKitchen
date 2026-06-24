@@ -44,12 +44,22 @@ public class KitchenRotation : MonoBehaviour
 
     public void RotateRight()
     {
+        if (CameraWobbleEffect.Instance != null)
+        {
+            CameraWobbleEffect.Instance.PlayWobble(1);
+        }
+
         currentViewIndex = (currentViewIndex + 1) % views.Length;
         UpdateVisuals();
     }
 
     public void RotateLeft()
     {
+        if (CameraWobbleEffect.Instance != null)
+        {
+            CameraWobbleEffect.Instance.PlayWobble(-1);
+        }
+
         currentViewIndex--;
         if (currentViewIndex < 0)
         {
@@ -60,7 +70,6 @@ public class KitchenRotation : MonoBehaviour
 
     private void UpdateVisuals()
     {
-        // Вызываем эффект затемнения перед обновлением геометрии
         if (CameraBlinkEffect.Instance != null)
         {
             CameraBlinkEffect.Instance.PlayBlink();
