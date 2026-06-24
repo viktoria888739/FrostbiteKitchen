@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ThreatSpawner : MonoBehaviour
+public class ThreatSpawner2 : MonoBehaviour
 {
     [Header("Информация стороны")]
     public string sideName = "Сторона";

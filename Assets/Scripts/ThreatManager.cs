@@ -12,7 +12,7 @@ public class ThreatManager : MonoBehaviour
     [SerializeField] private float threatDuration = 15f;
 
     [Header("Стороны кухни")]
-    [SerializeField] private List<ThreatSpawner> spawners = new List<ThreatSpawner>();
+    [SerializeField] private List<ThreatSpawner2> spawners = new List<ThreatSpawner2>();
 
     private bool isThreatActive = false;
     private Coroutine activeThreatCoroutine;
@@ -56,7 +56,7 @@ public class ThreatManager : MonoBehaviour
     {
         if (isThreatActive || spawners.Count == 0) return;
 
-        ThreatSpawner spawner = spawners[Random.Range(0, spawners.Count)];
+        ThreatSpawner2 spawner = spawners[Random.Range(0, spawners.Count)];
         isThreatActive = true;
 
         Debug.Log($"<color=red>[THREAT] 🚨 УГРОЗА со стороны: {spawner.sideName}</color>");
@@ -71,14 +71,14 @@ public class ThreatManager : MonoBehaviour
         activeThreatCoroutine = StartCoroutine(ThreatDurationCoroutine(spawner));
     }
 
-    private IEnumerator ThreatDurationCoroutine(ThreatSpawner spawner)
+    private IEnumerator ThreatDurationCoroutine(ThreatSpawner2 spawner)
     {
         yield return new WaitForSeconds(threatDuration);
         if (isThreatActive)
             ClearCurrentThreat(spawner);   // Успешное отражение (если не было jumpscare)
     }
 
-    public void ClearCurrentThreat(ThreatSpawner spawner = null)
+    public void ClearCurrentThreat(ThreatSpawner2 spawner = null)
     {
         if (!isThreatActive) return;
 
@@ -111,7 +111,7 @@ public class ThreatManager : MonoBehaviour
         }
     }
 
-    public void PlayerDefendedThreat(ThreatSpawner spawner)
+    public void PlayerDefendedThreat(ThreatSpawner2 spawner)
     {
         if (spawner == null) return;
         ClearCurrentThreat(spawner);
