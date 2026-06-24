@@ -639,20 +639,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4056864866935689188, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
   m_PrefabInstance: {fileID: 138771885}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &123280530
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 123280528}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069a4e154bd34ae42816b2559b175a31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestWarehouseBox
-  isEmpty: 0
-  ingredientName: "\u0421\u044B\u0440"
 --- !u!114 &123280533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -668,6 +654,21 @@ MonoBehaviour:
   hoverCursor: {fileID: 2800000, guid: a5f9251f302a646559d2ef75693794c8, type: 3}
   defaultCursor: {fileID: 0}
   hotSpot: {x: 16, y: 16}
+--- !u!114 &123280534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 123280528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df0c62d4eb1a1e4cadb2c6e871154e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarehouseBox
+  ingredientData: {fileID: 11400000, guid: a600d45ae358e5f41aff04207f860e59, type: 2}
+  amountToGive: 3
+  isEmpty: 0
 --- !u!1001 &138771885
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -766,10 +767,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 123280530}
+      addedObject: {fileID: 123280533}
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 123280533}
+      addedObject: {fileID: 123280534}
   m_SourcePrefab: {fileID: 100100000, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
 --- !u!1 &141233163
 GameObject:
@@ -920,6 +921,54 @@ MonoBehaviour:
   hoverCursor: {fileID: 2800000, guid: a5f9251f302a646559d2ef75693794c8, type: 3}
   defaultCursor: {fileID: 0}
   hotSpot: {x: 16, y: 16}
+--- !u!1 &160428325
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 160428327}
+  - component: {fileID: 160428326}
+  m_Layer: 0
+  m_Name: _SessionStatistics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &160428326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160428325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e027f1c7ec2269f41ae1bc4ad8a151a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SessionStatistics
+  successfulDishes: 0
+  spoiledDishes: 0
+  threatsDefended: 0
+  timeSurvived: 0
+--- !u!4 &160428327
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160428325}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 569.9789, y: 351.72253, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &175371624
 GameObject:
   m_ObjectHideFlags: 0
@@ -1465,6 +1514,7 @@ GameObject:
   - component: {fileID: 377284353}
   - component: {fileID: 377284352}
   - component: {fileID: 377284355}
+  - component: {fileID: 377284356}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1590,6 +1640,18 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &377284356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377284351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4955841067488f146b470df4c2782c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Core.InteractionDetector
 --- !u!1 &404926107
 GameObject:
   m_ObjectHideFlags: 0
@@ -1898,7 +1960,7 @@ GameObject:
   - component: {fileID: 502806580}
   - component: {fileID: 502806583}
   - component: {fileID: 502806582}
-  - component: {fileID: 502806581}
+  - component: {fileID: 502806584}
   m_Layer: 5
   m_Name: Ing_Slot5
   m_TagString: Untagged
@@ -1925,19 +1987,6 @@ RectTransform:
   m_AnchoredPosition: {x: -90, y: -150}
   m_SizeDelta: {x: 141.21, y: 136.07}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &502806581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 502806579}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3175b7d4a4b440e4ab9364171744fbd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestKitchenIngredient
-  ingredientName: "\u041A\u0430\u0440\u0442\u043E\u0448\u043A\u0430"
 --- !u!114 &502806582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1976,6 +2025,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 502806579}
   m_CullTransparentMesh: 1
+--- !u!114 &502806584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502806579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac22549a7e5165c4ba6b4628100fb95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KitchenTableSlot
+  allowedIngredient: {fileID: 11400000, guid: dd2ffb046c03b7448bb9843748c0d0b1, type: 2}
+  maxCount: 3
+  currentCount: 0
 --- !u!1 &508835433
 GameObject:
   m_ObjectHideFlags: 0
@@ -2150,20 +2214,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4056864866935689188, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
   m_PrefabInstance: {fileID: 1280966829}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &552464499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552464497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069a4e154bd34ae42816b2559b175a31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestWarehouseBox
-  isEmpty: 1
-  ingredientName: "\u041A\u0430\u0440\u0442\u043E\u0448\u043A\u0430"
 --- !u!114 &552464502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2179,6 +2229,21 @@ MonoBehaviour:
   hoverCursor: {fileID: 2800000, guid: a5f9251f302a646559d2ef75693794c8, type: 3}
   defaultCursor: {fileID: 0}
   hotSpot: {x: 16, y: 16}
+--- !u!114 &552464503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552464497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df0c62d4eb1a1e4cadb2c6e871154e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarehouseBox
+  ingredientData: {fileID: 11400000, guid: dd2ffb046c03b7448bb9843748c0d0b1, type: 2}
+  amountToGive: 3
+  isEmpty: 0
 --- !u!1 &558788906
 GameObject:
   m_ObjectHideFlags: 0
@@ -2190,7 +2255,7 @@ GameObject:
   - component: {fileID: 558788907}
   - component: {fileID: 558788910}
   - component: {fileID: 558788909}
-  - component: {fileID: 558788908}
+  - component: {fileID: 558788911}
   m_Layer: 5
   m_Name: Ing_Slot1
   m_TagString: Untagged
@@ -2217,19 +2282,6 @@ RectTransform:
   m_AnchoredPosition: {x: -89, y: 154}
   m_SizeDelta: {x: 138.8581, y: 136.2675}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &558788908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 558788906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3175b7d4a4b440e4ab9364171744fbd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestKitchenIngredient
-  ingredientName: "\u0425\u043B\u0435\u0431"
 --- !u!114 &558788909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2268,6 +2320,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 558788906}
   m_CullTransparentMesh: 1
+--- !u!114 &558788911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558788906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac22549a7e5165c4ba6b4628100fb95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KitchenTableSlot
+  allowedIngredient: {fileID: 11400000, guid: b69abe203673c724c87e72a9383728a3, type: 2}
+  maxCount: 3
+  currentCount: 0
 --- !u!1 &578057741
 GameObject:
   m_ObjectHideFlags: 0
@@ -2449,7 +2516,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &608053843
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2918,20 +2985,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4056864866935689188, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
   m_PrefabInstance: {fileID: 1631355614}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &769954903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 769954901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069a4e154bd34ae42816b2559b175a31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestWarehouseBox
-  isEmpty: 1
-  ingredientName: "\u041A\u0430\u0440\u0442\u043E\u0448\u043A\u0430"
 --- !u!114 &769954906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2947,6 +3000,21 @@ MonoBehaviour:
   hoverCursor: {fileID: 2800000, guid: a5f9251f302a646559d2ef75693794c8, type: 3}
   defaultCursor: {fileID: 0}
   hotSpot: {x: 16, y: 16}
+--- !u!114 &769954907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 769954901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df0c62d4eb1a1e4cadb2c6e871154e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarehouseBox
+  ingredientData: {fileID: 0}
+  amountToGive: 3
+  isEmpty: 1
 --- !u!1 &795922335
 GameObject:
   m_ObjectHideFlags: 0
@@ -3058,7 +3126,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &845354150
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3989,20 +4057,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4056864866935689188, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
   m_PrefabInstance: {fileID: 1529848418}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &976789063
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 976789061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069a4e154bd34ae42816b2559b175a31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestWarehouseBox
-  isEmpty: 1
-  ingredientName: "\u041A\u0430\u0440\u0442\u043E\u0448\u043A\u0430"
 --- !u!114 &976789066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4018,6 +4072,21 @@ MonoBehaviour:
   hoverCursor: {fileID: 2800000, guid: a5f9251f302a646559d2ef75693794c8, type: 3}
   defaultCursor: {fileID: 0}
   hotSpot: {x: 16, y: 16}
+--- !u!114 &976789067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976789061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df0c62d4eb1a1e4cadb2c6e871154e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarehouseBox
+  ingredientData: {fileID: 0}
+  amountToGive: 3
+  isEmpty: 1
 --- !u!1 &986728843
 GameObject:
   m_ObjectHideFlags: 0
@@ -4165,20 +4234,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4056864866935689188, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
   m_PrefabInstance: {fileID: 1939294150369910003}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1000761248
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000761246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069a4e154bd34ae42816b2559b175a31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestWarehouseBox
-  isEmpty: 1
-  ingredientName: "\u041A\u0430\u0440\u0442\u043E\u0448\u043A\u0430"
 --- !u!114 &1000761251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4194,6 +4249,21 @@ MonoBehaviour:
   hoverCursor: {fileID: 2800000, guid: a5f9251f302a646559d2ef75693794c8, type: 3}
   defaultCursor: {fileID: 0}
   hotSpot: {x: 16, y: 16}
+--- !u!114 &1000761252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000761246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df0c62d4eb1a1e4cadb2c6e871154e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarehouseBox
+  ingredientData: {fileID: 0}
+  amountToGive: 3
+  isEmpty: 1
 --- !u!1001 &1003535873
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4641,10 +4711,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2025067046}
+      addedObject: {fileID: 2025067049}
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2025067049}
+      addedObject: {fileID: 2025067050}
   m_SourcePrefab: {fileID: 100100000, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
 --- !u!1 &1103949661
 GameObject:
@@ -4940,20 +5010,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4056864866935689188, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
   m_PrefabInstance: {fileID: 1580111665}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1158808529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1158808527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069a4e154bd34ae42816b2559b175a31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestWarehouseBox
-  isEmpty: 0
-  ingredientName: "\u041A\u0430\u0440\u0442\u043E\u0448\u043A\u0430"
 --- !u!114 &1158808532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4969,6 +5025,21 @@ MonoBehaviour:
   hoverCursor: {fileID: 2800000, guid: a5f9251f302a646559d2ef75693794c8, type: 3}
   defaultCursor: {fileID: 0}
   hotSpot: {x: 16, y: 16}
+--- !u!114 &1158808533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1158808527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df0c62d4eb1a1e4cadb2c6e871154e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarehouseBox
+  ingredientData: {fileID: 0}
+  amountToGive: 3
+  isEmpty: 1
 --- !u!1 &1175559761
 GameObject:
   m_ObjectHideFlags: 0
@@ -5144,10 +5215,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1972995841}
+      addedObject: {fileID: 1972995844}
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1972995844}
+      addedObject: {fileID: 1972995845}
   m_SourcePrefab: {fileID: 100100000, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
 --- !u!1 &1228799535
 GameObject:
@@ -5459,10 +5530,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 552464499}
+      addedObject: {fileID: 552464502}
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 552464502}
+      addedObject: {fileID: 552464503}
   m_SourcePrefab: {fileID: 100100000, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
 --- !u!1 &1332359142
 GameObject:
@@ -5553,7 +5624,7 @@ GameObject:
   - component: {fileID: 1336314798}
   - component: {fileID: 1336314801}
   - component: {fileID: 1336314800}
-  - component: {fileID: 1336314799}
+  - component: {fileID: 1336314802}
   m_Layer: 5
   m_Name: Ing_Slot4
   m_TagString: Untagged
@@ -5580,19 +5651,6 @@ RectTransform:
   m_AnchoredPosition: {x: 97, y: 3}
   m_SizeDelta: {x: 140.43, y: 136.07}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1336314799
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1336314797}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3175b7d4a4b440e4ab9364171744fbd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestKitchenIngredient
-  ingredientName: "\u041A\u043E\u043B\u0431\u0430\u0441\u0430"
 --- !u!114 &1336314800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5631,6 +5689,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1336314797}
   m_CullTransparentMesh: 1
+--- !u!114 &1336314802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336314797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac22549a7e5165c4ba6b4628100fb95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KitchenTableSlot
+  allowedIngredient: {fileID: 11400000, guid: 1af6abc4d65999e42942963d8fad6596, type: 2}
+  maxCount: 3
+  currentCount: 0
 --- !u!1 &1367854592
 GameObject:
   m_ObjectHideFlags: 0
@@ -6449,10 +6522,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 976789063}
+      addedObject: {fileID: 976789066}
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 976789066}
+      addedObject: {fileID: 976789067}
   m_SourcePrefab: {fileID: 100100000, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
 --- !u!1 &1535389705
 GameObject:
@@ -6801,10 +6874,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1158808529}
+      addedObject: {fileID: 1158808532}
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1158808532}
+      addedObject: {fileID: 1158808533}
   m_SourcePrefab: {fileID: 100100000, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
 --- !u!1 &1591392203
 GameObject:
@@ -7116,10 +7189,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 769954903}
+      addedObject: {fileID: 769954906}
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 769954906}
+      addedObject: {fileID: 769954907}
   m_SourcePrefab: {fileID: 100100000, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
 --- !u!1 &1681075201
 GameObject:
@@ -7212,7 +7285,7 @@ GameObject:
   - component: {fileID: 1711520242}
   - component: {fileID: 1711520245}
   - component: {fileID: 1711520244}
-  - component: {fileID: 1711520243}
+  - component: {fileID: 1711520246}
   m_Layer: 5
   m_Name: Ing_Slot3
   m_TagString: Untagged
@@ -7239,19 +7312,6 @@ RectTransform:
   m_AnchoredPosition: {x: -90, y: 2}
   m_SizeDelta: {x: 138.43, y: 136.13}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1711520243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1711520241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3175b7d4a4b440e4ab9364171744fbd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestKitchenIngredient
-  ingredientName: "\u0421\u044B\u0440"
 --- !u!114 &1711520244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7290,6 +7350,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1711520241}
   m_CullTransparentMesh: 1
+--- !u!114 &1711520246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711520241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac22549a7e5165c4ba6b4628100fb95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KitchenTableSlot
+  allowedIngredient: {fileID: 11400000, guid: a600d45ae358e5f41aff04207f860e59, type: 2}
+  maxCount: 3
+  currentCount: 0
 --- !u!1 &1717249734
 GameObject:
   m_ObjectHideFlags: 0
@@ -7862,7 +7937,7 @@ GameObject:
   - component: {fileID: 1941766621}
   - component: {fileID: 1941766624}
   - component: {fileID: 1941766623}
-  - component: {fileID: 1941766622}
+  - component: {fileID: 1941766625}
   m_Layer: 5
   m_Name: Ing_Slot6
   m_TagString: Untagged
@@ -7889,19 +7964,6 @@ RectTransform:
   m_AnchoredPosition: {x: 98, y: -150}
   m_SizeDelta: {x: 141.21, y: 134.04}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1941766622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1941766620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3175b7d4a4b440e4ab9364171744fbd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestKitchenIngredient
-  ingredientName: "\u0412\u0430\u0440\u0435\u043D\u044C\u0435"
 --- !u!114 &1941766623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7940,6 +8002,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1941766620}
   m_CullTransparentMesh: 1
+--- !u!114 &1941766625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941766620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac22549a7e5165c4ba6b4628100fb95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KitchenTableSlot
+  allowedIngredient: {fileID: 11400000, guid: 52fd34a39bc6d4d459d84d2d4ced615d, type: 2}
+  maxCount: 3
+  currentCount: 0
 --- !u!1 &1967826958 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
@@ -7950,20 +8027,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4056864866935689188, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
   m_PrefabInstance: {fileID: 2015626431}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1967826960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1967826958}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069a4e154bd34ae42816b2559b175a31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestWarehouseBox
-  isEmpty: 0
-  ingredientName: "\u041A\u043E\u043B\u0431\u0430\u0441\u0430"
 --- !u!114 &1967826963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7979,6 +8042,66 @@ MonoBehaviour:
   hoverCursor: {fileID: 2800000, guid: a5f9251f302a646559d2ef75693794c8, type: 3}
   defaultCursor: {fileID: 0}
   hotSpot: {x: 16, y: 16}
+--- !u!114 &1967826964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967826958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df0c62d4eb1a1e4cadb2c6e871154e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarehouseBox
+  ingredientData: {fileID: 11400000, guid: 1af6abc4d65999e42942963d8fad6596, type: 2}
+  amountToGive: 3
+  isEmpty: 0
+--- !u!1 &1972882689
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1972882691}
+  - component: {fileID: 1972882690}
+  m_Layer: 0
+  m_Name: _SettingsLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1972882690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972882689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c78594f32b98acd48b8af715dd4bf9ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SettingsLoader
+  configFileName: game_settings.json
+--- !u!4 &1972882691
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972882689}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 569.9789, y: 351.72253, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1972995839 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
@@ -7989,20 +8112,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4056864866935689188, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
   m_PrefabInstance: {fileID: 1198296394}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1972995841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1972995839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069a4e154bd34ae42816b2559b175a31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestWarehouseBox
-  isEmpty: 0
-  ingredientName: "\u0425\u043B\u0435\u0431"
 --- !u!114 &1972995844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8018,6 +8127,21 @@ MonoBehaviour:
   hoverCursor: {fileID: 2800000, guid: a5f9251f302a646559d2ef75693794c8, type: 3}
   defaultCursor: {fileID: 0}
   hotSpot: {x: 16, y: 16}
+--- !u!114 &1972995845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1972995839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df0c62d4eb1a1e4cadb2c6e871154e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarehouseBox
+  ingredientData: {fileID: 11400000, guid: b69abe203673c724c87e72a9383728a3, type: 2}
+  amountToGive: 3
+  isEmpty: 0
 --- !u!1 &1997696925
 GameObject:
   m_ObjectHideFlags: 0
@@ -8243,10 +8367,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1967826960}
+      addedObject: {fileID: 1967826963}
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1967826963}
+      addedObject: {fileID: 1967826964}
   m_SourcePrefab: {fileID: 100100000, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
 --- !u!1 &2025067044 stripped
 GameObject:
@@ -8258,20 +8382,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4056864866935689188, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
   m_PrefabInstance: {fileID: 1088210246}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2025067046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2025067044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069a4e154bd34ae42816b2559b175a31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestWarehouseBox
-  isEmpty: 0
-  ingredientName: "\u0412\u0430\u0440\u0435\u043D\u044C\u0435"
 --- !u!114 &2025067049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8287,6 +8397,21 @@ MonoBehaviour:
   hoverCursor: {fileID: 2800000, guid: a5f9251f302a646559d2ef75693794c8, type: 3}
   defaultCursor: {fileID: 0}
   hotSpot: {x: 16, y: 16}
+--- !u!114 &2025067050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025067044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df0c62d4eb1a1e4cadb2c6e871154e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarehouseBox
+  ingredientData: {fileID: 11400000, guid: 52fd34a39bc6d4d459d84d2d4ced615d, type: 2}
+  amountToGive: 3
+  isEmpty: 0
 --- !u!1 &2034572874
 GameObject:
   m_ObjectHideFlags: 0
@@ -8708,20 +8833,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4056864866935689188, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
   m_PrefabInstance: {fileID: 2106282775}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2080758992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2080758990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 069a4e154bd34ae42816b2559b175a31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestWarehouseBox
-  isEmpty: 0
-  ingredientName: "\u042F\u0439\u0446\u0430"
 --- !u!114 &2080758995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8737,6 +8848,21 @@ MonoBehaviour:
   hoverCursor: {fileID: 2800000, guid: a5f9251f302a646559d2ef75693794c8, type: 3}
   defaultCursor: {fileID: 0}
   hotSpot: {x: 16, y: 16}
+--- !u!114 &2080758996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080758990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df0c62d4eb1a1e4cadb2c6e871154e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarehouseBox
+  ingredientData: {fileID: 11400000, guid: 46df33669aa05de4c84ce787a5c829aa, type: 2}
+  amountToGive: 3
+  isEmpty: 0
 --- !u!1 &2099820756
 GameObject:
   m_ObjectHideFlags: 0
@@ -8911,10 +9037,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2080758992}
+      addedObject: {fileID: 2080758995}
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2080758995}
+      addedObject: {fileID: 2080758996}
   m_SourcePrefab: {fileID: 100100000, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
 --- !u!1 &2108421900
 GameObject:
@@ -8927,7 +9053,7 @@ GameObject:
   - component: {fileID: 2108421901}
   - component: {fileID: 2108421904}
   - component: {fileID: 2108421903}
-  - component: {fileID: 2108421902}
+  - component: {fileID: 2108421905}
   m_Layer: 5
   m_Name: Ing_Slot2
   m_TagString: Untagged
@@ -8954,19 +9080,6 @@ RectTransform:
   m_AnchoredPosition: {x: 96, y: 153}
   m_SizeDelta: {x: 138.43, y: 136.13}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2108421902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2108421900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3175b7d4a4b440e4ab9364171744fbd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestKitchenIngredient
-  ingredientName: "\u042F\u0439\u0446\u0430"
 --- !u!114 &2108421903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9005,6 +9118,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2108421900}
   m_CullTransparentMesh: 1
+--- !u!114 &2108421905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108421900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac22549a7e5165c4ba6b4628100fb95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KitchenTableSlot
+  allowedIngredient: {fileID: 11400000, guid: 46df33669aa05de4c84ce787a5c829aa, type: 2}
+  maxCount: 3
+  currentCount: 0
 --- !u!1001 &1939294150369910003
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9103,10 +9231,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1000761248}
+      addedObject: {fileID: 1000761251}
     - targetCorrespondingSourceObject: {fileID: 6453147576903389853, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1000761251}
+      addedObject: {fileID: 1000761252}
   m_SourcePrefab: {fileID: 100100000, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
 --- !u!1001 &3153532734206282663
 PrefabInstance:
@@ -9230,3 +9358,5 @@ SceneRoots:
   - {fileID: 876820153}
   - {fileID: 1544562639}
   - {fileID: 260110302}
+  - {fileID: 1972882691}
+  - {fileID: 160428327}
