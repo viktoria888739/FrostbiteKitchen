@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 380ef5fc1847d3043be18fba403f0a69, type: 3}
+  m_Name: Recipe_EggsWithSausage
+  m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.RecipeData
+  recipeId: eggs_with_sausage
+  recipeName: "\u042F\u0438\u0447\u043D\u0438\u0446\u0430 \u0441 \u043A\u043E\u043B\u0431\u0430\u0441\u043E\u0439"
+  icon: {fileID: 0}
+  requiredIngredients:
+  - ingredient: {fileID: 11400000, guid: 46df33669aa05de4c84ce787a5c829aa, type: 2}
+    count: 2
+  - ingredient: {fileID: 11400000, guid: 1af6abc4d65999e42942963d8fad6596, type: 2}
+    count: 1
+  timeLimit: 40
