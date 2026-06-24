@@ -73,10 +73,21 @@ public class PauseMenuController : MonoBehaviour
 
     private void CloseSettings()
     {
-        if (settingsPanel != null) settingsPanel.SetActive(false);
-        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(true);
+        if (settingsPanel != null) 
+        {
+            settingsPanel.SetActive(false);
+        }
+        if (pauseMenuPanel != null) 
+        {
+            UIWindowFade fadeComponent = pauseMenuPanel.GetComponent<UIWindowFade>();
+            if (fadeComponent != null)
+            {
+                fadeComponent.SkipFadeNextTime();
+            }
+            
+            pauseMenuPanel.SetActive(true);
+        }
     }
-
     private void OnExitPressed()
     {
         Time.timeScale = 1;
