@@ -1074,6 +1074,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &260110300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 260110302}
+  - component: {fileID: 260110301}
+  m_Layer: 0
+  m_Name: GameOverManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &260110301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260110300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5f0373f7ff81bf498f1c4f0952451a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameOverManager
+  gameOverScreenUI: {fileID: 0}
+--- !u!4 &260110302
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260110300}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 648.5377, y: 278.96268, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &279467165
 GameObject:
   m_ObjectHideFlags: 0
@@ -1328,9 +1373,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 293504123}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb49820d6ec8f8c4c8a13f32e02f9a26, type: 3}
+  m_Script: {fileID: 11500000, guid: 91a7c83a2730a394ab7c3ac6849a44c0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestBlindsToggle
+  m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Threats.BlindsToggle
   openHeight: 35
   closedHeight: 424
 --- !u!1 &349413311
@@ -2016,9 +2061,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 508835433}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e2b51d18c5d5aa4592897e496d750b4, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d0836df7ddfcfe459e9716ae038d462, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestFireExtinguisher
+  m_EditorClassIdentifier: Assembly-CSharp::FireExtinguisher
+  sprayEffect: {fileID: 0}
 --- !u!1 &538989674
 GameObject:
   m_ObjectHideFlags: 0
@@ -4612,7 +4658,7 @@ GameObject:
   - component: {fileID: 1103949666}
   - component: {fileID: 1103949665}
   - component: {fileID: 1103949664}
-  - component: {fileID: 1103949663}
+  - component: {fileID: 1103949667}
   m_Layer: 5
   m_Name: Btn_Flashlight
   m_TagString: Untagged
@@ -4637,22 +4683,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 50}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 301, y: 91.24}
+  m_SizeDelta: {x: 160, y: 102.479}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1103949663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1103949661}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bca8d707e19d6904ca77148d60ee8047, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestFlashlightToggle
-  spotlightObject: {fileID: 1535389705}
 --- !u!114 &1103949664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4697,8 +4730,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1103949663}
-        m_TargetAssemblyTypeName: TestFlashlightToggle, Assembly-CSharp
+      - m_Target: {fileID: 1103949667}
+        m_TargetAssemblyTypeName: FlashlightToggle, Assembly-CSharp
         m_MethodName: ToggleFlashlight
         m_Mode: 1
         m_Arguments:
@@ -4747,6 +4780,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1103949661}
   m_CullTransparentMesh: 1
+--- !u!114 &1103949667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1103949661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 935295f0aed367444881ed52847a20f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlashlightToggle
+  spotlightObject: {fileID: 1535389705}
 --- !u!1 &1110517209
 GameObject:
   m_ObjectHideFlags: 0
@@ -6908,7 +6954,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1615904561
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9183,3 +9229,4 @@ SceneRoots:
   - {fileID: 1681075203}
   - {fileID: 876820153}
   - {fileID: 1544562639}
+  - {fileID: 260110302}
