@@ -17,17 +17,10 @@ public class ChoppingBoard : MonoBehaviour, IInteractable
         
         if (held != null)
         {
-            // Запуск анимации нарезки
             if (animator != null)
                 animator.SetTrigger("Chop");
 
             Debug.Log($"<color=cyan>[ДОСКА] Нарезаем: {held.displayName}</color>");
-
-            // Здесь можно добавить задержку и замену на нарезанную версию
-            // StartCoroutine(ChopItem(held));
         }
     }
-
-    // Пример корутины
-    // private IEnumerator ChopItem(IngredientData item) { ... }
 }

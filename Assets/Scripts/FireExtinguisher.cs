@@ -13,14 +13,11 @@ public class FireExtinguisher : MonoBehaviour, IInteractable
 
         Debug.Log("<color=#FF3333>[ОГНЕТУШИТЕЛЬ] Применён! Угроза нейтрализована.</color>");
 
-        // Визуальный эффект
         if (sprayEffect != null)
             sprayEffect.Play();
 
-        // Успешная защита
         if (ThreatManager.Instance != null)
             ThreatManager.Instance.PlayerDefendedThreat(null);
 
-        // Можно добавить звук sfx_extinguisher_spray
     }
 }

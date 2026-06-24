@@ -25,7 +25,6 @@ public class FlashlightToggle : MonoBehaviour, IInteractable
             {
                 Debug.Log("<color=yellow>[ФОНАРИК] Свет включён в вентиляции</color>");
 
-                // Успешная защита (если фонарик используется против угрозы)
                 if (ThreatManager.Instance != null)
                     ThreatManager.Instance.PlayerDefendedThreat(null);
             }

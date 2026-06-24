@@ -68,7 +68,7 @@ public class OrderManager : MonoBehaviour
         activeRecipe = null;
 
         if (SessionStatistics.Instance != null)
-            SessionStatistics.Instance.AddSpoiledDish();     // ← Исправлено
+            SessionStatistics.Instance.AddSpoiledDish();
 
         Debug.Log("[OrderManager] Заказ провален по времени!");
         OnOrderExpired?.Invoke();
@@ -83,7 +83,7 @@ public class OrderManager : MonoBehaviour
         Debug.Log($"[OrderManager] Заказ {activeRecipe.recipeName} выполнен!");
 
         if (SessionStatistics.Instance != null)
-            SessionStatistics.Instance.AddSuccessfulDish();   // ← Исправлено
+            SessionStatistics.Instance.AddSuccessfulDish();
 
         isOrderActive = false;
         activeRecipe = null;

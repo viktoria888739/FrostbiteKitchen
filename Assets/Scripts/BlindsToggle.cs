@@ -33,9 +33,8 @@ namespace FrostbiteKitchen.Threats
                 SetBlindsHeight(closedHeight);
                 Debug.Log("<color=red>[ЖАЛЮЗИ] Окно ЗАКРЫТО. Защита от монстра активна!</color>");
 
-                // Успешная защита угрозы
                 if (ThreatManager.Instance != null)
-                    ThreatManager.Instance.PlayerDefendedThreat(null); // null = не важно какой спавнер
+                    ThreatManager.Instance.PlayerDefendedThreat(null);
             }
             else
             {

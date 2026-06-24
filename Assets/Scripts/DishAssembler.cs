@@ -15,14 +15,8 @@ public class DishAssembler : MonoBehaviour
     [SerializeField] private bool isFrozen = false;
 
     [Header("Events")]
-    /// <summary>
-    /// Событие, срабатывающее при каждом изменении состава блюда (добавление, разморозка, очистка).
-    /// Василиса может подписаться на него в своем HUD скрипте.
-    /// Передает актуальный список ингредиентов на тарелке.
-    /// </summary>
     public static System.Action<List<IngredientData>> OnDishChanged; 
     
-    // Старое событие очистки можно оставить для совместимости, если Настя его уже использует
     public static System.Action OnPlateCleared; 
 
     private void Awake()
@@ -104,13 +98,8 @@ public class DishAssembler : MonoBehaviour
         isFrozen = false;
         Debug.Log($"[DishAssembler] Состояние ВОССТАНОВЛЕНО. На тарелке снова: {ingredientsOnPlate.Count} шт.");
 
-        // Вызываем событие, так как состав тарелки визуально восстановился для игрока
         OnDishChanged?.Invoke(ingredientsOnPlate);
     }
-
-    /// <summary>
-    /// Публичный метод для добавления ингредиента.
-    /// </summary>
     public void AddIngredient(IngredientData newIngredient) 
     { 
         if (newIngredient == null) 
@@ -125,8 +114,6 @@ public class DishAssembler : MonoBehaviour
             frozenIngredientsBuffer.Add(newIngredient);
             Debug.Log($"[DishAssembler] Добавлен в замороженный буфер: {newIngredient.displayName}");
             
-            // Если Василиса хочет обновлять HUD даже тогда, когда ингредиент "копится" в буфере во время атаки:
-            // OnDishChanged?.Invoke(frozenIngredientsBuffer); 
             return;
         }
         
@@ -135,7 +122,6 @@ public class DishAssembler : MonoBehaviour
         
         Debug.Log($"[DishAssembler] Ингредиент '{newIngredient.displayName}' добавлен. Всего: {ingredientsOnPlate.Count}");
         
-        // 🔥 ТРИГГЕР СОБЫТИЯ: Оповещаем Василису, передавая текущее состояние тарелки
         OnDishChanged?.Invoke(ingredientsOnPlate); 
     } 
 
@@ -147,7 +133,6 @@ public class DishAssembler : MonoBehaviour
 
         Debug.Log("[DishAssembler] Тарелка полностью очищена.");
         
-        // Оповещаем UI, что тарелка пуста
         OnDishChanged?.Invoke(ingredientsOnPlate);
         OnPlateCleared?.Invoke(); 
     } 

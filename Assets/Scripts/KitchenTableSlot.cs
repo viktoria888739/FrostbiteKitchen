@@ -6,7 +6,7 @@ public class KitchenTableSlot : MonoBehaviour, IInteractable
 {
     [Header("Настройки слота")]
     [SerializeField] private IngredientData allowedIngredient;
-    [SerializeField] private int maxCount = 3;           // Теперь используется
+    [SerializeField] private int maxCount = 3;
 
     [Header("Текущее состояние")]
     [SerializeField] private int currentCount = 0;
@@ -18,7 +18,6 @@ public class KitchenTableSlot : MonoBehaviour, IInteractable
     {
         var inventory = PlayerInventory.Instance;
 
-        // === Разгрузка пачки (3 шт.) ===
         if (inventory.CurrentHeldItem != null && inventory.CurrentAmount == 3)
         {
             if (currentCount > 0)
@@ -29,7 +28,7 @@ public class KitchenTableSlot : MonoBehaviour, IInteractable
 
             if (allowedIngredient == null || inventory.CurrentHeldItem == allowedIngredient)
             {
-                currentCount = maxCount;                    // ← Используем maxCount
+                currentCount = maxCount;
                 allowedIngredient = inventory.CurrentHeldItem;
 
                 inventory.ClearInventory();
@@ -44,7 +43,6 @@ public class KitchenTableSlot : MonoBehaviour, IInteractable
             return;
         }
 
-        // === Взять 1 шт. ===
         if (inventory.CurrentHeldItem == null && currentCount > 0)
         {
             currentCount--;
@@ -59,7 +57,6 @@ public class KitchenTableSlot : MonoBehaviour, IInteractable
             return;
         }
 
-        // Отправить в сборщик, если в руках 1 шт.
         if (inventory.CurrentHeldItem != null && inventory.CurrentAmount == 1)
         {
             if (DishAssembler.Instance != null)

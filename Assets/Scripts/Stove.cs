@@ -49,10 +49,6 @@ public class Stove : MonoBehaviour, IInteractable
             HandleOvercooking();
         }
     }
-
-    /// <summary>
-    /// Вызывается из ThreatManager
-    /// </summary>
     public void SetThreatState(bool underThreat)
     {
         isUnderThreat = underThreat;
@@ -126,7 +122,6 @@ public class Stove : MonoBehaviour, IInteractable
     {
         overcookTimer += Time.deltaTime;
 
-        // Используем criticalOvercookTime — warning убран
         if (overcookTimer >= criticalOvercookTime && overcookTimer >= burnTime)
         {
             BurnDish();

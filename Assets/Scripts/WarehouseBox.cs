@@ -7,7 +7,7 @@ public class WarehouseBox : MonoBehaviour, IInteractable
 {
     [Header("Настройки склада")]
     [SerializeField] private IngredientData ingredientData;
-    [SerializeField] private int amountToGive = 3;     // По ТЗ — пачка из 3 шт.
+    [SerializeField] private int amountToGive = 3;
     [SerializeField] private bool isEmpty = false;
 
     public void Interact()
