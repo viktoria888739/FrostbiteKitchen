@@ -51,10 +51,6 @@ public class PlayerInventory : MonoBehaviour
         }
         return true;
     }
-
-    /// <summary>
-    /// Новый метод по ТЗ — уменьшить количество на N штук
-    /// </summary>
     public void RemoveItem(int amount)
     {
         if (currentHeldItem == null) return;

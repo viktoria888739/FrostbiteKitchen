@@ -12,7 +12,6 @@ public class SceneLoader : MonoBehaviour
 
     private void Start()
     {
-        // При запуске игры всегда показываем главное меню и прячем настройки
         if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
         if (settingsPanel != null) settingsPanel.SetActive(false);
     }
@@ -49,14 +48,12 @@ public class SceneLoader : MonoBehaviour
 
     public void OpenSettings()
     {
-        // Включаем настройки, выключаем главное меню
         if (settingsPanel != null) settingsPanel.SetActive(true);
         if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
     }
 
     public void CloseSetting()
     {
-        // Выключаем настройки, возвращаем главное меню
         if (settingsPanel != null) settingsPanel.SetActive(false);
         if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
     }

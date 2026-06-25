@@ -14,7 +14,9 @@ public class DishAssembler : MonoBehaviour
     [SerializeField] private List<IngredientData> frozenIngredientsBuffer = new();
     [SerializeField] private bool isFrozen = false;
 
-    public static System.Action<List<IngredientData>> OnPlateUpdated; 
+    [Header("Events")]
+    public static System.Action<List<IngredientData>> OnDishChanged; 
+    
     public static System.Action OnPlateCleared; 
 
     private void Awake()
@@ -26,7 +28,6 @@ public class DishAssembler : MonoBehaviour
         }
         Instance = this;
 
-        // Гарантируем инициализацию списков
         ingredientsOnPlate ??= new List<IngredientData>();
         frozenIngredientsBuffer ??= new List<IngredientData>();
     }
@@ -46,9 +47,6 @@ public class DishAssembler : MonoBehaviour
         return ingredientsOnPlate?.Count ?? 0;
     }
 
-    /// <summary>
-    /// Автоматическая заморозка/разморозка при смене состояний (особенно важно при угрозах)
-    /// </summary>
     private void HandleGameStateChanged(GameStateMachine.GameState newState)
     {
         if (newState != GameStateMachine.GameState.Gameplay)
@@ -61,13 +59,11 @@ public class DishAssembler : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Замораживает текущее состояние сборки (вызывать при уходе на отражение угрозы)
-    /// </summary>
     public void FreezeCurrentState()
     {
         if (isFrozen) return;
 
+        frozenIngredientsBuffer ??= new List<IngredientData>();
         frozenIngredientsBuffer.Clear();
 
         if (ingredientsOnPlate != null)
@@ -80,16 +76,14 @@ public class DishAssembler : MonoBehaviour
         }
 
         isFrozen = true;
-        Debug.Log($"[DishAssembler] Состояние ЗАМОРОЖЕНО. Сохранено ингредиентов: {frozenIngredientsBuffer.Count}");
+        Debug.Log($"[DishAssembler] Состояние ЗАМОРОЖЕНО. В буфер сохранено: {frozenIngredientsBuffer.Count} шт.");
     }
 
-    /// <summary>
-    /// Восстанавливает состояние без потери прогресса (при возвращении игрока)
-    /// </summary>
     public void ResumeCurrentState()
     {
         if (!isFrozen) return;
 
+        ingredientsOnPlate ??= new List<IngredientData>();
         ingredientsOnPlate.Clear();
 
         if (frozenIngredientsBuffer != null)
@@ -102,24 +96,33 @@ public class DishAssembler : MonoBehaviour
         }
 
         isFrozen = false;
-        Debug.Log($"[DishAssembler] Состояние ВОССТАНОВЛЕНО. На тарелке: {ingredientsOnPlate.Count} ингредиентов");
+        Debug.Log($"[DishAssembler] Состояние ВОССТАНОВЛЕНО. На тарелке снова: {ingredientsOnPlate.Count} шт.");
 
-        OnPlateUpdated?.Invoke(ingredientsOnPlate);
+        OnDishChanged?.Invoke(ingredientsOnPlate);
     }
-
     public void AddIngredient(IngredientData newIngredient) 
     { 
-        if (newIngredient == null || isFrozen) 
+        if (newIngredient == null) 
         {
-            Debug.LogWarning("[DishAssembler] Нельзя добавить ингредиент — сборка заморожена или null");
+            Debug.LogWarning("[DishAssembler] Попытка добавить пустой ингредиент (null)!");
             return; 
+        }
+
+        if (isFrozen)
+        {
+            frozenIngredientsBuffer ??= new List<IngredientData>();
+            frozenIngredientsBuffer.Add(newIngredient);
+            Debug.Log($"[DishAssembler] Добавлен в замороженный буфер: {newIngredient.displayName}");
+            
+            return;
         }
         
         ingredientsOnPlate ??= new List<IngredientData>();
         ingredientsOnPlate.Add(newIngredient); 
         
-        Debug.Log($"[DishAssembler] Добавлен: {newIngredient.displayName}. Всего: {ingredientsOnPlate.Count}");
-        OnPlateUpdated?.Invoke(ingredientsOnPlate); 
+        Debug.Log($"[DishAssembler] Ингредиент '{newIngredient.displayName}' добавлен. Всего: {ingredientsOnPlate.Count}");
+        
+        OnDishChanged?.Invoke(ingredientsOnPlate); 
     } 
 
     public void ClearPlate() 
@@ -129,18 +132,16 @@ public class DishAssembler : MonoBehaviour
         isFrozen = false;
 
         Debug.Log("[DishAssembler] Тарелка полностью очищена.");
+        
+        OnDishChanged?.Invoke(ingredientsOnPlate);
         OnPlateCleared?.Invoke(); 
     } 
 
-    /// <summary>
-    /// Публичный метод для OrderCompleteBtn и других систем
-    /// </summary>
     public bool ValidateRecipe(RecipeData targetRecipe)
     {
         if (targetRecipe == null || targetRecipe.requiredIngredients == null || ingredientsOnPlate == null)
             return false;
 
-        // Подсчёт требуемых ингредиентов
         Dictionary<IngredientData, int> required = new();
         foreach (var req in targetRecipe.requiredIngredients)
         {
@@ -153,7 +154,6 @@ public class DishAssembler : MonoBehaviour
             }
         }
 
-        // Подсчёт текущих
         Dictionary<IngredientData, int> current = new();
         foreach (var ing in ingredientsOnPlate)
         {
@@ -177,7 +177,6 @@ public class DishAssembler : MonoBehaviour
         return true;
     }
 
-    // Для отладки в инспекторе
     [ContextMenu("Force Freeze State")]
     private void DebugFreeze() => FreezeCurrentState();
 

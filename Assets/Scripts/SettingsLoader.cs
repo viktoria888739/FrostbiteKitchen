@@ -28,7 +28,6 @@ public class SettingsLoader : MonoBehaviour
 
     private void Awake()
     {
-        // Настройка Синглтона
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);

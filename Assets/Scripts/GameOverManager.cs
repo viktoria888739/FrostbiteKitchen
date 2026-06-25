@@ -68,7 +68,6 @@ public class GameOverManager : MonoBehaviour
         if (gameOverScreenUI != null)
         {
             gameOverScreenUI.SetActive(true);
-            // Здесь Василиса будет подтягивать данные
         }
 
         Debug.Log($"=== GAME OVER ===\n" +

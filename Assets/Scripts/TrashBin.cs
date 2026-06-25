@@ -21,23 +21,19 @@ public class TrashBin : MonoBehaviour, IInteractable
     public void Interact()
     {
         var inventory = PlayerInventory.Instance;
-        
+
         if (inventory.CurrentHeldItem != null)
         {
             string itemName = inventory.CurrentHeldItem.displayName;
-            
+
             inventory.ClearInventory();
 
             Debug.Log($"<color=gray>[МУСОРКА]</color> Выброшено: {itemName}");
 
-            // Звук выброса
             if (audioSource != null && trashSound != null)
             {
                 audioSource.PlayOneShot(trashSound);
             }
-
-            // Можно добавить эффект частиц позже
-            // Например: trashParticles?.Play();
         }
         else
         {

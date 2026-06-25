@@ -75,7 +75,7 @@ public class ThreatManager : MonoBehaviour
     {
         yield return new WaitForSeconds(threatDuration);
         if (isThreatActive)
-            ClearCurrentThreat(spawner);   // Успешное отражение (если не было jumpscare)
+            ClearCurrentThreat(spawner);
     }
 
     public void ClearCurrentThreat(ThreatSpawner2 spawner = null)

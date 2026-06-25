@@ -1,14 +1,19 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
 
-public class FlashlightToggle : MonoBehaviour
+public class FlashlightToggle : MonoBehaviour, IInteractable
 {
     [Header("Объект света")]
     [SerializeField] private GameObject spotlightObject;
 
     private bool isOn = false;
 
-    // Этот метод мы будем вызывать при нажатии на UI Button
+    public void Interact()
+    {
+        ToggleFlashlight();
+    }
+
     public void ToggleFlashlight()
     {
         if (spotlightObject != null)
@@ -18,16 +23,14 @@ public class FlashlightToggle : MonoBehaviour
 
             if (isOn)
             {
-                Debug.Log("<color=yellow>[ФОНАРИК]</color> Свет включён в вентиляции");
+                Debug.Log("<color=yellow>[ФОНАРИК] Свет включён в вентиляции</color>");
 
-                // Сохраняем логику Вики: если фонарик включили, 
-                // отправляем сигнал в ThreatManager, что мы защитились от монстра
                 if (ThreatManager.Instance != null)
                     ThreatManager.Instance.PlayerDefendedThreat(null);
             }
             else
             {
-                Debug.Log("<color=white>[ФОНАРИК]</color> Свет выключен");
+                Debug.Log("<color=white>[ФОНАРИК] Свет выключен</color>");
             }
         }
     }

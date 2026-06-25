@@ -7,12 +7,11 @@ namespace FrostbiteKitchen.Core
     {
         [Header("Settings")]
         [Tooltip("Длительность сессии в секундах (по ТЗ 180 секунд = 3 минуты)")]
-        [SerializeField] private float sessionDuration = 180f; //
+        [SerializeField] private float sessionDuration = 180f;  
 
         private float _timeRemaining;
         private bool _isActive = false;
 
-        // Событие для Василисы (UI), чтобы обновлять полосу времени или текст
         public static event Action<float> OnTimerUpdated;
         public static event Action OnTimerExpired;
 
@@ -20,8 +19,7 @@ namespace FrostbiteKitchen.Core
         {
             _timeRemaining = sessionDuration;
             
-            // Подписываемся на состояние геймплея твоей машины
-            GameStateMachine.OnStateChanged += HandleStateChanged; //
+            GameStateMachine.OnStateChanged += HandleStateChanged;
         }
 
         private void Update()
@@ -42,29 +40,26 @@ namespace FrostbiteKitchen.Core
             }
         }
 
-        private void HandleStateChanged(GameStateMachine.GameState newState) //
+        private void HandleStateChanged(GameStateMachine.GameState newState)
         {
-            // Таймер идет только во время активного геймплея
-            _isActive = (newState == GameStateMachine.GameState.Gameplay); //
+            _isActive = (newState == GameStateMachine.GameState.Gameplay);
         }
 
         private void HandleSessionEnd()
         {
             Debug.Log("[SessionTimer] Время демо-сессии вышло!");
             
-            // Переключаем твой конечный автомат в состояние результатов
-            if (GameStateMachine.Instance != null) //
+            if (GameStateMachine.Instance != null)  
             {
-                GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Results); //
+                GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Results);  
             }
         }
 
         private void OnDestroy()
         {
-            GameStateMachine.OnStateChanged -= HandleStateChanged; //
+            GameStateMachine.OnStateChanged -= HandleStateChanged;  
         }
 
-        // Публичный метод, если UI захочет узнать точный остаток времени в секундах
         public float GetTimeRemaining() => _timeRemaining;
     }
 }
