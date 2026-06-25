@@ -1,15 +1,15 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // Добавили поддержку новой системы ввода
+using UnityEngine.InputSystem;
 
 public class KitchenRotation : MonoBehaviour
 {
-    [Header("Панели сторон кухни")]
+    [Header("Р’РёРґС‹ СЃС‚РѕСЂРѕРЅ РєСѓС…РЅРё")]
     public GameObject viewFront;
     public GameObject viewRight;
     public GameObject viewLeft;
     public GameObject viewBack;
 
-    [Header("Внешние ссылки")]
+    [Header("РњРµРЅРµРґР¶РµСЂ РїСЂРµРґСѓРїСЂРµР¶РґРµРЅРёР№")]
     [SerializeField] private VisualWarningManager warningManager;
 
     private int currentViewIndex = 0;
@@ -17,10 +17,8 @@ public class KitchenRotation : MonoBehaviour
 
     void Start()
     {
-        // Порядок в массиве: 0 = Front, 1 = Right, 2 = Back, 3 = Left
         views = new GameObject[] { viewFront, viewRight, viewBack, viewLeft };
 
-        // Автоматически ищем VisualWarningManager на сцене, если забыли привязать в инспекторе
         if (warningManager == null)
         {
             warningManager = Object.FindFirstObjectByType<VisualWarningManager>();
@@ -31,7 +29,6 @@ public class KitchenRotation : MonoBehaviour
 
     void Update()
     {
-        // Проверяем нажатие клавиш по правилам New Input System в Unity 6
         if (Keyboard.current != null)
         {
             if (Keyboard.current.aKey.wasPressedThisFrame || Keyboard.current.leftArrowKey.wasPressedThisFrame)
@@ -47,12 +44,22 @@ public class KitchenRotation : MonoBehaviour
 
     public void RotateRight()
     {
+        if (CameraWobbleEffect.Instance != null)
+        {
+            CameraWobbleEffect.Instance.PlayWobble(1);
+        }
+
         currentViewIndex = (currentViewIndex + 1) % views.Length;
         UpdateVisuals();
     }
 
     public void RotateLeft()
     {
+        if (CameraWobbleEffect.Instance != null)
+        {
+            CameraWobbleEffect.Instance.PlayWobble(-1);
+        }
+
         currentViewIndex--;
         if (currentViewIndex < 0)
         {
@@ -63,6 +70,11 @@ public class KitchenRotation : MonoBehaviour
 
     private void UpdateVisuals()
     {
+        if (CameraBlinkEffect.Instance != null)
+        {
+            CameraBlinkEffect.Instance.PlayBlink();
+        }
+
         for (int i = 0; i < views.Length; i++)
         {
             if (views[i] != null)
@@ -71,7 +83,6 @@ public class KitchenRotation : MonoBehaviour
             }
         }
 
-        // НОВАЯ ЛОГИКА: Сообщаем менеджеру предупреждений, куда теперь смотрит игрок
         if (warningManager != null)
         {
             KitchenSide currentSide = GetCurrentSideEnum(currentViewIndex);
@@ -79,9 +90,6 @@ public class KitchenRotation : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Конвертирует индекс массива в соответствующий KitchenSide Enum
-    /// </summary>
     private KitchenSide GetCurrentSideEnum(int index)
     {
         switch (index)

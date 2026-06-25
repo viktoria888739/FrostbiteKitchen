@@ -1,35 +1,34 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement; // Обязательно для смены сцен
+using UnityEngine.SceneManagement;
 
 public class PauseMenuController : MonoBehaviour
 {
     [Header("UI Panels")]
-    [SerializeField] private GameObject pauseMenuPanel; // Окно паузы
-
+    [SerializeField] private GameObject pauseMenuPanel;
+    [SerializeField] private GameObject settingsPanel;
     [Header("Gameplay HUD")]
-    [SerializeField] private Button hudPauseButton; // Кнопка "||" на экране во время игры
-
+    [SerializeField] private Button hudPauseButton;
     [Header("Pause Menu Buttons")]
     [SerializeField] private Button resumeButton;
+    [SerializeField] private Button settingsButton;
     [SerializeField] private Button exitButton;
+
+    [Header("Settings Panel Buttons")]
+    [SerializeField] private Button closeSettingsButton;
 
     private void Awake()
     {
-        // Кнопка "||" на экране
-        if (hudPauseButton != null)
-            hudPauseButton.onClick.AddListener(TogglePauseState);
+        if (hudPauseButton != null) hudPauseButton.onClick.AddListener(TogglePauseState);
+        if (resumeButton != null) resumeButton.onClick.AddListener(TogglePauseState);
+        if (exitButton != null) exitButton.onClick.AddListener(OnExitPressed);
 
-        // Кнопки внутри меню паузы
-        if (resumeButton != null)
-            resumeButton.onClick.AddListener(TogglePauseState);
+        // РџРѕРґРїРёСЃС‹РІР°РµРј РЅРѕРІС‹Рµ РєРЅРѕРїРєРё
+        if (settingsButton != null) settingsButton.onClick.AddListener(OpenSettings);
+        if (closeSettingsButton != null) closeSettingsButton.onClick.AddListener(CloseSettings);
 
-        if (exitButton != null)
-            exitButton.onClick.AddListener(OnExitPressed);
-
-        // В начале игры меню паузы должно быть скрыто
-        if (pauseMenuPanel != null)
-            pauseMenuPanel.SetActive(false);
+        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
+        if (settingsPanel != null) settingsPanel.SetActive(false);
     }
 
     private void OnEnable()
@@ -44,7 +43,6 @@ public class PauseMenuController : MonoBehaviour
         GameStateMachine.OnGameResumed -= HidePauseUI;
     }
 
-    // Метод для переключения состояния через State Machine
     private void TogglePauseState()
     {
         if (GameStateMachine.Instance != null)
@@ -56,28 +54,49 @@ public class PauseMenuController : MonoBehaviour
     private void ShowPauseUI()
     {
         pauseMenuPanel.SetActive(true);
-        if (hudPauseButton != null) hudPauseButton.gameObject.SetActive(false); // Скрываем кнопку паузы, когда меню открыто
+        if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (hudPauseButton != null) hudPauseButton.gameObject.SetActive(false);
     }
 
     private void HidePauseUI()
     {
         pauseMenuPanel.SetActive(false);
-        if (hudPauseButton != null) hudPauseButton.gameObject.SetActive(true); // Показываем кнопку паузы обратно
+        if (settingsPanel != null) settingsPanel.SetActive(false);
+        if (hudPauseButton != null) hudPauseButton.gameObject.SetActive(true);
+    }
+    
+    private void OpenSettings()
+    {
+        if (pauseMenuPanel != null) pauseMenuPanel.SetActive(false);
+        if (settingsPanel != null) settingsPanel.SetActive(true);
     }
 
+    private void CloseSettings()
+    {
+        if (settingsPanel != null) 
+        {
+            settingsPanel.SetActive(false);
+        }
+        if (pauseMenuPanel != null) 
+        {
+            UIWindowFade fadeComponent = pauseMenuPanel.GetComponent<UIWindowFade>();
+            if (fadeComponent != null)
+            {
+                fadeComponent.SkipFadeNextTime();
+            }
+            
+            pauseMenuPanel.SetActive(true);
+        }
+    }
     private void OnExitPressed()
     {
-        // 1. Важно! Возвращаем время в нормальный режим перед сменой сцены
         Time.timeScale = 1;
 
-        // 2. Опционально: уведомляем стейт-машину, что мы уходим в меню
         if (GameStateMachine.Instance != null)
         {
             GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.MainMenu);
         }
 
-        // 3. Загружаем сцену главного меню
-        // Убедись, что сцена в окне Build Settings называется именно "MainMenu"
         SceneManager.LoadScene("MainMenu");
     }
 }
