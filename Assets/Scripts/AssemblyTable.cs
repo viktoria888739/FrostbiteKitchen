@@ -21,33 +21,22 @@ namespace FrostbiteKitchen.KitchenStation
                 return;
             }
 
-            if (inventory.CurrentHeldItem != null)
-            {
-                if (assembler.GetCurrentIngredientCount() >= maxIngredients)
-                {
-                    Debug.Log("<color=yellow>[СБОРКА]</color> Тарелка уже полная!");
-                    return;
-                }
-
-                IngredientData heldItem = inventory.CurrentHeldItem;
-
-                assembler.AddIngredient(heldItem);
-
-                if (inventory.CurrentAmount > 1)
-                {
-                    inventory.TryUseOneItem();
-                }
-                else
-                {
-                    inventory.ClearInventory();
-                }
-
-                Debug.Log($"<color=#33FF57>[СБОРКА]</color> Добавлен ингредиент: {heldItem.displayName}");
-            }
-            else
+            if (inventory.CurrentHeldItem == null)
             {
                 Debug.Log("<color=#33FF57>[СБОРКА]</color> Руки пустые.");
+                return;
             }
+
+            if (assembler.GetCurrentIngredientCount() >= maxIngredients)
+            {
+                Debug.Log("<color=yellow>[СБОРКА]</color> Тарелка уже полная!");
+                return;
+            }
+
+            IngredientData heldItem = inventory.CurrentHeldItem;
+            assembler.AddIngredient(heldItem);
+            inventory.TryUseOneItem();
+            Debug.Log($"<color=#33FF57>[СБОРКА]</color> Добавлен ингредиент: {heldItem.displayName}");
         }
     }
 }

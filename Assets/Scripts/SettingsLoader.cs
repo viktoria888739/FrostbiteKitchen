@@ -5,9 +5,6 @@ using UnityEngine;
 [Serializable]
 public class GameSettingsData
 {
-    [Tooltip("Длительность игровой сессии в секундах (3 минуты = 180с)")]
-    public float sessionDurationSeconds = 180f;
-
     [Tooltip("Время паузы между заказами в секундах")]
     public float timeBetweenOrdersSeconds = 5f;
 

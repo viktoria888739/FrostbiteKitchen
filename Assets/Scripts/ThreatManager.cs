@@ -18,7 +18,7 @@ public class ThreatManager : MonoBehaviour
     private Coroutine activeThreatCoroutine;
     private Coroutine threatSpawnCoroutine;
 
-    public static System.Action OnThreatStarted;
+    public static System.Action<KitchenSide> OnThreatStarted;
     public static System.Action OnThreatCleared;
 
     private void Awake()
@@ -56,19 +56,25 @@ public class ThreatManager : MonoBehaviour
     {
         if (isThreatActive || spawners.Count == 0) return;
 
-        ThreatSpawner2 spawner = spawners[Random.Range(0, spawners.Count)];
+        ThreatSpawner2 chosenSpawner = spawners[Random.Range(0, spawners.Count)];
         isThreatActive = true;
 
-        Debug.Log($"<color=red>[THREAT] 🚨 УГРОЗА со стороны: {spawner.sideName}</color>");
+        Debug.Log($"<color=red>[THREAT] 🚨 УГРОЗА со стороны: {chosenSpawner.sideName}</color>");
 
-        spawner.ActivateThreat();
-        OnThreatStarted?.Invoke();
+        chosenSpawner.ActivateThreat();
 
-        if (DishAssembler.Instance != null) DishAssembler.Instance.FreezeCurrentState();
-        SetAllStovesThreatState(true);
+        if (System.Enum.TryParse(chosenSpawner.sideName, out KitchenSide sideEnum))
+        {
+            OnThreatStarted?.Invoke(sideEnum);
+        }
+        else
+        {
+            Debug.LogWarning($"[ThreatManager] Не удалось распознать сторону: {chosenSpawner.sideName}");
+            OnThreatStarted?.Invoke(KitchenSide.Front);
+        }
 
         if (activeThreatCoroutine != null) StopCoroutine(activeThreatCoroutine);
-        activeThreatCoroutine = StartCoroutine(ThreatDurationCoroutine(spawner));
+        activeThreatCoroutine = StartCoroutine(ThreatDurationCoroutine(chosenSpawner));
     }
 
     private IEnumerator ThreatDurationCoroutine(ThreatSpawner2 spawner)
@@ -92,22 +98,10 @@ public class ThreatManager : MonoBehaviour
 
         OnThreatCleared?.Invoke();
 
-        if (DishAssembler.Instance != null) DishAssembler.Instance.ResumeCurrentState();
-        SetAllStovesThreatState(false);
-
         if (activeThreatCoroutine != null)
         {
             StopCoroutine(activeThreatCoroutine);
             activeThreatCoroutine = null;
-        }
-    }
-
-    private void SetAllStovesThreatState(bool underThreat)
-    {
-        Stove[] stoves = Object.FindObjectsByType<Stove>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (var stove in stoves)
-        {
-            if (stove != null) stove.SetThreatState(underThreat);
         }
     }
 
