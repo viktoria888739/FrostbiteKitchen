@@ -41,6 +41,24 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Backgrounds
+    uniqueID: 2441015079
+    locked: 0
+  - name: Environment
+    uniqueID: 1107893321
+    locked: 0
+  - name: 'Interactors '
+    uniqueID: 2384671455
+    locked: 0
+  - name: Items
+    uniqueID: 816311099
+    locked: 0
+  - name: Monsters
+    uniqueID: 1460504591
+    locked: 0
+  - name: ForeGround
+    uniqueID: 4140061027
+    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1
