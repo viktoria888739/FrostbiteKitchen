@@ -14,17 +14,19 @@ public class Stove : MonoBehaviour, IInteractable
     [SerializeField] private Animator animator;
 
     [Header("Порча во время угрозы")]
-    [Tooltip("Время (сек), после которого блюдо начинает портиться")]
+    [Tooltip("Через сколько секунд блюдо начинает подгорать")]
     [SerializeField] private float criticalOvercookTime = 6f;
-    
-    [Tooltip("Время (сек), через которое блюдо полностью сгорает")]
+
+    [Tooltip("Через сколько секунд блюдо полностью сгорает")]
     [SerializeField] private float burnTime = 11f;
 
     private float overcookTimer = 0f;
     private bool isUnderThreat = false;
+    private Coroutine cookingCoroutine;
 
     public event System.Action<float> OnProgressUpdated;
     public event System.Action OnDishBurned;
+    public event System.Action OnCookingFinished;
 
     private void Awake()
     {
@@ -49,9 +51,11 @@ public class Stove : MonoBehaviour, IInteractable
             HandleOvercooking();
         }
     }
+
     public void SetThreatState(bool underThreat)
     {
         isUnderThreat = underThreat;
+
         if (animator != null)
             animator.SetBool("IsUnderThreat", underThreat);
 
@@ -64,10 +68,6 @@ public class Stove : MonoBehaviour, IInteractable
         if (currentIngredientOnStove == null) return;
 
         PlayerInventory.Instance.SetHeldItem(currentIngredientOnStove, 1);
-        
-        string status = isBurned ? "сгоревшее" : "готовое";
-        Debug.Log($"<color=yellow>[ПЛИТА]</color> Забрали {status} блюдо: {currentIngredientOnStove.displayName}");
-
         ResetStove();
     }
 
@@ -84,9 +84,13 @@ public class Stove : MonoBehaviour, IInteractable
 
     private void StartCookingProcess()
     {
+        if (cookingCoroutine != null)
+            StopCoroutine(cookingCoroutine);
+
         isCooking = true;
         if (animator != null) animator.SetTrigger("StartCooking");
-        StartCoroutine(CookingCoroutine(currentIngredientOnStove));
+
+        cookingCoroutine = StartCoroutine(CookingCoroutine(currentIngredientOnStove));
     }
 
     private IEnumerator CookingCoroutine(IngredientData rawIngredient)
@@ -96,10 +100,13 @@ public class Stove : MonoBehaviour, IInteractable
 
         while (elapsed < targetTime)
         {
-            if (isUnderThreat)
+            if (!isCooking || currentIngredientOnStove == null)
+                yield break;
+
+            if (GameStateMachine.Instance != null && GameStateMachine.Instance.CurrentState != GameStateMachine.GameState.Gameplay)
             {
                 yield return null;
-                continue;
+                continue; 
             }
 
             elapsed += Time.deltaTime;
@@ -108,13 +115,15 @@ public class Stove : MonoBehaviour, IInteractable
             yield return null;
         }
 
-        if (rawIngredient.CookedVersion != null)
+        if (rawIngredient.CookedVersion != null && isCooking)
         {
             currentIngredientOnStove = rawIngredient.CookedVersion;
             if (animator != null) animator.SetTrigger("CookingDone");
+            OnCookingFinished?.Invoke();
         }
 
         isCooking = false;
+        cookingCoroutine = null;
         OnProgressUpdated?.Invoke(1f);
     }
 
@@ -122,7 +131,15 @@ public class Stove : MonoBehaviour, IInteractable
     {
         overcookTimer += Time.deltaTime;
 
-        if (overcookTimer >= criticalOvercookTime && overcookTimer >= burnTime)
+        if (overcookTimer >= criticalOvercookTime && overcookTimer < burnTime)
+        {
+            if (overcookTimer < criticalOvercookTime + 0.5f)
+            {
+                Debug.Log("<color=orange>[ПЛИТА] Блюдо начинает подгорать...</color>");
+            }
+        }
+
+        if (overcookTimer >= burnTime)
         {
             BurnDish();
         }
@@ -134,19 +151,25 @@ public class Stove : MonoBehaviour, IInteractable
 
         isBurned = true;
         isCooking = false;
+        cookingCoroutine = null;
 
         Debug.Log($"<color=red>[ПЛИТА] 🔥 БЛЮДО СГОРЕЛО: {currentIngredientOnStove.displayName}</color>");
 
         if (SessionStatistics.Instance != null)
-            SessionStatistics.Instance.AddSpoiledDish();
+            SessionStatistics.Instance.AddFailedOrder(); 
 
         if (animator != null) animator.SetTrigger("Burned");
-
         OnDishBurned?.Invoke();
     }
 
     private void ResetStove()
     {
+        if (cookingCoroutine != null)
+        {
+            StopCoroutine(cookingCoroutine);
+            cookingCoroutine = null;
+        }
+
         currentIngredientOnStove = null;
         isCooking = false;
         isBurned = false;
@@ -157,5 +180,9 @@ public class Stove : MonoBehaviour, IInteractable
     private void HandleGameStateChanged(GameStateMachine.GameState newState)
     {
         isUnderThreat = (newState != GameStateMachine.GameState.Gameplay);
+        
+        if (animator != null) 
+            animator.SetBool("IsUnderThreat", isUnderThreat);
+
     }
 }

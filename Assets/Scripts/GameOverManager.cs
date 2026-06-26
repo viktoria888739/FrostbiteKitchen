@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using FrostbiteKitchen.Core;
 
 public class GameOverManager : MonoBehaviour
 {
@@ -33,18 +32,18 @@ public class GameOverManager : MonoBehaviour
 
     private void SubscribeToEvents()
     {
-        SessionTimer.OnTimerExpired += OnSessionTimeExpired;
+        SessionOrderTracker.OnSessionCompleted += OnSessionFinished;
     }
 
     private void OnDisable()
     {
-        SessionTimer.OnTimerExpired -= OnSessionTimeExpired;
+        SessionOrderTracker.OnSessionCompleted -= OnSessionFinished;
     }
 
-    private void OnSessionTimeExpired()
+    private void OnSessionFinished()
     {
         if (!isGameOver)
-            TriggerGameOver("Время сессии вышло");
+            TriggerGameOver("Смена завершена! Все клиенты обслужены.");
     }
 
     public void TriggerGameOver(string reason = "Game Over")
@@ -56,25 +55,27 @@ public class GameOverManager : MonoBehaviour
 
         Debug.Log($"<color=red>[GAME OVER] Причина: {reason}</color>");
 
-        SessionData stats = SessionStatistics.Instance != null 
-            ? SessionStatistics.Instance.GetSessionData() 
-            : new SessionData();
-
-        ShowGameOverScreen(stats, reason);
+        ShowGameOverScreen(reason);
     }
 
-    private void ShowGameOverScreen(SessionData stats, string reason)
+    private void ShowGameOverScreen(string reason)
     {
         if (gameOverScreenUI != null)
         {
             gameOverScreenUI.SetActive(true);
         }
 
-        Debug.Log($"=== GAME OVER ===\n" +
-                  $"✅ Выполнено блюд: {stats.successfulDishes}\n" +
-                  $"❌ Испорчено: {stats.spoiledDishes}\n" +
-                  $"🛡️ Отражено атак: {stats.threatsDefended}\n" +
-                  $"⏱️ Время выживания: {stats.survivalTime:F1} сек.");
+        if (SessionStatistics.Instance != null)
+        {
+            Debug.Log($"=== GAME OVER ===\n" +
+                      $"✅ Выполнено заказов: {SessionStatistics.Instance.completedOrders}\n" +
+                      $"❌ Провалено заказов: {SessionStatistics.Instance.failedOrders}\n" +
+                      $"⏱️ Общее время сессии: {SessionStatistics.Instance.sessionTime:F1} сек.");
+        }
+        else
+        {
+            Debug.LogWarning("[GameOverManager] SessionStatistics не найден!");
+        }
     }
 
     public void RestartGame()

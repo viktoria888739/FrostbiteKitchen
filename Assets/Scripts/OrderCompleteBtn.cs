@@ -7,7 +7,7 @@ namespace FrostbiteKitchen.UI
     public class OrderCompleteBtn : MonoBehaviour, IInteractable
     {
         [Header("Зона выдачи")]
-        [Tooltip("Ссылка на сборщик (если не найдёт автоматически)")]
+        [Tooltip("Ссылка на сборщик тарелок")]
         [SerializeField] private DishAssembler dishAssembler;
 
         private void Awake()
@@ -25,15 +25,9 @@ namespace FrostbiteKitchen.UI
 
         public void Interact()
         {
-            if (dishAssembler == null)
+            if (dishAssembler == null || OrderManager.Instance == null)
             {
-                Debug.LogError("[ЗОНА ВЫДАЧИ] DishAssembler не найден!");
-                return;
-            }
-
-            if (OrderManager.Instance == null)
-            {
-                Debug.LogError("[ЗОНА ВЫДАЧИ] OrderManager не найден!");
+                Debug.LogError("[ЗОНА ВЫДАЧИ] Не найдены необходимые компоненты!");
                 return;
             }
 
@@ -53,7 +47,10 @@ namespace FrostbiteKitchen.UI
             }
             else
             {
-                Debug.Log("<color=red>[ЗОНА ВЫДАЧИ]</color> Блюдо не соответствует заказу! Проверьте ингредиенты.");
+                Debug.Log("<color=red>[ЗОНА ВЫДАЧИ]</color> Блюдо не соответствует заказу! Заказ провален.");
+
+                OrderManager.Instance.FailCurrentOrder();
+                dishAssembler.ClearPlate();
             }
         }
     }

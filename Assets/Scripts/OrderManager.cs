@@ -1,22 +1,22 @@
 using UnityEngine;
-using System.Collections.Generic;
 using FrostbiteKitchen.Data;
 
 public class OrderManager : MonoBehaviour
 {
     public static OrderManager Instance { get; private set; }
 
-    [Header("Settings")]
+    [Header("Настройки заказов")]
     [SerializeField] private RecipeCatalog recipeCatalog;
-    [SerializeField] private float timeBetweenOrders = 5f;
+    [Tooltip("Время между появлением новых заказов (в секундах)")]
+    [SerializeField] private float timeBetweenOrders = 9f;
 
-    [Header("Current Order")]
+    [Header("Текущий заказ")]
     [SerializeField] private RecipeData activeRecipe;
     private float currentOrderTimer;
     private bool isOrderActive = false;
-
-    public static System.Action<RecipeData> OnNewOrderStarted;
+    public static System.Action OnOrderSubmitted;
     public static System.Action OnOrderExpired;
+    public static System.Action<RecipeData> OnNewOrderStarted;
 
     private void Awake()
     {
@@ -26,7 +26,7 @@ public class OrderManager : MonoBehaviour
     private void Update()
     {
         if (GameStateMachine.Instance == null || 
-            GameStateMachine.Instance.CurrentState != GameStateMachine.GameState.Gameplay) 
+            GameStateMachine.Instance.CurrentState != GameStateMachine.GameState.Gameplay)
             return;
 
         if (isOrderActive)
@@ -50,12 +50,13 @@ public class OrderManager : MonoBehaviour
         isOrderActive = true;
 
         OnNewOrderStarted?.Invoke(activeRecipe);
-        Debug.Log($"[OrderManager] Новый заказ: {activeRecipe.recipeName}");
+        Debug.Log($"[OrderManager] Новый заказ: {activeRecipe.recipeName} | Время: {currentOrderTimer:F1}с");
     }
 
     private void UpdateOrderTimer()
     {
         currentOrderTimer -= Time.deltaTime;
+
         if (currentOrderTimer <= 0)
         {
             OrderFailed();
@@ -66,27 +67,27 @@ public class OrderManager : MonoBehaviour
     {
         isOrderActive = false;
         activeRecipe = null;
-
-        if (SessionStatistics.Instance != null)
-            SessionStatistics.Instance.AddSpoiledDish();
-
-        Debug.Log("[OrderManager] Заказ провален по времени!");
+        SessionStatistics.Instance?.AddFailedOrder();
         OnOrderExpired?.Invoke();
-
+        SessionOrderTracker.Instance?.RegisterCompletedOrder();
+        Debug.Log("[OrderManager] Заказ провален по времени!");
         Invoke(nameof(StartNewRandomOrder), timeBetweenOrders);
     }
 
     public void CompleteActiveOrder()
     {
         if (!isOrderActive) return;
-
-        Debug.Log($"[OrderManager] Заказ {activeRecipe.recipeName} выполнен!");
-
-        if (SessionStatistics.Instance != null)
-            SessionStatistics.Instance.AddSuccessfulDish();
-
+        Debug.Log($"[OrderManager] Заказ {activeRecipe.recipeName} успешно сдан!");
+        SessionStatistics.Instance?.AddCompletedOrder();
+        OnOrderSubmitted?.Invoke();
+        SessionOrderTracker.Instance?.RegisterCompletedOrder();
         isOrderActive = false;
         activeRecipe = null;
         Invoke(nameof(StartNewRandomOrder), timeBetweenOrders);
+    }
+    public void FailCurrentOrder()
+    {
+        if (!isOrderActive) return;
+        OrderFailed();
     }
 }

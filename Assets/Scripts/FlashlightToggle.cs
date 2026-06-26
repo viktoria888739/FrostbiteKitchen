@@ -21,16 +21,17 @@ public class FlashlightToggle : MonoBehaviour, IInteractable
             isOn = !isOn;
             spotlightObject.SetActive(isOn);
 
+            ViewRotationBlocker.SetBlock(isOn);
+
             if (isOn)
             {
-                Debug.Log("<color=yellow>[ФОНАРИК] Свет включён в вентиляции</color>");
-
+                Debug.Log("<color=yellow>[ФОНАРИК] Свет включён — вращение заблокировано</color>");
                 if (ThreatManager.Instance != null)
                     ThreatManager.Instance.PlayerDefendedThreat(null);
             }
             else
             {
-                Debug.Log("<color=white>[ФОНАРИК] Свет выключен</color>");
+                Debug.Log("<color=white>[ФОНАРИК] Свет выключен — вращение разрешено</color>");
             }
         }
     }

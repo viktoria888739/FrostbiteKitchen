@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FrostbiteKitchen.Data;
 using FrostbiteKitchen.Gameplay;
 
-public class DishAssembler : MonoBehaviour 
+public class DishAssembler : MonoBehaviour
 {
     public static DishAssembler Instance { get; private set; }
 
@@ -15,9 +15,8 @@ public class DishAssembler : MonoBehaviour
     [SerializeField] private bool isFrozen = false;
 
     [Header("Events")]
-    public static System.Action<List<IngredientData>> OnDishChanged; 
-    
-    public static System.Action OnPlateCleared; 
+    public static System.Action<List<IngredientData>> OnDishChanged;
+    public static System.Action OnPlateCleared;
 
     private void Awake()
     {
@@ -100,12 +99,13 @@ public class DishAssembler : MonoBehaviour
 
         OnDishChanged?.Invoke(ingredientsOnPlate);
     }
-    public void AddIngredient(IngredientData newIngredient) 
-    { 
-        if (newIngredient == null) 
+
+    public void AddIngredient(IngredientData newIngredient)
+    {
+        if (newIngredient == null)
         {
             Debug.LogWarning("[DishAssembler] Попытка добавить пустой ингредиент (null)!");
-            return; 
+            return;
         }
 
         if (isFrozen)
@@ -113,60 +113,49 @@ public class DishAssembler : MonoBehaviour
             frozenIngredientsBuffer ??= new List<IngredientData>();
             frozenIngredientsBuffer.Add(newIngredient);
             Debug.Log($"[DishAssembler] Добавлен в замороженный буфер: {newIngredient.displayName}");
-            
             return;
         }
-        
-        ingredientsOnPlate ??= new List<IngredientData>();
-        ingredientsOnPlate.Add(newIngredient); 
-        
-        Debug.Log($"[DishAssembler] Ингредиент '{newIngredient.displayName}' добавлен. Всего: {ingredientsOnPlate.Count}");
-        
-        OnDishChanged?.Invoke(ingredientsOnPlate); 
-    } 
 
-    public void ClearPlate() 
-    { 
-        ingredientsOnPlate?.Clear(); 
+        ingredientsOnPlate ??= new List<IngredientData>();
+        ingredientsOnPlate.Add(newIngredient);
+
+        Debug.Log($"[DishAssembler] Ингредиент '{newIngredient.displayName}' добавлен. Всего: {ingredientsOnPlate.Count}");
+
+        OnDishChanged?.Invoke(ingredientsOnPlate);
+    }
+
+    public void ClearPlate()
+    {
+        ingredientsOnPlate?.Clear();
         frozenIngredientsBuffer?.Clear();
         isFrozen = false;
 
         Debug.Log("[DishAssembler] Тарелка полностью очищена.");
-        
-        OnDishChanged?.Invoke(ingredientsOnPlate);
-        OnPlateCleared?.Invoke(); 
-    } 
 
+        OnDishChanged?.Invoke(ingredientsOnPlate);
+        OnPlateCleared?.Invoke();
+    }
     public bool ValidateRecipe(RecipeData targetRecipe)
     {
-        if (targetRecipe == null || targetRecipe.requiredIngredients == null || ingredientsOnPlate == null)
+        if (targetRecipe == null || targetRecipe.requiredIngredients == null)
             return false;
 
-        Dictionary<IngredientData, int> required = new();
+        var required = new Dictionary<IngredientData, int>();
         foreach (var req in targetRecipe.requiredIngredients)
         {
             if (req.ingredient != null)
-            {
-                if (required.ContainsKey(req.ingredient))
-                    required[req.ingredient] += req.count;
-                else
-                    required[req.ingredient] = req.count;
-            }
+                required[req.ingredient] = required.GetValueOrDefault(req.ingredient) + req.count;
         }
 
-        Dictionary<IngredientData, int> current = new();
+        var current = new Dictionary<IngredientData, int>();
         foreach (var ing in ingredientsOnPlate)
         {
             if (ing != null)
-            {
-                if (current.ContainsKey(ing))
-                    current[ing]++;
-                else
-                    current[ing] = 1;
-            }
+                current[ing] = current.GetValueOrDefault(ing) + 1;
         }
 
-        if (required.Count != current.Count) return false;
+        if (required.Count != current.Count)
+            return false;
 
         foreach (var pair in required)
         {
