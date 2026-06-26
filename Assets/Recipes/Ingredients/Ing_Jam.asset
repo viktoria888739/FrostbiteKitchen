@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.IngredientData
   ingredientId: jam
   displayName: "\u0412\u0430\u0440\u0435\u043D\u044C\u0435"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 0a231994fd01fe649aa34c0b792beec6, type: 3}
   debugColor: {r: 0.5673561, g: 0, b: 1, a: 1}

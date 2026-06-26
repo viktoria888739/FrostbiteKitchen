@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.RecipeData
   recipeId: eggs_with_sausage
   recipeName: "\u042F\u0438\u0447\u043D\u0438\u0446\u0430 \u0441 \u043A\u043E\u043B\u0431\u0430\u0441\u043E\u0439"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: cb1cb0fb5acb6bc418d02a5535228732, type: 3}
   requiredIngredients:
   - ingredient: {fileID: 11400000, guid: 46df33669aa05de4c84ce787a5c829aa, type: 2}
     count: 2

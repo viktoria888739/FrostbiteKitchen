@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.RecipeData
   recipeId: sandwich_sweet
   recipeName: "\u0421\u043B\u0430\u0434\u043A\u0438\u0439 \u0431\u0443\u0442\u0435\u0440\u0431\u0440\u043E\u0434"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 5d10a1f267589174fb5f8a3d927d5cba, type: 3}
   requiredIngredients:
   - ingredient: {fileID: 11400000, guid: b69abe203673c724c87e72a9383728a3, type: 2}
     count: 1

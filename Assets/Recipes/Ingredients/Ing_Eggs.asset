@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.IngredientData
   id: 
   displayName: "\u042F\u0439\u0446\u043E"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ebec97657d17f7a4894e4143af283bc9, type: 3}
   requiresCooking: 1
   cookingTime: 10
   cookedVersion: {fileID: 0}
