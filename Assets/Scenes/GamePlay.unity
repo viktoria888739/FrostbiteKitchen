@@ -4858,7 +4858,7 @@ GameObject:
   - component: {fileID: 876820153}
   - component: {fileID: 876820152}
   m_Layer: 0
-  m_Name: SceneLoaderObject
+  m_Name: _SceneLoaderObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4904,7 +4904,7 @@ GameObject:
   - component: {fileID: 877362855}
   - component: {fileID: 877362854}
   m_Layer: 0
-  m_Name: GameOverManager
+  m_Name: _GameOverManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9711,7 +9711,7 @@ GameObject:
   - component: {fileID: 1681075203}
   - component: {fileID: 1681075202}
   m_Layer: 0
-  m_Name: GameStateMachine
+  m_Name: _GameStateMachine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
