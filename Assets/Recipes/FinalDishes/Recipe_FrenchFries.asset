@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.RecipeData
   recipeId: french_fries
   recipeName: "\u0416\u0430\u0440\u0435\u043D\u0430\u044F \u043A\u0430\u0440\u0442\u043E\u0448\u043A\u0430"
-  icon: {fileID: 21300000, guid: cd577f0742fced14c98da93cd32ad58d, type: 3}
+  icon: {fileID: 21300000, guid: 242829a1def8e5d4e9cfc06d116764b7, type: 3}
   requiredIngredients:
   - ingredient: {fileID: 11400000, guid: dd2ffb046c03b7448bb9843748c0d0b1, type: 2}
     count: 2
