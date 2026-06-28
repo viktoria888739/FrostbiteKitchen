@@ -5,6 +5,10 @@ using FrostbiteKitchen.Data;
 
 public class HudPresenter : MonoBehaviour
 {
+    private const string OrderIconChildName = "Image_Order";
+    private const string OrderTimerChildName = "Text_Order_Time";
+    private const string CustomersCounterName = "Text_Number_People";
+
     [SerializeField] private GameObject orderCardPrefab;
     [SerializeField] private Transform orderContainer;
     [SerializeField] private TextMeshProUGUI textNumberPeople;
@@ -15,30 +19,36 @@ public class HudPresenter : MonoBehaviour
 
     private float currentOrderTimer;
     private bool isOrderActive;
-    private int servedCount = 0;
-    private int totalOrdersTarget = 10;
+
+    private void Awake()
+    {
+        ResolveCustomersCounterText();
+    }
 
     private void OnEnable()
     {
-        Debug.Log("HudPresenter: Скрипт включен и подписан на события.");
         OrderManager.OnNewOrderStarted += ShowNewOrder;
-        OrderManager.OnOrderExpired += HandleOrderExpired;
+        OrderManager.OnOrderExpired += HandleOrderFinished;
+        OrderManager.OnOrderSubmitted += HandleOrderFinished;
+        SessionOrderTracker.OnCustomerCountChanged += UpdateCustomersUi;
+        RefreshCustomersCounter();
     }
 
     private void OnDisable()
     {
         OrderManager.OnNewOrderStarted -= ShowNewOrder;
-        OrderManager.OnOrderExpired -= HandleOrderExpired;
+        OrderManager.OnOrderExpired -= HandleOrderFinished;
+        OrderManager.OnOrderSubmitted -= HandleOrderFinished;
+        SessionOrderTracker.OnCustomerCountChanged -= UpdateCustomersUi;
     }
 
     private void Start()
     {
-        Debug.Log("HudPresenter: Метод Start.");
-        UpdateCustomersUi();
+        ResolveCustomersCounterText();
+        RefreshCustomersCounter();
 
         if (OrderManager.Instance != null && OrderManager.Instance.GetActiveRecipe() != null)
         {
-            Debug.Log("HudPresenter: Обнаружен активный заказ при старте, запускаю отображение вручную.");
             ShowNewOrder(OrderManager.Instance.GetActiveRecipe());
         }
     }
@@ -47,16 +57,8 @@ public class HudPresenter : MonoBehaviour
     {
         if (!isOrderActive) return;
 
-        if (OrderManager.Instance != null && OrderManager.Instance.GetActiveRecipe() == null)
-        {
-            servedCount++;
-            UpdateCustomersUi();
-            HandleOrderExpired();
-            return;
-        }
-
         currentOrderTimer -= Time.deltaTime;
-        if (currentOrderTimer < 0) currentOrderTimer = 0;
+        if (currentOrderTimer < 0f) currentOrderTimer = 0f;
 
         if (textOrderTime != null)
         {
@@ -69,33 +71,128 @@ public class HudPresenter : MonoBehaviour
     private void ShowNewOrder(RecipeData newRecipe)
     {
         if (orderCardPrefab == null || orderContainer == null)
-        {
-            Debug.LogError("HudPresenter: Ошибка! Не задан префаб или контейнер.");
             return;
-        }
 
         if (currentOrderCard != null) Destroy(currentOrderCard);
 
         currentOrderCard = Instantiate(orderCardPrefab, orderContainer);
-        Debug.Log("HudPresenter: Префаб успешно инстанцирован.");
+        StretchCardToContainer(currentOrderCard);
 
-        imageOrder = currentOrderCard.GetComponentInChildren<Image>();
-        textOrderTime = currentOrderCard.GetComponentInChildren<TextMeshProUGUI>();
+        imageOrder = FindOrderImage(currentOrderCard.transform);
+        textOrderTime = FindOrderTimer(currentOrderCard.transform);
 
-        if (newRecipe.icon != null) imageOrder.sprite = newRecipe.icon;
+        if (imageOrder != null)
+        {
+            imageOrder.preserveAspect = true;
+            imageOrder.color = Color.white;
+
+            if (newRecipe.icon != null)
+                imageOrder.sprite = newRecipe.icon;
+        }
+
+        if (textOrderTime != null)
+        {
+            textOrderTime.enableAutoSizing = true;
+            textOrderTime.fontSizeMin = 18f;
+            textOrderTime.fontSizeMax = 42f;
+        }
+
         currentOrderTimer = newRecipe.timeLimit;
         isOrderActive = true;
     }
 
-    private void HandleOrderExpired()
+    private static void StretchCardToContainer(GameObject card)
     {
-        Debug.Log("HudPresenter: Заказ завершен/истек.");
-        isOrderActive = false;
-        if (currentOrderCard != null) Destroy(currentOrderCard);
+        RectTransform rect = card.GetComponent<RectTransform>();
+        if (rect == null) return;
+
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+        rect.localScale = Vector3.one;
+        rect.localRotation = Quaternion.identity;
     }
 
-    private void UpdateCustomersUi()
+    private static Image FindOrderImage(Transform cardRoot)
     {
+        Transform iconTransform = cardRoot.Find(OrderIconChildName);
+        if (iconTransform != null && iconTransform.TryGetComponent(out Image iconImage))
+            return iconImage;
+
+        Image[] images = cardRoot.GetComponentsInChildren<Image>(true);
+        foreach (Image image in images)
+        {
+            if (image.gameObject != cardRoot.gameObject)
+                return image;
+        }
+
+        return null;
+    }
+
+    private static TextMeshProUGUI FindOrderTimer(Transform cardRoot)
+    {
+        Transform timerTransform = cardRoot.Find(OrderTimerChildName);
+        if (timerTransform != null && timerTransform.TryGetComponent(out TextMeshProUGUI timerText))
+            return timerText;
+
+        return cardRoot.GetComponentInChildren<TextMeshProUGUI>(true);
+    }
+
+    private void HandleOrderFinished()
+    {
+        isOrderActive = false;
+        if (currentOrderCard != null)
+        {
+            Destroy(currentOrderCard);
+            currentOrderCard = null;
+        }
+
+        imageOrder = null;
+        textOrderTime = null;
+    }
+
+    private void ResolveCustomersCounterText()
+    {
+        if (textNumberPeople != null)
+            return;
+
+        TextMeshProUGUI[] texts = GetComponentsInChildren<TextMeshProUGUI>(true);
+        foreach (TextMeshProUGUI text in texts)
+        {
+            if (text.gameObject.name == CustomersCounterName)
+            {
+                textNumberPeople = text;
+                return;
+            }
+        }
+
+        GameObject counterObject = GameObject.Find(CustomersCounterName);
+        if (counterObject != null)
+        {
+            textNumberPeople = counterObject.GetComponent<TextMeshProUGUI>();
+        }
+    }
+
+    private void RefreshCustomersCounter()
+    {
+        if (SessionOrderTracker.Instance != null)
+        {
+            UpdateCustomersUi(
+                SessionOrderTracker.Instance.CurrentOrdersCount,
+                SessionOrderTracker.Instance.MaxOrders);
+            return;
+        }
+
+        UpdateCustomersUi(0, 10);
+    }
+
+    private void UpdateCustomersUi(int servedCount, int totalOrdersTarget)
+    {
+        ResolveCustomersCounterText();
+        if (textNumberPeople == null)
+            return;
+
         textNumberPeople.text = $"{servedCount}/{totalOrdersTarget}";
     }
 }

@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using System;
 
 public class GameStateMachine : MonoBehaviour
 {
@@ -17,7 +15,6 @@ public class GameStateMachine : MonoBehaviour
         Results
     }
 
-    [Header("Current Status")]
     [SerializeField] private GameState currentState = GameState.MainMenu;
     public GameState CurrentState => currentState;
 
@@ -37,6 +34,13 @@ public class GameStateMachine : MonoBehaviour
         if (currentState == GameState.Gameplay)
         {
             SessionStatistics.Instance?.StartSession();
+            SessionResultEvaluator.Instance?.ResetStatistics();
+            SessionOrderTracker.Instance?.ResetSession();
+            GameAudioManager.Instance?.PlayKitchenAmbient();
+        }
+        else if (currentState == GameState.MainMenu)
+        {
+            GameAudioManager.Instance?.PlayMainMenuMusic();
         }
     }
 
@@ -44,24 +48,32 @@ public class GameStateMachine : MonoBehaviour
     {
         if (currentState == newState) return;
 
+        GameState previousState = currentState;
         ExitState(currentState);
         currentState = newState;
-        EnterState(currentState);
+        EnterState(currentState, previousState);
         OnStateChanged?.Invoke(newState);
-        Debug.Log($"[GameStateMachine] Переход в: {newState}");
     }
 
-    private void EnterState(GameState state)
+    private void EnterState(GameState state, GameState previousState)
     {
         switch (state)
         {
+            case GameState.MainMenu:
+                GameAudioManager.Instance?.PlayMainMenuMusic();
+                break;
+
             case GameState.Gameplay:
                 Time.timeScale = 1f;
                 OnGameResumed?.Invoke();
+                GameAudioManager.Instance?.PlayKitchenAmbient();
 
-                SessionStatistics.Instance?.StartSession();
-                SessionResultEvaluator.Instance?.ResetStatistics();
-                SessionOrderTracker.Instance?.ResetSession();
+                if (previousState != GameState.Pause)
+                {
+                    SessionStatistics.Instance?.StartSession();
+                    SessionResultEvaluator.Instance?.ResetStatistics();
+                    SessionOrderTracker.Instance?.ResetSession();
+                }
                 break;
 
             case GameState.Pause:
@@ -70,6 +82,7 @@ public class GameStateMachine : MonoBehaviour
                 break;
 
             case GameState.Results:
+                GameAudioManager.Instance?.StopAllLoops();
                 SessionResultEvaluator.Instance?.EvaluateSessionResult();
                 EndSessionAndShowFinalScreen();
                 break;
@@ -81,26 +94,14 @@ public class GameStateMachine : MonoBehaviour
     private void EndSessionAndShowFinalScreen()
     {
         if (SessionStatistics.Instance == null)
-        {
-            Debug.LogError("[GameStateMachine] SessionStatistics не найден!");
             return;
-        }
 
         SessionStatistics.Instance.EndSession();
-        var result = SessionResultEvaluator.Instance != null
-            ? SessionResultEvaluator.Instance.CurrentResult
-            : SessionResultEvaluator.SessionStatus.Fail;
 
         var gameOverDisplay = UnityEngine.Object.FindFirstObjectByType<GameOverDisplay>(FindObjectsInactive.Include);
 
         if (gameOverDisplay != null)
-        {
             gameOverDisplay.gameObject.SetActive(true);
-        }
-        else
-        {
-            Debug.LogWarning("[GameStateMachine] GameOverDisplay не найден!");
-        }
     }
 
     public void TogglePause()

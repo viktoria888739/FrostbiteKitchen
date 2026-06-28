@@ -8,9 +8,18 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< Updated upstream:Assets/Prefabs/Box_1.prefab
   - component: {fileID: 4056864866935689188}
   - component: {fileID: 516840398226058968}
   - component: {fileID: 5390396752033379867}
+=======
+  - component: {fileID: 222222222}
+  - component: {fileID: 333333333}
+  - component: {fileID: 444444444}
+  - component: {fileID: 555555555}
+  - component: {fileID: 666666666}
+  - component: {fileID: 777777777}
+>>>>>>> Stashed changes:Assets/Prefabs/Stove_Prefab.prefab
   m_Layer: 5
   m_Name: Box_1
   m_TagString: Untagged
@@ -75,3 +84,60 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+<<<<<<< Updated upstream:Assets/Prefabs/Box_1.prefab
+=======
+--- !u!114 &555555555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111111111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec655629b11fb34c92448ebd5c37122, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stationAnimator: {fileID: 777777777}
+  currentIngredientOnStove: {fileID: 0}
+  isCooking: 0
+  isBurned: 0
+  burnTime: 11
+--- !u!95 &666666666
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111111111}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &777777777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111111111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7e6d5c4a3b241509876543210fedcba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.KitchenAnimation.KitchenStationAnimator
+  profile: {fileID: 11400000, guid: e5f6a7b8c9d041e2a3f4b5c6d7e8f9a0, type: 2}
+  animator: {fileID: 666666666}
+  targetImage: {fileID: 444444444}
+>>>>>>> Stashed changes:Assets/Prefabs/Stove_Prefab.prefab

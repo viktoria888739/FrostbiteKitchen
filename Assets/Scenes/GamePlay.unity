@@ -1701,7 +1701,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &349413312
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3671,7 +3671,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3696,6 +3696,7 @@ MonoBehaviour:
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
+  m_raycastTarget: 0
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
@@ -3977,7 +3978,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &756000003
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4712,6 +4713,28 @@ MonoBehaviour:
   warningImage: {fileID: 175371625}
   blinkSpeed: 2
   steadyAlpha: 0.4
+<<<<<<< Updated upstream
+=======
+--- !u!114 &909166594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909166590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a6b4b915440efe419a8efbf7524a741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ThreatManager
+  minSpawnDelay: 8
+  maxSpawnDelay: 15
+  timeBeforeJumpscare: 10
+  frontHandler: {fileID: 0}
+  leftHandler: {fileID: 933889811}
+  backHandler: {fileID: 0}
+  rightHandler: {fileID: 0}
+>>>>>>> Stashed changes
 --- !u!1 &918414449
 GameObject:
   m_ObjectHideFlags: 0
@@ -4837,6 +4860,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 936061972}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< Updated upstream
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
@@ -4879,6 +4903,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.KitchenStation.AssemblyTable
   maxIngredients: 6
+=======
+  m_Script: {fileID: 11500000, guid: 469e47ad088fda14db4a03e6f1b374e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LeftThreatHandler
+  flashlightSpotlight: {fileID: 324176629}
+  ventilationImage: {fileID: 0}
+  normalVentSprite: {fileID: 21300000, guid: d5c3f00d46117a543bdb6802367babe8, type: 3}
+  litVentSprite: {fileID: 21300000, guid: f9271f6869b35bc4e9b5b43c1961bb96, type: 3}
+  monsterVentSprite: {fileID: 0}
+>>>>>>> Stashed changes
 --- !u!1 &937595619
 GameObject:
   m_ObjectHideFlags: 0
@@ -6400,8 +6434,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+<<<<<<< Updated upstream
       - m_Target: {fileID: 1103949663}
         m_TargetAssemblyTypeName: TestFlashlightToggle, Assembly-CSharp
+=======
+      - m_Target: {fileID: 933889811}
+        m_TargetAssemblyTypeName: LeftThreatHandler, Assembly-CSharp
+>>>>>>> Stashed changes
         m_MethodName: ToggleFlashlight
         m_Mode: 1
         m_Arguments:
@@ -6498,6 +6537,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
+<<<<<<< Updated upstream
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -6587,6 +6627,10 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1110517209}
   m_CullTransparentMesh: 1
+=======
+  m_EditorClassIdentifier: Assembly-CSharp::FlashlightToggle
+  leftThreatHandler: {fileID: 933889811}
+>>>>>>> Stashed changes
 --- !u!1 &1132384244
 GameObject:
   m_ObjectHideFlags: 0
@@ -7113,6 +7157,7 @@ MonoBehaviour:
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
+<<<<<<< Updated upstream
   m_Modification:
     serializedVersion: 3
     m_TransformParent: {fileID: 462201405}
@@ -7212,6 +7257,138 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 552464502}
   m_SourcePrefab: {fileID: 100100000, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
+=======
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 871.1965, y: 480.35, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1987654321
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1987654323}
+  - component: {fileID: 1987654322}
+  m_Layer: 0
+  m_Name: _GameAudio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1987654322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987654321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8f4a2b1c3d5476980a1b2c3d4e5f602, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameAudioManager
+  library: {fileID: 11400000, guid: a9b8c7d6e5f4433221100aabbccddeef, type: 2}
+  sfxMixerGroup: {fileID: 0}
+  musicMixerGroup: {fileID: 0}
+  ambientMixerGroup: {fileID: 0}
+--- !u!4 &1987654323
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1987654321}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1317278266
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1317278267}
+  - component: {fileID: 1317278269}
+  - component: {fileID: 1317278268}
+  m_Layer: 5
+  m_Name: SlotImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1317278267
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317278266}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1718220944}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.00017929, y: -0.0010929}
+  m_SizeDelta: {x: 174.66, y: 137.67}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1317278268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317278266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: ba6f1d8600a41d744a2a59bc43ba7bf2, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1317278269
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317278266}
+  m_CullTransparentMesh: 1
+>>>>>>> Stashed changes
 --- !u!1 &1325502601
 GameObject:
   m_ObjectHideFlags: 0
@@ -8901,6 +9078,8 @@ GameObject:
   - component: {fileID: 1615904561}
   - component: {fileID: 1615904563}
   - component: {fileID: 1615904562}
+  - component: {fileID: 1615904564}
+  - component: {fileID: 1615904565}
   m_Layer: 5
   m_Name: View_Front
   m_TagString: Untagged
@@ -8971,6 +9150,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1615904560}
   m_CullTransparentMesh: 1
+<<<<<<< Updated upstream
 --- !u!1001 &1631355614
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9074,6 +9254,138 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 769954906}
   m_SourcePrefab: {fileID: 100100000, guid: 8a426041664f8c74abec51ae99879da5, type: 3}
+=======
+--- !u!82 &1615904564
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1615904560}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1615904565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1615904560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8e4b2a19c3d4e5f6a7b8c9d0e1f2a3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IssueWindowCustomerPresenter
+  customerPortraitImage: {fileID: 349413313}
+  dialogueWindowRoot: {fileID: 756000002}
+  dialogueText: {fileID: 0}
+  customerProfiles:
+  - displayName: "\u0413\u043E\u0441\u0442\u044C 1"
+    portrait: {fileID: 21300000, guid: ad565557b8449ba408fb9f5bfaa2311d, type: 3}
+    greetingVoice: {fileID: 8300000, guid: 8dc5f3df3a1b5ae4f82b310167231142, type: 3}
+  - displayName: "\u0413\u043E\u0441\u0442\u044C 2"
+    portrait: {fileID: 21300000, guid: c9a576697bd44a341897a9399d171706, type: 3}
+    greetingVoice: {fileID: 8300000, guid: 7ea47b801e2352143bd2a91fb39a36c0, type: 3}
+  - displayName: "\u0413\u043E\u0441\u0442\u044C 3"
+    portrait: {fileID: 21300000, guid: bd0e5f0b88e5282449765269d86e44b6, type: 3}
+    greetingVoice: {fileID: 8300000, guid: 8dc5f3df3a1b5ae4f82b310167231142, type: 3}
+  - displayName: "\u0413\u043E\u0441\u0442\u044C 4"
+    portrait: {fileID: 21300000, guid: e1d79d681eec13344aabab4bc23397bd, type: 3}
+    greetingVoice: {fileID: 8300000, guid: 7ea47b801e2352143bd2a91fb39a36c0, type: 3}
+  - displayName: "\u0413\u043E\u0441\u0442\u044C 5"
+    portrait: {fileID: 21300000, guid: 667a4b3d2d5b9184f854f5fad8eb2362, type: 3}
+    greetingVoice: {fileID: 8300000, guid: 8dc5f3df3a1b5ae4f82b310167231142, type: 3}
+  orderDialogueFormat: "\u0417\u0430\u043A\u0430\u0436\u0438\u0442\u0435:\n{0}"
+  voiceAudioSource: {fileID: 1615904564}
+>>>>>>> Stashed changes
 --- !u!1 &1653180271
 GameObject:
   m_ObjectHideFlags: 0
@@ -9547,8 +9859,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrderManager
   recipeCatalog: {fileID: 11400000, guid: 15aafa0478d90de4e9d1d8d1eb03a1b3, type: 2}
-  timeBetweenOrders: 5
-  activeRecipe: {fileID: 0}
+  availableRecipes: []
+  orderSpawnInterval: 5
+  delayBeforeNextOrder: 2
 --- !u!4 &1717249736
 Transform:
   m_ObjectHideFlags: 0

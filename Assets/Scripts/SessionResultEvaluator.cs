@@ -27,31 +27,22 @@ public class SessionResultEvaluator : MonoBehaviour
 
     private void OnEnable()
     {
-        OrderManager.OnOrderSubmitted += OnOrderCompleted;
         OrderManager.OnNewOrderStarted += OnNewOrderGenerated;
     }
 
     private void OnDisable()
     {
-        OrderManager.OnOrderSubmitted -= OnOrderCompleted;
         OrderManager.OnNewOrderStarted -= OnNewOrderGenerated;
     }
 
     private void OnNewOrderGenerated(RecipeData recipe)
     {
     }
-
-    private void OnOrderCompleted()
-    {
-        if (SessionStatistics.Instance != null)
-        {
-            SessionStatistics.Instance.AddCompletedOrder();
-        }
-    }
     public void HandleThreatMissed()
     {
         CurrentResult = SessionStatus.GameOverByMonster;
         Debug.LogError("[SessionResultEvaluator] 💀 ИГРОК УБИТ МОНСТРОМ. Кулинарные расчеты прекращены!");
+        GameAudioManager.Instance?.PlaySessionGameOver();
 
         if (GameStateMachine.Instance != null)
         {
@@ -79,11 +70,13 @@ public class SessionResultEvaluator : MonoBehaviour
         {
             CurrentResult = SessionStatus.Success;
             Debug.Log($"[SessionResultEvaluator] Смена сдана! Успех: {successRate:F1}%");
+            GameAudioManager.Instance?.PlaySessionWin();
         }
         else
         {
             CurrentResult = SessionStatus.Fail;
             Debug.Log($"[SessionResultEvaluator] Смена провалена. Успех всего: {successRate:F1}%");
+            GameAudioManager.Instance?.PlaySessionGameOver();
         }
 
         if (GameStateMachine.Instance != null)

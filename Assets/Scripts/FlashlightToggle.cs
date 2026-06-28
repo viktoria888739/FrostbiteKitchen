@@ -2,12 +2,20 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
 
-public class FlashlightToggle : MonoBehaviour, IInteractable
+public class FlashlightToggle : MonoBehaviour, IInteractable, IPointerClickHandler
 {
-    [Header("Объект света")]
-    [SerializeField] private GameObject spotlightObject;
+    [SerializeField] private LeftThreatHandler leftThreatHandler;
 
-    private bool isOn = false;
+    private void Awake()
+    {
+        if (leftThreatHandler == null)
+            leftThreatHandler = Object.FindFirstObjectByType<LeftThreatHandler>();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        ToggleFlashlight();
+    }
 
     public void Interact()
     {
@@ -16,23 +24,12 @@ public class FlashlightToggle : MonoBehaviour, IInteractable
 
     public void ToggleFlashlight()
     {
-        if (spotlightObject != null)
-        {
-            isOn = !isOn;
-            spotlightObject.SetActive(isOn);
+        if (leftThreatHandler == null)
+            leftThreatHandler = Object.FindFirstObjectByType<LeftThreatHandler>();
 
-            ViewRotationBlocker.SetBlock(isOn);
-
-            if (isOn)
-            {
-                Debug.Log("<color=yellow>[ФОНАРИК] Свет включён — вращение заблокировано</color>");
-                if (ThreatManager.Instance != null)
-                    ThreatManager.Instance.PlayerDefendedThreat(null);
-            }
-            else
-            {
-                Debug.Log("<color=white>[ФОНАРИК] Свет выключен — вращение разрешено</color>");
-            }
-        }
+        if (leftThreatHandler != null)
+            leftThreatHandler.ToggleFlashlight();
+        else
+            Debug.LogWarning("[ФОНАРИК] LeftThreatHandler не найден на сцене.");
     }
 }

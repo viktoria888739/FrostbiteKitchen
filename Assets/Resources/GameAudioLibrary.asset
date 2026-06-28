@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8f4a2b1c3d5476980a1b2c3d4e5f601, type: 3}
+  m_Name: GameAudioLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::GameAudioLibrary
+  take: {fileID: 8300000, guid: 5a9971f91d4af9d4ba05fb89fc32271f, type: 3}
+  place: {fileID: 8300000, guid: 0a7d1f640cc90134498100e5237e1034, type: 3}
+  stoveSizzleLoop: {fileID: 8300000, guid: e29b6f4c869c9674385b8894f21bfe99, type: 3}
+  stoveDone: {fileID: 8300000, guid: a563ba83d22419a44814a1c86feff00a, type: 3}
+  dishAssembled: {fileID: 8300000, guid: ad4a7c065d181de41ba22ac21ea113bf, type: 3}
+  dishError: {fileID: 8300000, guid: 525dcf7d150f15948b439082a93c6f35, type: 3}
+  plateServe: {fileID: 8300000, guid: 4479efe9d3f376142a413610383a4d23, type: 3}
+  trashDrop: {fileID: 8300000, guid: b6ec6c3dfb371aa4fb18fa4bc0f8cb77, type: 3}
+  orderNew: {fileID: 8300000, guid: f9047626862ac134da0c5c80caa51d6e, type: 3}
+  orderSuccess: {fileID: 8300000, guid: 68949c2604a0328419f2705a83c53134, type: 3}
+  orderWrong: {fileID: 8300000, guid: d4f3282ffd695d3459594249af660098, type: 3}
+  orderExpired: {fileID: 8300000, guid: c71ac8819aefff34cbc8aef8b661c8fd, type: 3}
+  threatSpawnKitchen: {fileID: 8300000, guid: 04ab90a2888256048ad010dda4b85268, type: 3}
+  threatSpawnFront: {fileID: 8300000, guid: 7ad80f1038e1acb428df977c2f1fbae5, type: 3}
+  threatSpawnVent: {fileID: 8300000, guid: df68dea5e98bfc14481f7748574b1433, type: 3}
+  threatSpawnWarehouse: {fileID: 8300000, guid: d6dc5dab11d7f8b42a3b3fd843dd46a6, type: 3}
+  jumpscare: {fileID: 8300000, guid: 064322b21ade1634483052716b8ea731, type: 3}
+  blindsClose: {fileID: 8300000, guid: 976e29db6a321d741ae4526441f59777, type: 3}
+  blindsOpen: {fileID: 8300000, guid: 093645a0da69da444ba6558de2846f5c, type: 3}
+  flashlight: {fileID: 8300000, guid: 64ae80ac6b63d0042b8155bf45e97f4a, type: 3}
+  extinguisherSpray: {fileID: 8300000, guid: f82b14c3c2e47124fad1108b21ef37ec, type: 3}
+  uiClick: {fileID: 8300000, guid: f2bee167a427a8b42bd0b789cf9a4c74, type: 3}
+  sessionWin: {fileID: 8300000, guid: d182998c126a6464bbc486edea7232a2, type: 3}
+  sessionGameOver: {fileID: 8300000, guid: aac686c153f090a4eb84830319d01f80, type: 3}
+  mainMenuMusic: {fileID: 8300000, guid: d0b29924d9e3cf149b9b27b17c6df5e8, type: 3}
+  kitchenAmbientLoop: {fileID: 8300000, guid: bba8e8440dc32ce4ab7c927539ee2401, type: 3}
+  tensionSting: {fileID: 8300000, guid: 42cabeaf05986a842a17b7355f43ec39, type: 3}
+  maleCustomerVoice: {fileID: 8300000, guid: 7ea47b801e2352143bd2a91fb39a36c0, type: 3}
+  femaleCustomerVoice: {fileID: 8300000, guid: 8dc5f3df3a1b5ae4f82b310167231142, type: 3}

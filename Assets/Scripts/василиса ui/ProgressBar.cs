@@ -18,6 +18,22 @@ public class ProgressBar : MonoBehaviour
         maxTime = duration;
         currentTime = duration;
         isRunning = true;
+        UpdateUI();
+    }
+
+    public void SetRemainingNormalized(float remaining01)
+    {
+        maxTime = 1f;
+        currentTime = Mathf.Clamp01(remaining01);
+        isRunning = false;
+        UpdateUI();
+    }
+
+    public void StopTimer()
+    {
+        isRunning = false;
+        currentTime = 0f;
+        UpdateUI();
     }
 
     private void Update()
@@ -37,7 +53,10 @@ public class ProgressBar : MonoBehaviour
 
     private void UpdateUI()
     {
-        float progress = currentTime / maxTime;
+        if (fillImage == null)
+            return;
+
+        float progress = maxTime > 0f ? currentTime / maxTime : 0f;
         fillImage.fillAmount = progress;
         
         if (progress > 0.5f)

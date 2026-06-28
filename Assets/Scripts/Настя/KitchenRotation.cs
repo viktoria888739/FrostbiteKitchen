@@ -11,6 +11,7 @@ public class KitchenRotation : MonoBehaviour
 
     [Header("Менеджер предупреждений")]
     [SerializeField] private VisualWarningManager warningManager;
+    [SerializeField] private LeftThreatHandler leftThreatHandler;
 
     private int currentViewIndex = 0;
     private GameObject[] views;
@@ -20,15 +21,19 @@ public class KitchenRotation : MonoBehaviour
         views = new GameObject[] { viewFront, viewRight, viewBack, viewLeft };
 
         if (warningManager == null)
-        {
             warningManager = Object.FindFirstObjectByType<VisualWarningManager>();
-        }
+
+        if (leftThreatHandler == null)
+            leftThreatHandler = Object.FindFirstObjectByType<LeftThreatHandler>();
 
         UpdateVisuals();
     }
 
     void Update()
     {
+        if (ViewRotationBlocker.IsRotationBlocked)
+            return;
+
         if (Keyboard.current != null)
         {
             if (Keyboard.current.aKey.wasPressedThisFrame || Keyboard.current.leftArrowKey.wasPressedThisFrame)
@@ -83,11 +88,13 @@ public class KitchenRotation : MonoBehaviour
             }
         }
 
+        KitchenSide currentSide = GetCurrentSideEnum(currentViewIndex);
+
         if (warningManager != null)
-        {
-            KitchenSide currentSide = GetCurrentSideEnum(currentViewIndex);
             warningManager.UpdatePlayerView(currentSide);
-        }
+
+        if (currentSide != KitchenSide.Left)
+            leftThreatHandler?.OnPlayerTurnAway();
     }
 
     private KitchenSide GetCurrentSideEnum(int index)
