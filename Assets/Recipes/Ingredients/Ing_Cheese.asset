@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a2430a45a85c6d4bae5b49033aef6b3, type: 3}
   m_Name: Ing_Cheese
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.IngredientData
-  id: 
+  id: cheese
   displayName: "\u0421\u044B\u0440"
-  icon: {fileID: 21300000, guid: aac2e3c76f097394c89a362128a32c67, type: 3}
+  icon: {fileID: 21300000, guid: e14041996c479ca44a69073b1ed38cfd, type: 3}
+  packIcon: {fileID: 21300000, guid: b6c99ae72b1be684ea6b0776773017eb, type: 3}
   requiresCooking: 0
   cookingTime: 3
   cookedVersion: {fileID: 0}

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a2430a45a85c6d4bae5b49033aef6b3, type: 3}
-  m_Name: Ing_Bread
+  m_Name: Ing_Eggs_Cooked
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.IngredientData
-  id: bread
-  displayName: "\u0425\u043B\u0435\u0431"
-  icon: {fileID: 21300000, guid: 20794ab810264174f84b0e7dbd5d98b3, type: 3}
-  packIcon: {fileID: 21300000, guid: 13a96b3af99884445bcc8810fe004784, type: 3}
+  id: egg_cooked
+  displayName: "\u042F\u0438\u0447\u043D\u0438\u0446\u0430"
+  icon: {fileID: 21300000, guid: 450403ac09d8c7b4d8f98c2cbdf5b533, type: 3}
+  packIcon: {fileID: 0}
   requiresCooking: 0
   cookingTime: 3
   cookedVersion: {fileID: 0}

@@ -2125,7 +2125,7 @@ GameObject:
   - component: {fileID: 1787537407}
   - component: {fileID: 1787537406}
   m_Layer: 0
-  m_Name: GameCore
+  m_Name: _GameCore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a2430a45a85c6d4bae5b49033aef6b3, type: 3}
   m_Name: Ing_Sausage
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.IngredientData
-  id: 
+  id: sausage_raw
   displayName: "\u041A\u043E\u043B\u0431\u0430\u0441\u0430"
-  icon: {fileID: 21300000, guid: 6955d5a57dbcf5d4da957d4ea9f1a190, type: 3}
-  requiresCooking: 1
-  cookingTime: 10
+  icon: {fileID: 21300000, guid: 6e5bea78956159d47a0ffe69e860b860, type: 3}
+  packIcon: {fileID: 21300000, guid: fa42156dded3b2643bd6cf3b10308873, type: 3}
+  requiresCooking: 0
+  cookingTime: 3
   cookedVersion: {fileID: 0}
