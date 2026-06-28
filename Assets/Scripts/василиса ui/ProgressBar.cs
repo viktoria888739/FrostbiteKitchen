@@ -4,20 +4,46 @@ using UnityEngine.UI;
 public class ProgressBar : MonoBehaviour
 {
     [SerializeField] private Image fillImage;
-    [SerializeField] private Color greenColor = Color.green;
-    [SerializeField] private Color yellowColor = Color.yellow;
-    [SerializeField] private Color redColor = Color.red;
+    [SerializeField] private Sprite greenSprite;
+    [SerializeField] private Sprite redSprite;
+    
+    [Range(0f, 1f)]
+    [SerializeField] private float redThreshold = 0.3f;
+
+    [Header("Для теста в Инспекторе")]
+    [Range(0f, 1f)]
+    [SerializeField] private float testProgress = 1f;
 
     private float maxTime;
     private float currentTime;
     private bool isRunning;
-    
+
+    private void OnValidate()
+    {
+        if (fillImage != null)
+        {
+            fillImage.fillAmount = testProgress;
+            fillImage.color = Color.white;
+
+            if (testProgress > redThreshold)
+            {
+                fillImage.sprite = greenSprite;
+            }
+            else
+            {
+                fillImage.sprite = redSprite;
+            }
+        }
+    }
 
     public void StartTimer(float duration)
     {
         maxTime = duration;
         currentTime = duration;
         isRunning = true;
+        
+        fillImage.color = Color.white; 
+        fillImage.sprite = greenSprite;
     }
 
     private void Update()
@@ -40,13 +66,13 @@ public class ProgressBar : MonoBehaviour
         float progress = currentTime / maxTime;
         fillImage.fillAmount = progress;
         
-        if (progress > 0.5f)
+        if (progress > redThreshold)
         {
-            fillImage.color = Color.Lerp(yellowColor, greenColor, (progress - 0.5f) * 2f);
+            fillImage.sprite = greenSprite;
         }
         else
         {
-            fillImage.color = Color.Lerp(redColor, yellowColor, progress * 2f);
+            fillImage.sprite = redSprite;
         }
     }
 }

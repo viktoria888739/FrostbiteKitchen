@@ -3563,6 +3563,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482947219}
   m_CullTransparentMesh: 1
+--- !u!1 &499126298 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7509669052239370070, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
+  m_PrefabInstance: {fileID: 2097796489}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &509773976
 GameObject:
   m_ObjectHideFlags: 0
@@ -6176,7 +6181,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &845354150
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6838,7 +6843,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &918414450
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9888,6 +9893,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1012784207}
     m_Modifications:
+    - target: {fileID: 267112732628890552, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
+      propertyPath: m_Type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 267112732628890552, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1695013062114265043, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -9950,11 +9963,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1695013062114265043, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -5
+      value: -9
       objectReference: {fileID: 0}
     - target: {fileID: 1695013062114265043, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 109.99997
+      value: -95
       objectReference: {fileID: 0}
     - target: {fileID: 1695013062114265043, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -9968,6 +9981,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6367834721195483252, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c6b1aa24de3a446f995c40d5667db5c9, type: 3}
     - target: {fileID: 7243379355831246251, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
       propertyPath: m_Name
       value: ProgressBar
@@ -9980,6 +9997,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7243379355831246251, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1427676231}
+    - targetCorrespondingSourceObject: {fileID: 7243379355831246251, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1427676234}
   m_SourcePrefab: {fileID: 100100000, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
 --- !u!224 &1427676228 stripped
 RectTransform:
@@ -10019,6 +10039,23 @@ MonoBehaviour:
   greenColor: {r: 0, g: 1, b: 0, a: 1}
   yellowColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   redColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &1427676234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1427676230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24ca2c5b27ac548bf8dd1356c9130c6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProgressBar
+  fillImage: {fileID: 1427676229}
+  greenSprite: {fileID: 21300000, guid: ef2a7aeb3d0ad46bda0d73b79bd0f6fe, type: 3}
+  redSprite: {fileID: 21300000, guid: 9d7a7b5a76ed54f1e9b2ee2fbcb8bdd3, type: 3}
+  redThreshold: 0.4
+  testProgress: 0.286
 --- !u!1 &1428780840
 GameObject:
   m_ObjectHideFlags: 0
@@ -14638,11 +14675,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1695013062114265043, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -5
+      value: -11
       objectReference: {fileID: 0}
     - target: {fileID: 1695013062114265043, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 109.99997
+      value: -97
       objectReference: {fileID: 0}
     - target: {fileID: 1695013062114265043, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -14668,6 +14705,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7243379355831246251, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2097796493}
+    - targetCorrespondingSourceObject: {fileID: 7509669052239370070, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2097796496}
   m_SourcePrefab: {fileID: 100100000, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
 --- !u!224 &2097796490 stripped
 RectTransform:
@@ -14679,7 +14719,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 267112732628890552, guid: 7c1f73fce701a43649bc4069a4dc999d, type: 3}
   m_PrefabInstance: {fileID: 2097796489}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 499126298}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -14707,6 +14747,23 @@ MonoBehaviour:
   greenColor: {r: 0, g: 1, b: 0, a: 1}
   yellowColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   redColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &2097796496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 499126298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24ca2c5b27ac548bf8dd1356c9130c6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProgressBar
+  fillImage: {fileID: 2097796491}
+  greenSprite: {fileID: 21300000, guid: ef2a7aeb3d0ad46bda0d73b79bd0f6fe, type: 3}
+  redSprite: {fileID: 21300000, guid: 9d7a7b5a76ed54f1e9b2ee2fbcb8bdd3, type: 3}
+  redThreshold: 0.3
+  testProgress: 1
 --- !u!1 &2099820756
 GameObject:
   m_ObjectHideFlags: 0
