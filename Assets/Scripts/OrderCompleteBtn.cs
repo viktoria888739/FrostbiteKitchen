@@ -1,6 +1,7 @@
 using UnityEngine;
 using FrostbiteKitchen.Gameplay;
 using FrostbiteKitchen.Data;
+using FrostbiteKitchen.KitchenStation; // Добавлено для доступа к AssemblyTable
 
 namespace FrostbiteKitchen.UI
 {
@@ -44,6 +45,12 @@ namespace FrostbiteKitchen.UI
 
                 OrderManager.Instance.CompleteActiveOrder();
                 dishAssembler.ClearPlate();
+
+                // Добавлено: Очищаем визуал стола сборки при успешной сдаче
+                if (AssemblyTable.Instance != null)
+                {
+                    AssemblyTable.Instance.ResetTable();
+                }
             }
             else
             {
@@ -51,6 +58,12 @@ namespace FrostbiteKitchen.UI
 
                 OrderManager.Instance.FailCurrentOrder();
                 dishAssembler.ClearPlate();
+
+                // Добавлено: Очищаем визуал стола сборки, так как тарелка была опустошена
+                if (AssemblyTable.Instance != null)
+                {
+                    AssemblyTable.Instance.ResetTable();
+                }
             }
         }
     }

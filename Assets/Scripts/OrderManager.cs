@@ -25,7 +25,7 @@ public class OrderManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameStateMachine.Instance == null || 
+        if (GameStateMachine.Instance == null ||
             GameStateMachine.Instance.CurrentState != GameStateMachine.GameState.Gameplay)
             return;
 
