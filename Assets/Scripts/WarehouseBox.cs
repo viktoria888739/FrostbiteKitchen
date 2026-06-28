@@ -1,30 +1,21 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
 using FrostbiteKitchen.Data;
 
 public class WarehouseBox : MonoBehaviour, IInteractable
 {
-    [Header("Настройки склада")]
     [SerializeField] private IngredientData ingredientData;
-    [SerializeField] private int amountToGive = 3;
+    [SerializeField] private int amountToGive = PlayerInventory.WarehousePackSize;
     [SerializeField] private bool isEmpty = false;
 
     public void Interact()
     {
-        if (isEmpty || ingredientData == null)
-        {
-            Debug.Log($"[СКЛАД] Коробка {gameObject.name} пуста.");
+        if (isEmpty || ingredientData == null || PlayerInventory.Instance == null)
             return;
-        }
 
-        if (PlayerInventory.Instance.CurrentHeldItem != null)
-        {
-            Debug.Log("<color=yellow>[СКЛАД]</color> Руки заняты! Сначала разгрузи на стол.");
+        if (!PlayerInventory.Instance.TryAddIngredient(ingredientData, amountToGive))
             return;
-        }
 
-        PlayerInventory.Instance.SetHeldItem(ingredientData, amountToGive);
-        Debug.Log($"<color=orange>[СКЛАД]</color> Взята пачка: {ingredientData.displayName} x{amountToGive}");
+        GameAudioManager.Instance?.PlayTake();
     }
 }

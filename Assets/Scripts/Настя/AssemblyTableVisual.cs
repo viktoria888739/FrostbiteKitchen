@@ -1,92 +1,107 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
 using FrostbiteKitchen.Data;
 
 namespace FrostbiteKitchen.KitchenStation
 {
-    public class AssemblyTableVisual : MonoBehaviour
+    public class AssemblyTableVisual : MonoBehaviour, IPointerClickHandler
     {
-        [Header("Визуальные элементы стола")]
         [SerializeField] private Image tableSlotImage;
-        [SerializeField] private Sprite emptyPlateSprite;
         [SerializeField] private Sprite spoiledDishSprite;
-
-        [Header("Каталог рецептов для проверки")]
-        [Tooltip("Перетащи сюда твой ScriptableObject RecipeCatalog, чтобы стол знал все рецепты игры")]
         [SerializeField] private RecipeCatalog recipeCatalog;
+
+        private List<RecipeData> runtimeRecipes = new List<RecipeData>();
+
+        private void Awake()
+        {
+            if (tableSlotImage == null)
+                tableSlotImage = GetComponent<Image>();
+
+            ImageRaycastHelper.EnsureRaycastTarget(gameObject);
+
+            ResolveRecipeCatalog();
+            BuildRuntimeRecipes();
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            AssemblyTable.Instance?.Interact();
+        }
 
         private void Start()
         {
-            UpdateVisual(0, null);
+            RefreshFromPlate();
         }
 
-        public void UpdateVisual(int ingredientsCount, Sprite firstIngredientIcon)
+        public void RefreshFromPlate()
         {
-            if (tableSlotImage == null) return;
+            if (tableSlotImage == null)
+                return;
 
-            if (ingredientsCount == 0)
-            {
-                if (emptyPlateSprite != null)
-                {
-                    tableSlotImage.gameObject.SetActive(true);
-                    tableSlotImage.sprite = emptyPlateSprite;
-                }
-                else
-                {
-                    tableSlotImage.gameObject.SetActive(false);
-                }
-            }
-            else if (ingredientsCount == 1)
-            {
-                tableSlotImage.gameObject.SetActive(true);
-                tableSlotImage.sprite = firstIngredientIcon;
-            }
-            else
-            {
-                tableSlotImage.gameObject.SetActive(true);
-                Sprite matchingRecipeSprite = FindMatchingRecipeSprite();
+            IReadOnlyList<IngredientData> plateIngredients = DishAssembler.Instance != null
+                ? DishAssembler.Instance.GetCurrentIngredients()
+                : null;
 
-                if (matchingRecipeSprite != null)
-                {
-                    tableSlotImage.sprite = matchingRecipeSprite;
-                }
-                else
-                {
-                    if (spoiledDishSprite != null)
-                        tableSlotImage.sprite = spoiledDishSprite;
-                    else
-                        tableSlotImage.gameObject.SetActive(false);
-                }
+            if (plateIngredients == null || plateIngredients.Count == 0)
+            {
+                ShowEmptyPlate();
+                return;
             }
+
+            if (runtimeRecipes.Count == 0)
+                BuildRuntimeRecipes();
+
+            Sprite targetSprite = AssemblyPlateVisualResolver.ResolvePlateSprite(
+                plateIngredients,
+                runtimeRecipes,
+                spoiledDishSprite);
+
+            if (targetSprite == null)
+            {
+                ShowEmptyPlate();
+                return;
+            }
+
+            tableSlotImage.gameObject.SetActive(true);
+            tableSlotImage.raycastTarget = true;
+            tableSlotImage.sprite = targetSprite;
+            tableSlotImage.color = Color.white;
+            tableSlotImage.preserveAspect = true;
         }
 
-        private Sprite FindMatchingRecipeSprite()
+        private void ShowEmptyPlate()
         {
-            if (DishAssembler.Instance == null) return null;
+            if (tableSlotImage == null)
+                return;
 
-            // Проверяем все рецепты из каталога, который мы привязали к столу
-            if (recipeCatalog != null && recipeCatalog.AllRecipes != null)
-            {
-                foreach (RecipeData recipe in recipeCatalog.AllRecipes)
-                {
-                    if (DishAssembler.Instance.ValidateRecipe(recipe))
-                    {
-                        return recipe.icon; // Если это бутерброд с джемом, покажется бутерброд
-                    }
-                }
-            }
-            // Резервный вариант: если забыли привязать каталог, проверяем хотя бы активный заказ
-            else if (OrderManager.Instance != null)
-            {
-                RecipeData activeRecipe = OrderManager.Instance.GetActiveRecipe();
-                if (activeRecipe != null && DishAssembler.Instance.ValidateRecipe(activeRecipe))
-                {
-                    return activeRecipe.icon;
-                }
-            }
+            tableSlotImage.sprite = null;
+            tableSlotImage.color = new Color(1f, 1f, 1f, 0f);
+            tableSlotImage.raycastTarget = false;
+        }
 
-            return null;
+        private void ResolveRecipeCatalog()
+        {
+            if (recipeCatalog != null)
+                return;
+
+            recipeCatalog = Resources.Load<RecipeCatalog>("MainRecipeCatalog");
+        }
+
+        private void BuildRuntimeRecipes()
+        {
+            runtimeRecipes.Clear();
+
+            if (recipeCatalog == null || recipeCatalog.AllRecipes == null)
+                return;
+
+            foreach (RecipeData recipe in recipeCatalog.AllRecipes)
+            {
+                if (recipe != null && !runtimeRecipes.Contains(recipe))
+                    runtimeRecipes.Add(recipe);
+            }
         }
     }
 }

@@ -67,8 +67,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 133fa84086826f44ab698f16871d6d05, type: 3}
-  m_Type: 1
-  m_PreserveAspect: 0
+  m_Type: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -88,5 +88,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91a7c83a2730a394ab7c3ac6849a44c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blindsImage: {fileID: 444444444}
+  openSprite: {fileID: 21300000, guid: 133fa84086826f44ab698f16871d6d05, type: 3}
+  closedSprite: {fileID: 21300000, guid: 67b1e08c14d161248be3b0e2eca4b5c6, type: 3}
   openHeight: 60
   closedHeight: 450

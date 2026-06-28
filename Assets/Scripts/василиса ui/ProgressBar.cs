@@ -4,46 +4,36 @@ using UnityEngine.UI;
 public class ProgressBar : MonoBehaviour
 {
     [SerializeField] private Image fillImage;
-    [SerializeField] private Sprite greenSprite;
-    [SerializeField] private Sprite redSprite;
-    
-    [Range(0f, 1f)]
-    [SerializeField] private float redThreshold = 0.3f;
-
-    [Header("Для теста в Инспекторе")]
-    [Range(0f, 1f)]
-    [SerializeField] private float testProgress = 1f;
+    [SerializeField] private Color greenColor = Color.green;
+    [SerializeField] private Color yellowColor = Color.yellow;
+    [SerializeField] private Color redColor = Color.red;
 
     private float maxTime;
     private float currentTime;
     private bool isRunning;
-
-    private void OnValidate()
-    {
-        if (fillImage != null)
-        {
-            fillImage.fillAmount = testProgress;
-            fillImage.color = Color.white;
-
-            if (testProgress > redThreshold)
-            {
-                fillImage.sprite = greenSprite;
-            }
-            else
-            {
-                fillImage.sprite = redSprite;
-            }
-        }
-    }
+    
 
     public void StartTimer(float duration)
     {
         maxTime = duration;
         currentTime = duration;
         isRunning = true;
-        
-        fillImage.color = Color.white; 
-        fillImage.sprite = greenSprite;
+        UpdateUI();
+    }
+
+    public void SetRemainingNormalized(float remaining01)
+    {
+        maxTime = 1f;
+        currentTime = Mathf.Clamp01(remaining01);
+        isRunning = false;
+        UpdateUI();
+    }
+
+    public void StopTimer()
+    {
+        isRunning = false;
+        currentTime = 0f;
+        UpdateUI();
     }
 
     private void Update()
@@ -63,16 +53,19 @@ public class ProgressBar : MonoBehaviour
 
     private void UpdateUI()
     {
-        float progress = currentTime / maxTime;
+        if (fillImage == null)
+            return;
+
+        float progress = maxTime > 0f ? currentTime / maxTime : 0f;
         fillImage.fillAmount = progress;
         
-        if (progress > redThreshold)
+        if (progress > 0.5f)
         {
-            fillImage.sprite = greenSprite;
+            fillImage.color = Color.Lerp(yellowColor, greenColor, (progress - 0.5f) * 2f);
         }
         else
         {
-            fillImage.sprite = redSprite;
+            fillImage.color = Color.Lerp(redColor, yellowColor, progress * 2f);
         }
     }
 }

@@ -6,13 +6,15 @@ public class SessionOrderTracker : MonoBehaviour
     public static SessionOrderTracker Instance { get; private set; }
 
     public static event Action OnSessionCompleted;
+    public static event Action<int, int> OnCustomerCountChanged;
 
-    [Header("Настройки сессии")]
     [SerializeField] private int maxOrders = 10;
 
-    private int currentOrdersCount = 0;
+    private int servedCustomersCount = 0;
+    private int processedCustomersCount = 0;
 
-    public int CurrentOrdersCount => currentOrdersCount;
+    public int CurrentOrdersCount => servedCustomersCount;
+    public int ProcessedCustomersCount => processedCustomersCount;
     public int MaxOrders => maxOrders;
 
     private bool isSessionEnded = false;
@@ -27,14 +29,34 @@ public class SessionOrderTracker : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-    public void RegisterCompletedOrder()
+
+    private void Start()
+    {
+        NotifyCountChanged();
+    }
+
+    public void RegisterSuccessfulOrder()
     {
         if (isSessionEnded) return;
 
-        currentOrdersCount++;
-        Debug.Log($"<color=#33FFF7>[СЕССИЯ]</color> Заказ завершён! Обслужено: {currentOrdersCount}/{maxOrders}");
+        servedCustomersCount++;
+        processedCustomersCount++;
+        NotifyCountChanged();
+        TryEndSession();
+    }
 
-        if (currentOrdersCount >= maxOrders)
+    public void RegisterFailedOrder()
+    {
+        if (isSessionEnded) return;
+
+        processedCustomersCount++;
+        NotifyCountChanged();
+        TryEndSession();
+    }
+
+    private void TryEndSession()
+    {
+        if (processedCustomersCount >= maxOrders)
         {
             EndSession();
         }
@@ -45,7 +67,7 @@ public class SessionOrderTracker : MonoBehaviour
         if (isSessionEnded) return;
         isSessionEnded = true;
 
-        Debug.Log("<color=green>[СЕССИЯ] Лимит заказов достигнут! Завершение смены...</color>");
+        OrderManager.Instance?.StopManager();
 
         if (GameStateMachine.Instance != null)
         {
@@ -57,7 +79,14 @@ public class SessionOrderTracker : MonoBehaviour
 
     public void ResetSession()
     {
-        currentOrdersCount = 0;
+        servedCustomersCount = 0;
+        processedCustomersCount = 0;
         isSessionEnded = false;
+        NotifyCountChanged();
+    }
+
+    private void NotifyCountChanged()
+    {
+        OnCustomerCountChanged?.Invoke(servedCustomersCount, maxOrders);
     }
 }

@@ -1,40 +1,20 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
 
-public class FlashlightToggle : MonoBehaviour, IInteractable
+public class FlashlightToggle : MonoBehaviour, IInteractable, IPointerClickHandler
 {
-    [Header("Объект света")]
-    [SerializeField] private GameObject spotlightObject;
+    [SerializeField] private LeftThreatHandler leftThreatHandler;
 
-    [Header("Иконка внутри кнопки")]
-    [Tooltip("Ссылка на дочерний объект Image")]
-    [SerializeField] private Image innerIconImage; 
-    [SerializeField] private Sprite iconOff;
-    [SerializeField] private Sprite iconOn;
-
-    private bool isOn = false;
-
-    private void Start()
+    private void Awake()
     {
-        if (innerIconImage == null)
-        {
-            Transform childTransform = transform.Find("Image");
-            if (childTransform != null)
-            {
-                innerIconImage = childTransform.GetComponent<Image>();
-            }
-        }
-        
-        if (innerIconImage != null && iconOff != null)
-        {
-            innerIconImage.sprite = iconOff;
-        }
-        
-        if (spotlightObject != null && spotlightObject != this.gameObject)
-        {
-            spotlightObject.SetActive(false);
-        }
+        if (leftThreatHandler == null)
+            leftThreatHandler = Object.FindFirstObjectByType<LeftThreatHandler>();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        ToggleFlashlight();
     }
 
     public void Interact()
@@ -44,27 +24,12 @@ public class FlashlightToggle : MonoBehaviour, IInteractable
 
     public void ToggleFlashlight()
     {
-        if (spotlightObject != null)
-        {
-            isOn = !isOn;
-            spotlightObject.SetActive(isOn);
-            ViewRotationBlocker.SetBlock(isOn);
-            if (innerIconImage != null)
-            {
-                innerIconImage.sprite = isOn ? iconOn : iconOff;
-            }
-            if (isOn)
-            {
-                Debug.Log("<color=yellow>[ФОНАРИК] Свет включён — вращение заблокировано</color>");
-                if (ThreatManager.Instance != null)
-                {
-                    ThreatManager.Instance.PlayerDefendedThreat(null);
-                }
-            }
-            else
-            {
-                Debug.Log("<color=white>[ФОНАРИК] Свет выключен — вращение разрешено</color>");
-            }
-        }
+        if (leftThreatHandler == null)
+            leftThreatHandler = Object.FindFirstObjectByType<LeftThreatHandler>();
+
+        if (leftThreatHandler != null)
+            leftThreatHandler.ToggleFlashlight();
+        else
+            Debug.LogWarning("[ФОНАРИК] LeftThreatHandler не найден на сцене.");
     }
 }

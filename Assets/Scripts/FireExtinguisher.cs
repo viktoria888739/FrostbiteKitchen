@@ -16,8 +16,10 @@ public class FireExtinguisher : MonoBehaviour, IInteractable
         if (sprayEffect != null)
             sprayEffect.Play();
 
+        GameAudioManager.Instance?.PlayExtinguisherSpray();
+
         if (ThreatManager.Instance != null)
-            ThreatManager.Instance.PlayerDefendedThreat(null);
+            ThreatManager.Instance.PlayerDefendedThreat(KitchenSide.Back);
 
     }
 }

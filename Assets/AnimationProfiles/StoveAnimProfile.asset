@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8f3c2e1b4d5476a9e0f1c2d3e4f5a6b, type: 3}
+  m_Name: StoveAnimProfile
+  m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.KitchenAnimation.KitchenStationAnimProfile
+  stationType: 0
+  framesPerSecond: 8
+  idle: {fileID: 21300000, guid: f6425512de59cb2479b7b6dc312c0906, type: 3}
+  cuttingFrames: []
+  fryingFrames:
+  - {fileID: 21300000, guid: f6425512de59cb2479b7b6dc312c0906, type: 3}
+  done: {fileID: 21300000, guid: f6425512de59cb2479b7b6dc312c0906, type: 3}
+  burned: {fileID: 21300000, guid: b33af86f5563f5441814ea79e3af04cd, type: 3}

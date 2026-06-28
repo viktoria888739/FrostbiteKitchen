@@ -1,35 +1,40 @@
 using UnityEngine;
-using UnityEngine.UI;
 using FrostbiteKitchen.Data;
 using FrostbiteKitchen.Gameplay;
+using FrostbiteKitchen.KitchenStation;
 
 public class KitchenTableSlot : MonoBehaviour, IInteractable
 {
-    [Header("Настройки слота")]
     [SerializeField] private IngredientData allowedIngredient;
-    [SerializeField] private int maxCount = 3;
-
-    [Header("Текущее состояние")]
+    [SerializeField] private int maxCount = PlayerInventory.WarehousePackSize;
     [SerializeField] private int currentCount = 0;
-
-    [Header("UI Визуал ячейки стола")]
-    [Tooltip("Перетащи сюда дочерний объект с твоей картинкой ячейки, которая должна появляться/исчезать")]
-    [SerializeField] private GameObject slotVisualObject; // Заменили Image на GameObject, чтобы управлять только видимостью
+<<<<<<< Updated upstream
+=======
+    [SerializeField] private GameObject slotVisualObject;
+>>>>>>> Stashed changes
 
     public delegate void OnStockChanged(int count);
     public event OnStockChanged OnStockUpdated;
 
+<<<<<<< Updated upstream
+=======
+    public IngredientData AllowedIngredient => allowedIngredient;
+    public int CurrentCount => currentCount;
+
     private void Start()
     {
-        // На старте игры проверяем, нужно ли показать или скрыть ячейку
         UpdateVisual();
     }
 
+>>>>>>> Stashed changes
     public void Interact()
     {
+        if (PlayerInventory.Instance == null || allowedIngredient == null)
+            return;
+
         var inventory = PlayerInventory.Instance;
 
-        // Если в руках у игрока пачка (3 шт.) — разгружаем её на стол
+<<<<<<< Updated upstream
         if (inventory.CurrentHeldItem != null && inventory.CurrentAmount == 3)
         {
             if (currentCount > 0)
@@ -47,16 +52,17 @@ public class KitchenTableSlot : MonoBehaviour, IInteractable
 
                 Debug.Log($"<color=green>[РАБОЧИЙ СТОЛ]</color> Разгружено {maxCount} шт. {allowedIngredient.displayName}");
                 OnStockUpdated?.Invoke(currentCount);
-                UpdateVisual(); // Показываем твою картинку ячейки
             }
             else
             {
                 Debug.LogWarning("[РАБОЧИЙ СТОЛ] Неверный тип ингредиента для этого слота!");
             }
+=======
+        if (TryUnloadWarehousePack(inventory))
+>>>>>>> Stashed changes
             return;
-        }
 
-        // Если руки пустые, а на столе что-то есть — берем 1 штуку со стола в руки
+<<<<<<< Updated upstream
         if (inventory.CurrentHeldItem == null && currentCount > 0)
         {
             currentCount--;
@@ -68,39 +74,100 @@ public class KitchenTableSlot : MonoBehaviour, IInteractable
                 allowedIngredient = null;
 
             OnStockUpdated?.Invoke(currentCount);
-            UpdateVisual(); // Скрываем картинку ячейки, если ингредиенты закончились
+=======
+        if (TryTakeSingleItemForCooking(inventory))
+>>>>>>> Stashed changes
             return;
-        }
 
-        // Если в руках уже есть 1 штука — отдаем её на сборочный стол
-        if (inventory.CurrentHeldItem != null && inventory.CurrentAmount == 1)
-        {
-            if (DishAssembler.Instance != null)
-            {
-                DishAssembler.Instance.AddIngredient(inventory.CurrentHeldItem);
-                inventory.ClearInventory();
-            }
-        }
+        if (TryPlaceHeldItemOnAssembly(inventory))
+            return;
     }
 
+    private bool TryUnloadWarehousePack(PlayerInventory inventory)
+    {
+        if (!inventory.IsHoldingWarehousePack)
+        {
+            return false;
+        }
+
+<<<<<<< Updated upstream
+        if (inventory.CurrentHeldItem != null && inventory.CurrentAmount == 1)
+=======
+        if (inventory.CurrentHeldItem != allowedIngredient)
+            return true;
+
+        if (currentCount > 0)
+            return true;
+
+        currentCount = maxCount;
+        inventory.ClearInventory();
+        OnStockUpdated?.Invoke(currentCount);
+        UpdateVisual();
+        return true;
+    }
+
+    private bool TryTakeSingleItemForCooking(PlayerInventory inventory)
+    {
+        if (currentCount <= 0)
+            return false;
+
+        currentCount--;
+
+        if (!inventory.TryAddIngredient(allowedIngredient, PlayerInventory.SingleItemAmount))
+>>>>>>> Stashed changes
+        {
+            currentCount++;
+            return true;
+        }
+
+        GameAudioManager.Instance?.PlayTake();
+        OnStockUpdated?.Invoke(currentCount);
+        UpdateVisual();
+        return true;
+    }
+
+    private bool TryPlaceHeldItemOnAssembly(PlayerInventory inventory)
+    {
+        if (inventory.CurrentHeldDish != null || inventory.IsHoldingWarehousePack || currentCount > 0)
+            return false;
+
+        bool hasMatchingIngredient = false;
+        for (int i = 0; i < PlayerInventory.SlotCount; i++)
+        {
+            InventorySlot slot = inventory.GetSlot(i);
+            if (!slot.IsIngredient || slot.ingredient != allowedIngredient || slot.ingredient.RequiresCutting)
+                continue;
+
+            inventory.SelectSlot(i);
+            hasMatchingIngredient = true;
+            break;
+        }
+
+        if (!hasMatchingIngredient || AssemblyTable.Instance == null)
+            return false;
+
+        AssemblyTable.Instance.Interact();
+        return true;
+    }
+
+<<<<<<< Updated upstream
+    public int CurrentCount => currentCount;
+    public int MaxCount => maxCount;
+}
+=======
     public int GetCurrentCount()
     {
         return currentCount;
     }
 
-    // Логика видимости: просто включаем или выключаем объект, не меняя в нем картинку
     private void UpdateVisual()
     {
-        if (slotVisualObject == null) return;
+        if (slotVisualObject == null)
+        {
+            return;
+        }
 
-        // Если в ячейке есть предметы (количество больше 0), включаем твою картинку
-        if (currentCount > 0)
-        {
-            slotVisualObject.SetActive(true); // Объект становится видимым (показывает твою картинку)
-        }
-        else
-        {
-            slotVisualObject.SetActive(false); // Объект полностью отключается (картинка пропадает)
-        }
+        slotVisualObject.SetActive(currentCount > 0);
     }
 }
+>>>>>>> Stashed changes
