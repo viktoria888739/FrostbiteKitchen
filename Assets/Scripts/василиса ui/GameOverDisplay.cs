@@ -43,32 +43,32 @@ public class GameOverDisplay : MonoBehaviour
         {
             if (successPercentage < requiredPercentage)
             {
-                outcomeText.text = "Смена провалена: Ресторан закрыт";
+                outcomeText.text = "GAME OVER";
             }
             else
             {
-                outcomeText.text = "Вы пережили эту ночь. Демо завершено";
+                outcomeText.text = "WIN";
             }
         }
         
         if (successfulDishesText != null)
         {
-            successfulDishesText.text = $"Выдано блюд: {stats.successfulDishes}";
+            successfulDishesText.text = $"{stats.successfulDishes}";
         }
 
         if (spoiledDishesText != null)
         {
-            spoiledDishesText.text = $"Испорчено продуктов: {stats.spoiledDishes}";
+            spoiledDishesText.text = $"{stats.spoiledDishes}";
         }
 
         if (threatsDefendedText != null)
         {
-            threatsDefendedText.text = $"Отражено атак: {stats.threatsDefended}";
+            threatsDefendedText.text = $"{stats.threatsDefended}";
         }
 
         if (survivalTimeText != null)
         {
-            survivalTimeText.text = $"Время выживания: {stats.survivalTime:F1} сек.";
+            survivalTimeText.text = $"{stats.survivalTime:F1} сек.";
         }
     }
 }

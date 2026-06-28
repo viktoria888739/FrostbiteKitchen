@@ -4,21 +4,25 @@ using UnityEngine.EventSystems;
 public class CursorHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [SerializeField] private Texture2D hoverCursor;
-    [SerializeField] private Texture2D defaultCursor;
-    [SerializeField] private Vector2 hotSpot = new Vector2(16, 16);
+    [SerializeField] private Vector2 hotSpot = Vector2.zero;
+    [SerializeField] private CursorMode cursorMode = CursorMode.Auto;
+    [SerializeField] private bool resetCursorOnClick = false;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Cursor.SetCursor(hoverCursor, hotSpot, CursorMode.Auto);
+        Cursor.SetCursor(hoverCursor, hotSpot, cursorMode);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
-    
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
+        if (resetCursorOnClick)
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
     }
 }

@@ -7,7 +7,7 @@ public class HotbarManager : MonoBehaviour
     [SerializeField] private Image[] slotBackgrounds;
     [SerializeField] private Image[] slotIcons;
     [SerializeField] private Sprite[] items;
-    [SerializeField] private Color selectedColor = Color.yellow;
+    [SerializeField] private Color selectedColor = Color.gray7;
     [SerializeField] private Color defaultColor = Color.white;
 
     private int currentIndex = 0;
@@ -19,6 +19,8 @@ public class HotbarManager : MonoBehaviour
 
     private void Update()
     {
+        if (Time.timeScale == 0f) return;
+
         HandleNumberInput();
         HandleScrollInput();
     }
