@@ -107,92 +107,25 @@ public class ThreatManager : MonoBehaviour
 
     public void PlayerDefendedThreat(ThreatSpawner2 spawner)
     {
-<<<<<<< Updated upstream
         if (spawner == null) return;
         ClearCurrentThreat(spawner);
-=======
-        activeThreatSide = side;
-        Debug.Log($"[ThreatManager] Монстр напал на сторону: {side}");
-        GameAudioManager.Instance?.PlayThreatSpawn(side);
-
-        // Включаем визуал скриптов защиты
-        switch (side)
-        {
-            case KitchenSide.Front:
-                if (frontHandler != null) frontHandler.OnMonsterSpawn();
-                break;
-            case KitchenSide.Left:
-                if (leftHandler != null) leftHandler.OnMonsterSpawn();
-                break;
-            case KitchenSide.Back:
-                if (backHandler != null) backHandler.OnMonsterSpawn();
-                break;
-            case KitchenSide.Right:
-                if (rightHandler != null) rightHandler.OnMonsterSpawn();
-                break;
-        }
-
-        // Запуск чистового таймера скримера / проигрыша
-        if (jumpscareRoutine != null) StopCoroutine(jumpscareRoutine);
-        jumpscareRoutine = StartCoroutine(JumpscareTimeoutRoutine());
-    }
-
-    public void OnThreatResolved(KitchenSide side)
-    {
-        if (activeThreatSide == side)
-        {
-            Debug.Log($"[ThreatManager] Угроза на стороне {side} успешно устранена!");
-            activeThreatSide = null;
-            
-            if (jumpscareRoutine != null) StopCoroutine(jumpscareRoutine);
-        }
     }
 
     public void PlayerDefendedThreat(KitchenSide defendedSide)
     {
-        if (!activeThreatSide.HasValue || activeThreatSide.Value != defendedSide)
+        if (!isThreatActive)
             return;
 
-        OnThreatResolved(defendedSide);
-        SessionStatistics.Instance?.AddDefendedThreat();
-    }
-
-    private IEnumerator JumpscareTimeoutRoutine()
-    {
-        yield return new WaitForSeconds(timeBeforeJumpscare);
-        
-        Debug.LogError("[ThreatManager] Время вышло! Игрок пропустил атаку монстра. Вызов Game Over.");
-        GameAudioManager.Instance?.PlayJumpscare();
-        
-        StopSpawning();
-
-        if (SessionResultEvaluator.Instance != null)
+        foreach (ThreatSpawner2 spawner in spawners)
         {
-            SessionResultEvaluator.Instance.HandleThreatMissed();
-        }
-        else if (GameStateMachine.Instance != null)
-        {
-            GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Results);
-        }
-        else
-        {
-            Debug.LogError("Критическая ошибка: GameStateMachine.Instance не найден на сцене!");
-        }
-    }
+            if (spawner == null)
+                continue;
 
-    private void DeactivateAllVisuals()
-    {
-        if (frontHandler != null) frontHandler.ResetThreat();
-        if (leftHandler != null) leftHandler.ResetThreat();
-        if (backHandler != null) backHandler.ResetThreat();
-        if (rightHandler != null) rightHandler.ResetThreat();
-        activeThreatSide = null;
-    }
-
-    private void OnDestroy()
-    {
-        // Отписка от событий при уничтожении объекта во избежание утечек памяти
-        // GameStateMachine.Instance.OnStateChanged -= HandleGameStateChanged;
->>>>>>> Stashed changes
+            if (System.Enum.TryParse(spawner.sideName, out KitchenSide side) && side == defendedSide)
+            {
+                ClearCurrentThreat(spawner);
+                return;
+            }
+        }
     }
 }

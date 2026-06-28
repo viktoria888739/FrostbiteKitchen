@@ -244,15 +244,8 @@ public class Stove : MonoBehaviour, IInteractable, IPointerClickHandler
 
     private void HandleGameStateChanged(GameStateMachine.GameState newState)
     {
-<<<<<<< Updated upstream
-        isUnderThreat = (newState != GameStateMachine.GameState.Gameplay);
-
-        if (animator != null)
-            animator.SetBool("IsUnderThreat", isUnderThreat);
-=======
         isUnderThreat = newState != GameStateMachine.GameState.Gameplay;
         stationAnimator?.SetUnderThreat(isUnderThreat);
->>>>>>> Stashed changes
 
         if (!isUnderThreat)
             overcookTimer = 0f;

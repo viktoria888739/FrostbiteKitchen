@@ -170,14 +170,6 @@ public class PlayerInventory : MonoBehaviour
 
     public void SetHeldItem(IngredientData item, int amount)
     {
-<<<<<<< Updated upstream
-        currentHeldItem = item;
-        currentAmount = Mathf.Max(0, amount);
-        
-        OnHandUpdated?.Invoke(currentHeldItem, currentAmount);
-        
-        Debug.Log($"<color=cyan>[ИНВЕНТАРЬ]</color> В руках: { (item != null ? item.displayName : "Nothing") } ({currentAmount} шт.)");
-=======
         if (item == null || amount <= 0)
         {
             ClearSelectedSlot();
@@ -185,48 +177,16 @@ public class PlayerInventory : MonoBehaviour
         }
 
         SetSlot(selectedSlotIndex, InventorySlot.FromIngredient(item, amount));
->>>>>>> Stashed changes
     }
 
     public bool TryUseOneItem()
     {
-<<<<<<< Updated upstream
-        if (currentHeldItem == null || currentAmount <= 0) return false;
-
-        currentAmount--;
-        
-        if (currentAmount <= 0)
-        {
-            ClearInventory();
-        }
-        else
-        {
-            OnHandUpdated?.Invoke(currentHeldItem, currentAmount);
-        }
-        return true;
-=======
         return RemoveFromSlot(selectedSlotIndex, SingleItemAmount);
->>>>>>> Stashed changes
     }
 
     public bool RemoveItem(int amount)
     {
-<<<<<<< Updated upstream
-        if (currentHeldItem == null) return;
-        
-        currentAmount -= Mathf.Max(0, amount);
-        
-        if (currentAmount <= 0)
-        {
-            ClearInventory();
-        }
-        else
-        {
-            OnHandUpdated?.Invoke(currentHeldItem, currentAmount);
-        }
-=======
         return RemoveFromSlot(selectedSlotIndex, amount);
->>>>>>> Stashed changes
     }
 
     public void ClearInventory()

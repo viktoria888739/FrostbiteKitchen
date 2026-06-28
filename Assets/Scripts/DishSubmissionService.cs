@@ -1,5 +1,6 @@
 using UnityEngine;
 using FrostbiteKitchen.Data;
+using FrostbiteKitchen.Gameplay;
 
 public class DishSubmissionService : MonoBehaviour
 {

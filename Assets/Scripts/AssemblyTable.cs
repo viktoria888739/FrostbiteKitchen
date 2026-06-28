@@ -7,11 +7,6 @@ namespace FrostbiteKitchen.KitchenStation
 {
     public class AssemblyTable : MonoBehaviour, IInteractable, IPointerClickHandler
     {
-<<<<<<< Updated upstream
-        [Header("Сборочный стол")]
-        [Tooltip("Максимальное количество ингредиентов на тарелке")]
-        [SerializeField] private int maxIngredients = 6;
-=======
         public static AssemblyTable Instance { get; private set; }
 
         [SerializeField] private int maxIngredients = 6;
@@ -45,7 +40,6 @@ namespace FrostbiteKitchen.KitchenStation
         {
             Interact();
         }
->>>>>>> Stashed changes
 
         public void Interact()
         {
@@ -76,12 +70,6 @@ namespace FrostbiteKitchen.KitchenStation
             if (assembler.GetCurrentIngredientCount() >= maxIngredients)
                 return;
 
-<<<<<<< Updated upstream
-            IngredientData heldItem = inventory.CurrentHeldItem;
-            assembler.AddIngredient(heldItem);
-            inventory.TryUseOneItem();
-            Debug.Log($"<color=#33FF57>[СБОРКА]</color> Добавлен ингредиент: {heldItem.displayName}");
-=======
             if (heldItem.RequiresCooking)
                 return;
 
@@ -173,7 +161,6 @@ namespace FrostbiteKitchen.KitchenStation
             }
 
             return null;
->>>>>>> Stashed changes
         }
     }
 }
