@@ -16,8 +16,8 @@ MonoBehaviour:
   recipeName: "\u042F\u0438\u0447\u043D\u0438\u0446\u0430 \u0441 \u043A\u043E\u043B\u0431\u0430\u0441\u043E\u0439"
   icon: {fileID: 21300000, guid: 55cd1143d8047f24a9bdae9b5dccfe9d, type: 3}
   requiredIngredients:
-  - ingredient: {fileID: 11400000, guid: 46df33669aa05de4c84ce787a5c829aa, type: 2}
+  - ingredient: {fileID: 11400000, guid: 98063f25e5d9f9e4bb51a9a8e81e824a, type: 2}
     count: 2
   - ingredient: {fileID: 11400000, guid: 1af6abc4d65999e42942963d8fad6596, type: 2}
     count: 1
-  timeLimit: 40
+  timeLimit: 60

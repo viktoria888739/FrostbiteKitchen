@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a2430a45a85c6d4bae5b49033aef6b3, type: 3}
   m_Name: Ing_Jam
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.IngredientData
-  id: 
+  id: jam
   displayName: "\u0412\u0430\u0440\u0435\u043D\u044C\u0435"
   icon: {fileID: 21300000, guid: fc9b62813779ee64780f6c0e2fd59224, type: 3}
+  packIcon: {fileID: 21300000, guid: e2c4f67180e9efd409a419f97295fda2, type: 3}
   requiresCooking: 0
   cookingTime: 3
   cookedVersion: {fileID: 0}

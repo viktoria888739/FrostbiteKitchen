@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a2430a45a85c6d4bae5b49033aef6b3, type: 3}
   m_Name: Ing_Bread
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.IngredientData
-  id: 
+  id: bread
   displayName: "\u0425\u043B\u0435\u0431"
   icon: {fileID: 21300000, guid: 20794ab810264174f84b0e7dbd5d98b3, type: 3}
+  packIcon: {fileID: 21300000, guid: 13a96b3af99884445bcc8810fe004784, type: 3}
   requiresCooking: 0
   cookingTime: 3
   cookedVersion: {fileID: 0}

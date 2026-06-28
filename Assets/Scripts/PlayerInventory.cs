@@ -29,10 +29,10 @@ public class PlayerInventory : MonoBehaviour
     {
         currentHeldItem = item;
         currentAmount = Mathf.Max(0, amount);
-        
+
         OnHandUpdated?.Invoke(currentHeldItem, currentAmount);
-        
-        Debug.Log($"<color=cyan>[ИНВЕНТАРЬ]</color> В руках: { (item != null ? item.displayName : "Nothing") } ({currentAmount} шт.)");
+
+        Debug.Log($"<color=cyan>[ИНВЕНТАРЬ]</color> В руках: {(item != null ? item.displayName : "Nothing")} ({currentAmount} шт.)");
     }
 
     public bool TryUseOneItem()
@@ -40,7 +40,7 @@ public class PlayerInventory : MonoBehaviour
         if (currentHeldItem == null || currentAmount <= 0) return false;
 
         currentAmount--;
-        
+
         if (currentAmount <= 0)
         {
             ClearInventory();
@@ -54,9 +54,9 @@ public class PlayerInventory : MonoBehaviour
     public void RemoveItem(int amount)
     {
         if (currentHeldItem == null) return;
-        
+
         currentAmount -= Mathf.Max(0, amount);
-        
+
         if (currentAmount <= 0)
         {
             ClearInventory();

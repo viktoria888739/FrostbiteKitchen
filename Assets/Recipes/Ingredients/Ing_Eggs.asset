@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a2430a45a85c6d4bae5b49033aef6b3, type: 3}
   m_Name: Ing_Eggs
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.Data.IngredientData
-  id: 
+  id: egg_raw
   displayName: "\u042F\u0439\u0446\u043E"
   icon: {fileID: 21300000, guid: 7ac29f567086dac4d8738df4ef42a2af, type: 3}
+  packIcon: {fileID: 21300000, guid: 2c5c4df1c82055c4589b9ec90b6434ce, type: 3}
   requiresCooking: 1
   cookingTime: 10
-  cookedVersion: {fileID: 0}
+  cookedVersion: {fileID: 11400000, guid: 98063f25e5d9f9e4bb51a9a8e81e824a, type: 2}
