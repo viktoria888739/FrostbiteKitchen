@@ -601,8 +601,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -208.5}
-  m_SizeDelta: {x: 0, y: 384.934}
+  m_AnchoredPosition: {x: 0, y: 0.00007247925}
+  m_SizeDelta: {x: 0, y: 0.000076294}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &93333605
 MonoBehaviour:
@@ -690,7 +690,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 416.4233}
+  m_margin: {x: 0, y: 0, z: 0, w: -0.6253662}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -987,8 +987,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UICursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!1001 &143478435
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1239,9 +1240,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1957209570}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 114.6535, y: -98.01625}
   m_SizeDelta: {x: 155, y: 155}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &181143694
@@ -1662,9 +1663,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1260467182}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 114.6535, y: -98.01625}
   m_SizeDelta: {x: 155, y: 155}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &263075476
@@ -1954,8 +1955,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!1 &272132201
 GameObject:
   m_ObjectHideFlags: 0
@@ -2171,8 +2173,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!1 &286140785
 GameObject:
   m_ObjectHideFlags: 0
@@ -2785,8 +2788,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 1
 --- !u!1 &377284351
 GameObject:
   m_ObjectHideFlags: 0
@@ -3400,8 +3404,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 1
 --- !u!1 &462201404
 GameObject:
   m_ObjectHideFlags: 0
@@ -4089,9 +4094,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1013425144}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 114.6535, y: -241.54875}
   m_SizeDelta: {x: 214.65, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &557491821
@@ -4347,8 +4352,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!114 &583183271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5119,9 +5125,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1957209570}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 114.6535, y: -241.54875}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &680300362
@@ -6408,7 +6414,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &877331403
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6545,9 +6551,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1013425144}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 114.6535, y: -98.01625}
   m_SizeDelta: {x: 155, y: 155}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &898387650
@@ -6710,9 +6716,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 269262375}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 114.6535, y: -234.52876}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &911498948
@@ -7440,8 +7446,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UICursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 1
 --- !u!1001 &1012784206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7782,8 +7789,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!1 &1016273259
 GameObject:
   m_ObjectHideFlags: 0
@@ -7901,9 +7909,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1260467182}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 114.6535, y: -241.54875}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1017370663
@@ -8141,8 +8149,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 1
 --- !u!1 &1103949661
 GameObject:
   m_ObjectHideFlags: 0
@@ -8156,6 +8165,7 @@ GameObject:
   - component: {fileID: 1103949665}
   - component: {fileID: 1103949664}
   - component: {fileID: 1103949667}
+  - component: {fileID: 1103949668}
   m_Layer: 5
   m_Name: Btn_Flashlight
   m_TagString: Untagged
@@ -8293,6 +8303,22 @@ MonoBehaviour:
   innerIconImage: {fileID: 0}
   iconOff: {fileID: 21300000, guid: 48f643665271d32478b971a9a162b481, type: 3}
   iconOn: {fileID: 21300000, guid: 5a758c6aaba5b914ea0419cc3b0aa28b, type: 3}
+--- !u!114 &1103949668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1103949661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7d4dbbe3e5244df7895793457427d23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CursorHover
+  hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
+  hotSpot: {x: 0, y: 0}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!1001 &1133754314
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9011,8 +9037,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 1
 --- !u!224 &1240232347 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 222222222, guid: c3d4e5f60718293a4b5c6d7e8f901122, type: 3}
@@ -9241,8 +9268,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!1 &1316982465
 GameObject:
   m_ObjectHideFlags: 0
@@ -9849,8 +9877,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UICursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!1001 &1427676227
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10213,8 +10242,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!1001 &1442826788
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10850,8 +10880,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 1
 --- !u!114 &1559417187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12285,9 +12316,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1428780841}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 114.6535, y: -98.01625}
   m_SizeDelta: {x: 155, y: 155}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1783088382
@@ -12386,9 +12417,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1428780841}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 114.6535, y: -241.54875}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1799268985
@@ -12791,8 +12822,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!1 &1873355132
 GameObject:
   m_ObjectHideFlags: 0
@@ -13685,8 +13717,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!1 &1973826844
 GameObject:
   m_ObjectHideFlags: 0
@@ -14026,9 +14059,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 269262375}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 114.6535, y: -105.036255}
   m_SizeDelta: {x: 155, y: 155}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2054058385
@@ -14532,8 +14565,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!1001 &2097796489
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14958,8 +14992,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CursorHover
   hoverCursor: {fileID: 2800000, guid: eda18c72ead7eca4b8f2f35980f5e51a, type: 3}
-  defaultCursor: {fileID: 2800000, guid: f50300b783be743438c3773150e08dd8, type: 3}
   hotSpot: {x: 16, y: 16}
+  cursorMode: 0
+  resetCursorOnClick: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
