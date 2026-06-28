@@ -77,12 +77,21 @@ public class HudPresenter : MonoBehaviour
         if (currentOrderCard != null) Destroy(currentOrderCard);
 
         currentOrderCard = Instantiate(orderCardPrefab, orderContainer);
-        Debug.Log("HudPresenter: Префаб успешно инстанцирован.");
 
-        imageOrder = currentOrderCard.GetComponentInChildren<Image>();
+        Transform imageTransform = currentOrderCard.transform.Find("Image_Order");
+        if (imageTransform != null)
+        {
+            imageOrder = imageTransform.GetComponent<Image>();
+        }
+        else
+        {
+            imageOrder = currentOrderCard.GetComponentInChildren<Image>();
+        }
+
         textOrderTime = currentOrderCard.GetComponentInChildren<TextMeshProUGUI>();
 
-        if (newRecipe.icon != null) imageOrder.sprite = newRecipe.icon;
+        if (newRecipe.icon != null && imageOrder != null) imageOrder.sprite = newRecipe.icon;
+        
         currentOrderTimer = newRecipe.timeLimit;
         isOrderActive = true;
     }
