@@ -106,7 +106,7 @@ public class Stove : MonoBehaviour, IInteractable
             if (GameStateMachine.Instance != null && GameStateMachine.Instance.CurrentState != GameStateMachine.GameState.Gameplay)
             {
                 yield return null;
-                continue; 
+                continue;
             }
 
             elapsed += Time.deltaTime;
@@ -156,7 +156,7 @@ public class Stove : MonoBehaviour, IInteractable
         Debug.Log($"<color=red>[ПЛИТА] 🔥 БЛЮДО СГОРЕЛО: {currentIngredientOnStove.displayName}</color>");
 
         if (SessionStatistics.Instance != null)
-            SessionStatistics.Instance.AddFailedOrder(); 
+            SessionStatistics.Instance.AddFailedOrder();
 
         if (animator != null) animator.SetTrigger("Burned");
         OnDishBurned?.Invoke();
@@ -180,8 +180,8 @@ public class Stove : MonoBehaviour, IInteractable
     private void HandleGameStateChanged(GameStateMachine.GameState newState)
     {
         isUnderThreat = (newState != GameStateMachine.GameState.Gameplay);
-        
-        if (animator != null) 
+
+        if (animator != null)
             animator.SetBool("IsUnderThreat", isUnderThreat);
 
     }
