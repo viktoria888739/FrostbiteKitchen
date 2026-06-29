@@ -27,42 +27,37 @@ public class GameOverDisplay : MonoBehaviour
 
         SessionData stats = SessionStatistics.Instance.GetSessionData();
 
-        if (SessionResultEvaluator.Instance != null &&
-            SessionResultEvaluator.Instance.CurrentResult == SessionResultEvaluator.SessionStatus.GameOverByMonster)
-        {
-            if (outcomeText != null)
-                outcomeText.text = "GAME OVER";
-
-            FillStats(stats);
-            return;
-        }
-
-        float successPercentage = 0f;
-        if (stats.totalOrdersAttempted > 0)
-            successPercentage = ((float)stats.successfulDishes / stats.totalOrdersAttempted) * 100f;
-
-        float requiredPercentage = 50f;
-        if (SettingsLoader.Instance != null && SettingsLoader.Instance.CurrentSettings != null)
-            requiredPercentage = SettingsLoader.Instance.CurrentSettings.winRequiredOrderPercentage;
-
         if (outcomeText != null)
-            outcomeText.text = successPercentage < requiredPercentage ? "GAME OVER" : "WIN";
+            outcomeText.text = ResolveOutcomeText();
 
         FillStats(stats);
+    }
+
+    private string ResolveOutcomeText()
+    {
+        if (SessionResultEvaluator.Instance == null)
+            return "GAME OVER";
+
+        return SessionResultEvaluator.Instance.CurrentResult switch
+        {
+            SessionResultEvaluator.SessionStatus.Success => "WIN",
+            SessionResultEvaluator.SessionStatus.GameOverByMonster => "GAME OVER",
+            _ => "GAME OVER"
+        };
     }
 
     private void FillStats(SessionData stats)
     {
         if (successfulDishesText != null)
-            successfulDishesText.text = $"{stats.successfulDishes}";
+            successfulDishesText.text = $"{stats.completedOrders}";
 
         if (spoiledDishesText != null)
-            spoiledDishesText.text = $"{stats.spoiledDishes}";
+            spoiledDishesText.text = $"{stats.failedOrders}";
 
         if (threatsDefendedText != null)
             threatsDefendedText.text = $"{stats.threatsDefended}";
 
         if (survivalTimeText != null)
-            survivalTimeText.text = $"{stats.survivalTime:F1} сек.";
+            survivalTimeText.text = $"{stats.totalTime:F1} сек.";
     }
 }

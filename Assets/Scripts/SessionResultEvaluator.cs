@@ -66,7 +66,11 @@ public class SessionResultEvaluator : MonoBehaviour
 
         float successRate = ((float)completed / total) * 100f;
 
-        if (successRate >= 50f)
+        float requiredPercentage = 50f;
+        if (SettingsLoader.Instance != null && SettingsLoader.Instance.CurrentSettings != null)
+            requiredPercentage = SettingsLoader.Instance.CurrentSettings.winRequiredOrderPercentage;
+
+        if (successRate >= requiredPercentage)
         {
             CurrentResult = SessionStatus.Success;
             Debug.Log($"[SessionResultEvaluator] Смена сдана! Успех: {successRate:F1}%");
@@ -77,11 +81,6 @@ public class SessionResultEvaluator : MonoBehaviour
             CurrentResult = SessionStatus.Fail;
             Debug.Log($"[SessionResultEvaluator] Смена провалена. Успех всего: {successRate:F1}%");
             GameAudioManager.Instance?.PlaySessionGameOver();
-        }
-
-        if (GameStateMachine.Instance != null)
-        {
-            GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Results);
         }
     }
     public void ResetStatistics()

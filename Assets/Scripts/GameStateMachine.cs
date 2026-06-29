@@ -60,12 +60,21 @@ public class GameStateMachine : MonoBehaviour
         switch (state)
         {
             case GameState.MainMenu:
+                Time.timeScale = 1f;
+                SessionStatistics.Instance?.ResetStatistics();
+                SessionResultEvaluator.Instance?.ResetStatistics();
+                SessionOrderTracker.Instance?.ResetSession();
+                GameOverManager.Instance?.PrepareForNewSession();
+                HideResultsScreen();
                 GameAudioManager.Instance?.PlayMainMenuMusic();
                 break;
 
             case GameState.Gameplay:
                 Time.timeScale = 1f;
                 OnGameResumed?.Invoke();
+                HideResultsScreen();
+                GameOverManager.Instance?.PrepareForNewSession();
+                ViewRotationBlocker.Reset();
                 GameAudioManager.Instance?.PlayKitchenAmbient();
 
                 if (previousState != GameState.Pause)
@@ -82,6 +91,7 @@ public class GameStateMachine : MonoBehaviour
                 break;
 
             case GameState.Results:
+                Time.timeScale = 0f;
                 GameAudioManager.Instance?.StopAllLoops();
                 SessionResultEvaluator.Instance?.EvaluateSessionResult();
                 EndSessionAndShowFinalScreen();
@@ -89,7 +99,18 @@ public class GameStateMachine : MonoBehaviour
         }
     }
 
-    private void ExitState(GameState state) { }
+    private void ExitState(GameState state)
+    {
+        if (state == GameState.Results)
+            HideResultsScreen();
+    }
+
+    private static void HideResultsScreen()
+    {
+        var gameOverDisplay = Object.FindFirstObjectByType<GameOverDisplay>(FindObjectsInactive.Include);
+        if (gameOverDisplay != null)
+            gameOverDisplay.gameObject.SetActive(false);
+    }
 
     private void EndSessionAndShowFinalScreen()
     {

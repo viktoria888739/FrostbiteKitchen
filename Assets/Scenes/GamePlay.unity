@@ -6727,7 +6727,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5f0373f7ff81bf498f1c4f0952451a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOverManager
-  gameOverScreenUI: {fileID: 1781282936}
 --- !u!4 &877362855
 Transform:
   m_ObjectHideFlags: 0
@@ -15207,10 +15206,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 877362854}
-        m_TargetAssemblyTypeName: GameOverManager, Assembly-CSharp
-        m_MethodName: ReturnToMainMenu
-        m_Mode: 1
+      - m_Target: {fileID: 876820152}
+        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
+        m_MethodName: OpenScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
