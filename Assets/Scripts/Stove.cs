@@ -216,8 +216,7 @@ public class Stove : MonoBehaviour, IInteractable, IPointerClickHandler
         cookingCoroutine = null;
         GameAudioManager.Instance?.StopStoveSizzle();
 
-        if (SessionStatistics.Instance != null)
-            SessionStatistics.Instance.AddFailedOrder();
+        SessionStatistics.Instance?.AddSpoiledDish();
 
         stationAnimator?.SetStage(KitchenPrepStage.Burned);
         OnDishBurned?.Invoke();

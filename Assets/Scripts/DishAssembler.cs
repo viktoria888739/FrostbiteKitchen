@@ -11,6 +11,7 @@ namespace FrostbiteKitchen.Gameplay
 
         [SerializeField] private int maxIngredientsOnPlate = 5;
         [SerializeField] private RecipeCatalog recipeCatalog;
+        [SerializeField] private Sprite spoiledDishSprite;
 
         private readonly List<IngredientData> ingredientsOnPlate = new List<IngredientData>();
         private IngredientData[] frozenIngredientsBackup;
@@ -57,6 +58,21 @@ namespace FrostbiteKitchen.Gameplay
             return TryResolveCompleteRecipe(out _);
         }
 
+        public bool HasIngredientsOnPlate()
+        {
+            return ingredientsOnPlate.Count > 0;
+        }
+
+        public bool IsCurrentPlateSpoiled()
+        {
+            if (ingredientsOnPlate.Count == 0)
+                return false;
+
+            IReadOnlyList<RecipeData> recipes = GetRecipes();
+            return recipes == null ||
+                   AssemblyPlateVisualResolver.IsSpoiledPlate(ingredientsOnPlate, recipes);
+        }
+
         public bool TryBuildCompleteDish(out DishData dish)
         {
             dish = null;
@@ -75,10 +91,43 @@ namespace FrostbiteKitchen.Gameplay
 
         public bool TryPickupCompleteDish(out DishData dish)
         {
-            if (!TryBuildCompleteDish(out dish))
+            if (!TryCreateDishFromPlate(out dish))
                 return false;
 
             ClearPlate();
+            return true;
+        }
+
+        public bool TryPickupPlateDish(out DishData dish)
+        {
+            return TryPickupCompleteDish(out dish);
+        }
+
+        public bool TryCreateDishFromPlate(out DishData dish)
+        {
+            dish = null;
+
+            if (isInteractionFrozen || ingredientsOnPlate.Count == 0)
+                return false;
+
+            dish = ScriptableObject.CreateInstance<DishData>();
+            dish.ingredients = new List<IngredientData>(ingredientsOnPlate);
+
+            if (TryResolveCompleteRecipe(out RecipeData recipe))
+            {
+                dish.dishId = recipe.recipeId;
+                dish.dishName = recipe.recipeName;
+                dish.icon = recipe.icon;
+                dish.correspondingRecipe = recipe;
+            }
+            else
+            {
+                dish.dishId = "spoiled_dish";
+                dish.dishName = "Испорченное блюдо";
+                dish.icon = ResolveSpoiledSprite();
+                dish.correspondingRecipe = null;
+            }
+
             return true;
         }
 
@@ -224,6 +273,21 @@ namespace FrostbiteKitchen.Gameplay
         private void UpdatePlateVisuals()
         {
             AssemblyTable.Instance?.ResetTable();
+        }
+
+        private Sprite ResolveSpoiledSprite()
+        {
+            if (spoiledDishSprite != null)
+                return spoiledDishSprite;
+
+            if (AssemblyTable.Instance != null)
+            {
+                Sprite fromTable = AssemblyTable.Instance.GetSpoiledDishSprite();
+                if (fromTable != null)
+                    return fromTable;
+            }
+
+            return null;
         }
 
         private static Dictionary<IngredientData, int> BuildIngredientCounts(IReadOnlyList<IngredientData> ingredients)

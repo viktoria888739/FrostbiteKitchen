@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
 
-namespace FrostbiteKitchen.UI{
-    public class OrderCompleteBtn : MonoBehaviour, IInteractable
+namespace FrostbiteKitchen.UI
+{
+    public class OrderCompleteBtn : MonoBehaviour, IInteractable, IPointerClickHandler
     {
-        public void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData)
+        public void OnPointerClick(PointerEventData eventData)
         {
             Interact();
         }

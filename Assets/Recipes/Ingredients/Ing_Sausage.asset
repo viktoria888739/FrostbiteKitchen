@@ -19,6 +19,6 @@ MonoBehaviour:
   requiresCooking: 0
   cookingTime: 3
   cookedVersion: {fileID: 0}
-  requiresCutting: 1
+  requiresCutting: 0
   cuttingTime: 2
-  cutVersion: {fileID: 11400000, guid: 1af6abc4d65999e42942963d8fad6596, type: 2}
+  cutVersion: {fileID: 0}

@@ -84,7 +84,7 @@ public class KitchenTableSlot : MonoBehaviour, IInteractable
         for (int i = 0; i < PlayerInventory.SlotCount; i++)
         {
             InventorySlot slot = inventory.GetSlot(i);
-            if (!slot.IsIngredient || slot.ingredient != allowedIngredient || slot.ingredient.RequiresCutting)
+            if (!slot.IsIngredient || slot.ingredient != allowedIngredient)
                 continue;
 
             inventory.SelectSlot(i);

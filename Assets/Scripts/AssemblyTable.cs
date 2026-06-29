@@ -57,7 +57,8 @@ namespace FrostbiteKitchen.KitchenStation
             if (inventory.CurrentHeldDish != null)
                 return;
 
-            if (inventory.CurrentHeldItem == null && assembler.HasCompleteDish())
+            if (inventory.CurrentHeldItem == null && inventory.CurrentHeldDish == null &&
+                (assembler.HasCompleteDish() || assembler.IsCurrentPlateSpoiled()))
             {
                 TryPickupDish(inventory, assembler);
                 return;
@@ -71,9 +72,6 @@ namespace FrostbiteKitchen.KitchenStation
                 return;
 
             if (heldItem.RequiresCooking)
-                return;
-
-            if (heldItem.RequiresCutting)
                 return;
 
             if (!assembler.TryAddIngredient(heldItem))
@@ -108,12 +106,17 @@ namespace FrostbiteKitchen.KitchenStation
                 }
             }
 
-            return item != null && !item.RequiresCooking && !item.RequiresCutting;
+            return item != null && !item.RequiresCooking;
+        }
+
+        public Sprite GetSpoiledDishSprite()
+        {
+            return tableVisual != null ? tableVisual.SpoiledDishSprite : null;
         }
 
         private void TryPickupDish(PlayerInventory inventory, DishAssembler assembler)
         {
-            if (!assembler.TryBuildCompleteDish(out DishData dish))
+            if (!assembler.TryCreateDishFromPlate(out DishData dish))
                 return;
 
             if (!inventory.TryAddDish(dish))
