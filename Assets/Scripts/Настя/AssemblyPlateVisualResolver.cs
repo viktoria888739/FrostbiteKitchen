@@ -37,6 +37,27 @@ namespace FrostbiteKitchen.KitchenStation
             return spoiledDishSprite;
         }
 
+        public static bool IsSpoiledPlate(
+            IReadOnlyList<IngredientData> plateIngredients,
+            IReadOnlyList<RecipeData> recipes)
+        {
+            if (plateIngredients == null || plateIngredients.Count == 0)
+                return false;
+
+            if (plateIngredients.Count == 1)
+                return false;
+
+            Dictionary<IngredientData, int> plateCounts = BuildCounts(plateIngredients);
+
+            if (FindExactRecipe(plateCounts, recipes) != null)
+                return false;
+
+            if (plateIngredients.Count == 2 && IsPrefixOfAnyRecipe(plateCounts, recipes))
+                return false;
+
+            return true;
+        }
+
         private static RecipeData FindExactRecipe(
             Dictionary<IngredientData, int> plateCounts,
             IReadOnlyList<RecipeData> recipes)

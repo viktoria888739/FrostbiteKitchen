@@ -64,6 +64,14 @@ namespace FrostbiteKitchen.Core
 
         private static IInteractable ChooseUiInteractable(List<RaycastResult> results)
         {
+            Stove stoveInResults = FindStoveInResults(results);
+
+            if (stoveInResults != null)
+            {
+                if (stoveInResults.CanPickupCookedIngredient() || stoveInResults.HasIngredientOnStove)
+                    return stoveInResults;
+            }
+
             IInteractable topInteractable = null;
 
             foreach (RaycastResult result in results)
@@ -86,18 +94,35 @@ namespace FrostbiteKitchen.Core
             }
 
             if (Stove.IsHoldingCookableSingleItem())
+            {
+                if (stoveInResults != null)
+                    return stoveInResults;
+
                 return topInteractable;
+            }
 
             if (AssemblyTable.CanAcceptHeldIngredient() && AssemblyTable.Instance != null)
             {
                 if (topInteractable is AssemblyTable)
                     return AssemblyTable.Instance;
-
-                if (topInteractable is Stove && !Stove.IsHoldingCookableSingleItem())
-                    return AssemblyTable.Instance;
             }
 
             return topInteractable;
+        }
+
+        private static Stove FindStoveInResults(List<RaycastResult> results)
+        {
+            foreach (RaycastResult result in results)
+            {
+                Stove stove = result.gameObject.GetComponent<Stove>();
+                if (stove == null)
+                    stove = result.gameObject.GetComponentInParent<Stove>();
+
+                if (stove != null)
+                    return stove;
+            }
+
+            return null;
         }
     }
 }

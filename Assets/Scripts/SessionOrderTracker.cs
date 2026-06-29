@@ -68,6 +68,7 @@ public class SessionOrderTracker : MonoBehaviour
         isSessionEnded = true;
 
         OrderManager.Instance?.StopManager();
+        ThreatManager.Instance?.CancelSessionThreats();
 
         if (GameStateMachine.Instance != null)
         {

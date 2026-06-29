@@ -20,14 +20,18 @@ public class IssueWindowCustomerPresenter : MonoBehaviour, IInteractable
     [SerializeField] private Image customerPortraitImage;
     [SerializeField] private GameObject dialogueWindowRoot;
     [SerializeField] private TextMeshProUGUI dialogueText;
+    [SerializeField] private TMP_FontAsset dialogueFont;
+    [SerializeField] private Color dialogueTextColor = Color.white;
     [SerializeField] private List<CustomerProfile> customerProfiles = new List<CustomerProfile>();
-    [SerializeField] private string orderDialogueFormat = "Закажите:\n{0}";
+    [SerializeField] private string orderDialogueFormat = "Привет! Мне {0}.";
+    [SerializeField] private string resourcesCustomersPath = "Customers";
     [SerializeField] private AudioSource voiceAudioSource;
 
     private CustomerProfile activeCustomer;
 
     private void Awake()
     {
+        EnsureCustomerProfiles();
         ResolveReferences();
         EnsureVoiceSource();
         EnsureDialogueText();
@@ -71,6 +75,36 @@ public class IssueWindowCustomerPresenter : MonoBehaviour, IInteractable
         }
     }
 
+    private void EnsureCustomerProfiles()
+    {
+        if (customerProfiles != null && customerProfiles.Count > 0)
+        {
+            int validCount = customerProfiles.FindAll(p => p != null && p.portrait != null).Count;
+            if (validCount > 0)
+                return;
+        }
+
+        if (string.IsNullOrWhiteSpace(resourcesCustomersPath))
+            return;
+
+        Sprite[] sprites = Resources.LoadAll<Sprite>(resourcesCustomersPath);
+        if (sprites == null || sprites.Length == 0)
+            return;
+
+        customerProfiles = new List<CustomerProfile>();
+        foreach (Sprite sprite in sprites)
+        {
+            if (sprite == null)
+                continue;
+
+            customerProfiles.Add(new CustomerProfile
+            {
+                displayName = sprite.name,
+                portrait = sprite
+            });
+        }
+    }
+
     private void ResolveReferences()
     {
         if (customerPortraitImage == null)
@@ -107,6 +141,9 @@ public class IssueWindowCustomerPresenter : MonoBehaviour, IInteractable
 
         voiceAudioSource.playOnAwake = false;
         voiceAudioSource.spatialBlend = 0f;
+
+        if (GameAudioManager.Instance != null && GameAudioManager.Instance.SfxMixerGroup != null)
+            voiceAudioSource.outputAudioMixerGroup = GameAudioManager.Instance.SfxMixerGroup;
     }
 
     private void EnsureClickableTargets()
@@ -132,6 +169,7 @@ public class IssueWindowCustomerPresenter : MonoBehaviour, IInteractable
         dialogueText = dialogueWindowRoot.GetComponentInChildren<TextMeshProUGUI>(true);
         if (dialogueText != null)
         {
+            ApplyDialogueStyle();
             return;
         }
 
@@ -145,11 +183,28 @@ public class IssueWindowCustomerPresenter : MonoBehaviour, IInteractable
         rect.offsetMax = new Vector2(-12f, -12f);
 
         dialogueText = textObject.AddComponent<TextMeshProUGUI>();
-        dialogueText.font = TMP_Settings.defaultFontAsset;
         dialogueText.alignment = TextAlignmentOptions.Center;
         dialogueText.fontSize = 22f;
-        dialogueText.color = Color.black;
         dialogueText.textWrappingMode = TextWrappingModes.Normal;
+        ApplyDialogueStyle();
+    }
+
+    private void ApplyDialogueStyle()
+    {
+        if (dialogueText == null)
+            return;
+
+        dialogueText.color = dialogueTextColor;
+
+        if (dialogueFont != null)
+        {
+            dialogueText.font = dialogueFont;
+            return;
+        }
+
+        TMP_FontAsset projectFont = Resources.Load<TMP_FontAsset>("Fonts & Materials/stolzl_medium SDF");
+        if (projectFont != null)
+            dialogueText.font = projectFont;
     }
 
     private void HandleNewOrder(RecipeData recipe)
@@ -178,11 +233,12 @@ public class IssueWindowCustomerPresenter : MonoBehaviour, IInteractable
 
         if (dialogueText != null)
         {
+            ApplyDialogueStyle();
             dialogueText.text = string.Format(orderDialogueFormat, recipe.recipeName);
             dialogueText.gameObject.SetActive(true);
         }
 
-        PlayCustomerVoice(activeCustomer.greetingVoice);
+        PlayCustomerVoice(activeCustomer);
     }
 
     private void HandleOrderFinished()
@@ -233,10 +289,13 @@ public class IssueWindowCustomerPresenter : MonoBehaviour, IInteractable
         return validProfiles[UnityEngine.Random.Range(0, validProfiles.Count)];
     }
 
-    private void PlayCustomerVoice(AudioClip clip)
+    private void PlayCustomerVoice(CustomerProfile customer)
     {
-        if (clip == null && GameAudioManager.Instance != null)
-            clip = GameAudioManager.Instance.GetRandomCustomerVoice();
+        AudioClip clip = null;
+        if (GameAudioManager.Instance != null)
+            clip = GameAudioManager.Instance.GetCustomerVoice(customer);
+
+        EnsureVoiceSource();
 
         if (clip == null || voiceAudioSource == null)
             return;

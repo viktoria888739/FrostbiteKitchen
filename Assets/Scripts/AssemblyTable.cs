@@ -7,11 +7,6 @@ namespace FrostbiteKitchen.KitchenStation
 {
     public class AssemblyTable : MonoBehaviour, IInteractable, IPointerClickHandler
     {
-<<<<<<< Updated upstream
-        [Header("Сборочный стол")]
-        [Tooltip("Максимальное количество ингредиентов на тарелке")]
-        [SerializeField] private int maxIngredients = 6;
-=======
         public static AssemblyTable Instance { get; private set; }
 
         [SerializeField] private int maxIngredients = 6;
@@ -45,7 +40,6 @@ namespace FrostbiteKitchen.KitchenStation
         {
             Interact();
         }
->>>>>>> Stashed changes
 
         public void Interact()
         {
@@ -63,29 +57,21 @@ namespace FrostbiteKitchen.KitchenStation
             if (inventory.CurrentHeldDish != null)
                 return;
 
-            if (inventory.CurrentHeldItem == null && assembler.HasCompleteDish())
+            if (inventory.CurrentHeldItem == null && inventory.CurrentHeldDish == null &&
+                (assembler.HasCompleteDish() || assembler.IsCurrentPlateSpoiled()))
             {
                 TryPickupDish(inventory, assembler);
                 return;
             }
 
-            IngredientData heldItem = ResolveHeldIngredient(inventory);
+            IngredientData heldItem = inventory.CurrentHeldItem;
             if (heldItem == null)
                 return;
 
             if (assembler.GetCurrentIngredientCount() >= maxIngredients)
                 return;
 
-<<<<<<< Updated upstream
-            IngredientData heldItem = inventory.CurrentHeldItem;
-            assembler.AddIngredient(heldItem);
-            inventory.TryUseOneItem();
-            Debug.Log($"<color=#33FF57>[СБОРКА]</color> Добавлен ингредиент: {heldItem.displayName}");
-=======
             if (heldItem.RequiresCooking)
-                return;
-
-            if (heldItem.RequiresCutting)
                 return;
 
             if (!assembler.TryAddIngredient(heldItem))
@@ -107,25 +93,17 @@ namespace FrostbiteKitchen.KitchenStation
                 return false;
 
             IngredientData item = inventory.CurrentHeldItem;
-            if (item == null)
-            {
-                for (int i = 0; i < PlayerInventory.SlotCount; i++)
-                {
-                    InventorySlot slot = inventory.GetSlot(i);
-                    if (!slot.IsIngredient)
-                        continue;
+            return item != null && !item.RequiresCooking;
+        }
 
-                    item = slot.ingredient;
-                    break;
-                }
-            }
-
-            return item != null && !item.RequiresCooking && !item.RequiresCutting;
+        public Sprite GetSpoiledDishSprite()
+        {
+            return tableVisual != null ? tableVisual.SpoiledDishSprite : null;
         }
 
         private void TryPickupDish(PlayerInventory inventory, DishAssembler assembler)
         {
-            if (!assembler.TryBuildCompleteDish(out DishData dish))
+            if (!assembler.TryCreateDishFromPlate(out DishData dish))
                 return;
 
             if (!inventory.TryAddDish(dish))
@@ -155,25 +133,6 @@ namespace FrostbiteKitchen.KitchenStation
             UnityEngine.UI.Image image = clickZone.GetComponent<UnityEngine.UI.Image>();
             image.color = new Color(1f, 1f, 1f, 0.01f);
             image.raycastTarget = true;
-        }
-
-        private static IngredientData ResolveHeldIngredient(PlayerInventory inventory)
-        {
-            if (inventory.CurrentHeldItem != null)
-                return inventory.CurrentHeldItem;
-
-            for (int i = 0; i < PlayerInventory.SlotCount; i++)
-            {
-                InventorySlot slot = inventory.GetSlot(i);
-                if (!slot.IsIngredient)
-                    continue;
-
-                inventory.SelectSlot(i);
-                return slot.ingredient;
-            }
-
-            return null;
->>>>>>> Stashed changes
         }
     }
 }

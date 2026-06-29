@@ -16,6 +16,8 @@ public class KitchenRotation : MonoBehaviour
     private int currentViewIndex = 0;
     private GameObject[] views;
 
+    public KitchenSide CurrentSide => GetCurrentSideEnum(currentViewIndex);
+
     void Start()
     {
         views = new GameObject[] { viewFront, viewRight, viewBack, viewLeft };

@@ -72,6 +72,8 @@ namespace FrostbiteKitchen.KitchenStation
             tableSlotImage.preserveAspect = true;
         }
 
+        public Sprite SpoiledDishSprite => spoiledDishSprite;
+
         private void ShowEmptyPlate()
         {
             if (tableSlotImage == null)

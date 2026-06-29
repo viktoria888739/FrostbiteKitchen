@@ -3,6 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
+    public const int MainMenuSceneIndex = 0;
+    public const int TutorialSceneIndex = 1;
+    public const int GameplaySceneIndex = 2;
+
     [Header("UI Panels (Only for Main Menu)")]
     [Tooltip("Панель с главными 3 кнопками (Start, Settings, Exit)")]
     [SerializeField] private GameObject mainMenuPanel;
@@ -19,31 +23,44 @@ public class SceneLoader : MonoBehaviour
     public void OpenScene(int sceneIndex)
     {
         Debug.Log($"[SceneLoader] Загрузка сцены с индексом: {sceneIndex}");
+        Time.timeScale = 1f;
+        GameOverManager.Instance?.PrepareForNewSession();
         SceneManager.LoadScene(sceneIndex);
 
         if (GameStateMachine.Instance != null)
         {
-            if (sceneIndex == 0)
-            {
+            if (sceneIndex == MainMenuSceneIndex)
                 GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.MainMenu);
-            }
-            else
-            {
+            else if (sceneIndex == GameplaySceneIndex)
                 GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Gameplay);
-            }
         }
+    }
+
+    public void OpenTutorial()
+    {
+        OpenScene(TutorialSceneIndex);
+    }
+
+    public void OpenGameplay()
+    {
+        OpenScene(GameplaySceneIndex);
     }
 
     public void RestartCurrentScene()
     {
         Debug.Log("[SceneLoader] Перезапуск текущего уровня...");
+        Time.timeScale = 1f;
+        GameOverManager.Instance?.PrepareForNewSession();
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
 
         if (GameStateMachine.Instance != null)
-        {
             GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Gameplay);
-        }
+    }
+
+    public void ReturnToMainMenu()
+    {
+        OpenScene(MainMenuSceneIndex);
     }
 
     public void OpenSettings()
@@ -56,5 +73,15 @@ public class SceneLoader : MonoBehaviour
     {
         if (settingsPanel != null) settingsPanel.SetActive(false);
         if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("[SceneLoader] Выход из игры");
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

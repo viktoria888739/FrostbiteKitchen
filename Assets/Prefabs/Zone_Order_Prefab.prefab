@@ -87,5 +87,4 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a1110060cbd4c640998c15af608eff9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  dishAssembler: {fileID: 0}
+  m_EditorClassIdentifier: FrostbiteKitchen.UI::FrostbiteKitchen.UI.OrderCompleteBtn

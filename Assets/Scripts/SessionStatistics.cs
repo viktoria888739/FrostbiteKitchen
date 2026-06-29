@@ -36,16 +36,15 @@ public class SessionStatistics : MonoBehaviour
 
     public void StartSession()
     {
+        ResetStatistics();
         isSessionActive = true;
-        sessionTime = 0f;
-        completedOrders = 0;
-        failedOrders = 0;
-        Debug.Log("[SessionStatistics] Сессия начата (Session Stats)");
+        Debug.Log("[SessionStatistics] Сессия начата — статистика сброшена");
     }
 
     public void EndSession()
     {
         isSessionActive = false;
+        timeSurvived = sessionTime;
         Debug.Log($"[SessionStatistics] Сессия завершена. Выполнено: {completedOrders} | Провалено: {failedOrders} | Время: {sessionTime:F1}с");
     }
 
@@ -70,11 +69,11 @@ public class SessionStatistics : MonoBehaviour
             successfulDishes = this.successfulDishes,
             spoiledDishes = this.spoiledDishes,
             threatsDefended = this.threatsDefended,
-            survivalTime = this.timeSurvived,
+            survivalTime = this.sessionTime,
             completedOrders = this.completedOrders,
             failedOrders = this.failedOrders,
             totalTime = this.sessionTime,
-            totalOrdersAttempted = this.successfulDishes + this.spoiledDishes
+            totalOrdersAttempted = this.completedOrders + this.failedOrders
         };
     }
 

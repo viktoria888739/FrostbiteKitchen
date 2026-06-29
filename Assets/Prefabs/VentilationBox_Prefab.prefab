@@ -86,14 +86,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 111111111}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 469e47ad088fda14db4a03e6f1b374e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b2aeb8ea51ad7348807f19f007662e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LeftThreatHandler
   flashlightSpotlight: {fileID: 666666666}
   ventilationImage: {fileID: 444444444}
   normalVentSprite: {fileID: 21300000, guid: d5c3f00d46117a543bdb6802367babe8, type: 3}
   litVentSprite: {fileID: 21300000, guid: f9271f6869b35bc4e9b5b43c1961bb96, type: 3}
-  monsterVentSprite: {fileID: 0}
+  monsterVentSprite: {fileID: 21300000, guid: 0caa14ca3bf824343947b27165281824, type: 3}
 --- !u!1 &666666666
 GameObject:
   m_ObjectHideFlags: 0

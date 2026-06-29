@@ -42,16 +42,19 @@ public class SessionResultEvaluator : MonoBehaviour
     {
         CurrentResult = SessionStatus.GameOverByMonster;
         Debug.LogError("[SessionResultEvaluator] 💀 ИГРОК УБИТ МОНСТРОМ. Кулинарные расчеты прекращены!");
-        GameAudioManager.Instance?.PlaySessionGameOver();
+
+        OrderManager.Instance?.StopManager();
 
         if (GameStateMachine.Instance != null)
-        {
-            GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Results);
-        }
+            GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Screamer);
     }
     public void EvaluateSessionResult()
     {
-        if (CurrentResult == SessionStatus.GameOverByMonster) return;
+        if (CurrentResult == SessionStatus.GameOverByMonster)
+        {
+            GameAudioManager.Instance?.PlaySessionGameOver();
+            return;
+        }
 
         int completed = SessionStatistics.Instance != null ? SessionStatistics.Instance.completedOrders : 0;
         int failed = SessionStatistics.Instance != null ? SessionStatistics.Instance.failedOrders : 0;
@@ -66,7 +69,11 @@ public class SessionResultEvaluator : MonoBehaviour
 
         float successRate = ((float)completed / total) * 100f;
 
-        if (successRate >= 50f)
+        float requiredPercentage = 50f;
+        if (SettingsLoader.Instance != null && SettingsLoader.Instance.CurrentSettings != null)
+            requiredPercentage = SettingsLoader.Instance.CurrentSettings.winRequiredOrderPercentage;
+
+        if (successRate >= requiredPercentage)
         {
             CurrentResult = SessionStatus.Success;
             Debug.Log($"[SessionResultEvaluator] Смена сдана! Успех: {successRate:F1}%");
@@ -77,11 +84,6 @@ public class SessionResultEvaluator : MonoBehaviour
             CurrentResult = SessionStatus.Fail;
             Debug.Log($"[SessionResultEvaluator] Смена провалена. Успех всего: {successRate:F1}%");
             GameAudioManager.Instance?.PlaySessionGameOver();
-        }
-
-        if (GameStateMachine.Instance != null)
-        {
-            GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Results);
         }
     }
     public void ResetStatistics()

@@ -2,10 +2,23 @@ using UnityEngine;
 
 public static class ViewRotationBlocker
 {
-    public static bool IsRotationBlocked { get; private set; }
+    private static int blockCount;
 
-    public static void SetBlock(bool block)
+    public static bool IsRotationBlocked => blockCount > 0;
+
+    public static void PushBlock()
     {
-        IsRotationBlocked = block;
+        blockCount++;
+    }
+
+    public static void PopBlock()
+    {
+        if (blockCount > 0)
+            blockCount--;
+    }
+
+    public static void Reset()
+    {
+        blockCount = 0;
     }
 }

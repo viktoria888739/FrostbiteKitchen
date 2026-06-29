@@ -5,8 +5,11 @@ using UnityEngine;
 [Serializable]
 public class GameSettingsData
 {
-    [Tooltip("Время паузы между заказами в секундах")]
-    public float timeBetweenOrdersSeconds = 5f;
+    [Tooltip("Минимальная пауза между заказами в секундах")]
+    public float minTimeBetweenOrdersSeconds = 3f;
+
+    [Tooltip("Максимальная пауза между заказами в секундах")]
+    public float maxTimeBetweenOrdersSeconds = 5f;
 
     [Tooltip("Процент успешно выполненных заказов для победы в демо")]
     public float winRequiredOrderPercentage = 50f;
