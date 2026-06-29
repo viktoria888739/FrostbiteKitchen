@@ -34,9 +34,9 @@ public class GameOverManager : MonoBehaviour
     {
         var loader = Object.FindFirstObjectByType<SceneLoader>();
         if (loader != null)
-            loader.OpenScene(0);
+            loader.OpenScene(SceneLoader.MainMenuSceneIndex);
         else
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(SceneLoader.MainMenuSceneIndex);
     }
 
     public void QuitGame()

@@ -3,6 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
+    public const int MainMenuSceneIndex = 0;
+    public const int TutorialSceneIndex = 1;
+    public const int GameplaySceneIndex = 2;
+
     [Header("UI Panels (Only for Main Menu)")]
     [Tooltip("Панель с главными 3 кнопками (Start, Settings, Exit)")]
     [SerializeField] private GameObject mainMenuPanel;
@@ -25,11 +29,21 @@ public class SceneLoader : MonoBehaviour
 
         if (GameStateMachine.Instance != null)
         {
-            if (sceneIndex == 0)
+            if (sceneIndex == MainMenuSceneIndex)
                 GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.MainMenu);
-            else
+            else if (sceneIndex == GameplaySceneIndex)
                 GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Gameplay);
         }
+    }
+
+    public void OpenTutorial()
+    {
+        OpenScene(TutorialSceneIndex);
+    }
+
+    public void OpenGameplay()
+    {
+        OpenScene(GameplaySceneIndex);
     }
 
     public void RestartCurrentScene()
@@ -46,7 +60,7 @@ public class SceneLoader : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        OpenScene(0);
+        OpenScene(MainMenuSceneIndex);
     }
 
     public void OpenSettings()
