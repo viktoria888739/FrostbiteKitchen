@@ -64,7 +64,7 @@ namespace FrostbiteKitchen.KitchenStation
                 return;
             }
 
-            IngredientData heldItem = ResolveHeldIngredient(inventory);
+            IngredientData heldItem = inventory.CurrentHeldItem;
             if (heldItem == null)
                 return;
 
@@ -93,19 +93,6 @@ namespace FrostbiteKitchen.KitchenStation
                 return false;
 
             IngredientData item = inventory.CurrentHeldItem;
-            if (item == null)
-            {
-                for (int i = 0; i < PlayerInventory.SlotCount; i++)
-                {
-                    InventorySlot slot = inventory.GetSlot(i);
-                    if (!slot.IsIngredient)
-                        continue;
-
-                    item = slot.ingredient;
-                    break;
-                }
-            }
-
             return item != null && !item.RequiresCooking;
         }
 
@@ -146,24 +133,6 @@ namespace FrostbiteKitchen.KitchenStation
             UnityEngine.UI.Image image = clickZone.GetComponent<UnityEngine.UI.Image>();
             image.color = new Color(1f, 1f, 1f, 0.01f);
             image.raycastTarget = true;
-        }
-
-        private static IngredientData ResolveHeldIngredient(PlayerInventory inventory)
-        {
-            if (inventory.CurrentHeldItem != null)
-                return inventory.CurrentHeldItem;
-
-            for (int i = 0; i < PlayerInventory.SlotCount; i++)
-            {
-                InventorySlot slot = inventory.GetSlot(i);
-                if (!slot.IsIngredient)
-                    continue;
-
-                inventory.SelectSlot(i);
-                return slot.ingredient;
-            }
-
-            return null;
         }
     }
 }

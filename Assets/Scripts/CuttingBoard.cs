@@ -134,7 +134,7 @@ public class CuttingBoard : MonoBehaviour, IInteractable, IPointerClickHandler
 
     private void TryTakeIngredient(PlayerInventory inventory)
     {
-        if (!inventory.SelectedSlot.IsEmpty)
+        if (!inventory.HasEmptySelectedSlot)
             return;
 
         IngredientData itemToTake = isCutting ? rawIngredient : currentIngredient;
@@ -236,30 +236,6 @@ public class CuttingBoard : MonoBehaviour, IInteractable, IPointerClickHandler
 
     private static bool TryResolveCuttableSingleItem(PlayerInventory inventory, out IngredientData ingredient)
     {
-        ingredient = null;
-
-        if (inventory.IsHoldingSingleItem &&
-            inventory.CurrentHeldItem != null &&
-            inventory.CurrentHeldItem.RequiresCutting)
-        {
-            ingredient = inventory.CurrentHeldItem;
-            return true;
-        }
-
-        for (int i = 0; i < PlayerInventory.SlotCount; i++)
-        {
-            InventorySlot slot = inventory.GetSlot(i);
-            if (!slot.IsIngredient || slot.amount != PlayerInventory.SingleItemAmount)
-                continue;
-
-            if (!slot.ingredient.RequiresCutting)
-                continue;
-
-            inventory.SelectSlot(i);
-            ingredient = slot.ingredient;
-            return true;
-        }
-
-        return false;
+        return inventory.TryGetSelectedSingleIngredient(out ingredient, item => item.RequiresCutting);
     }
 }

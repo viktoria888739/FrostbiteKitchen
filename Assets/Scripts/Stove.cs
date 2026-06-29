@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using FrostbiteKitchen.Data;
 using FrostbiteKitchen.Gameplay;
@@ -16,11 +15,19 @@ public class Stove : MonoBehaviour, IInteractable
     private bool isBurned;
     private float cookingElapsed;
     private float cookingTotalTime;
-    private Coroutine cookingCoroutine;
+    private float burnedClearAt = -1f;
     private int lastInteractFrame = -1;
 
     public bool IsCooking => isCooking;
     public bool HasIngredientOnStove => rawIngredientOnStove != null || isBurned;
+
+    public float GetCookingProgressNormalized()
+    {
+        if (cookingTotalTime <= 0f)
+            return 0f;
+
+        return Mathf.Clamp01(cookingElapsed / cookingTotalTime);
+    }
 
     public event System.Action<float> OnProgressUpdated;
     public event System.Action OnCookingStarted;
@@ -78,25 +85,7 @@ public class Stove : MonoBehaviour, IInteractable
         if (inventory == null)
             return false;
 
-        if (inventory.IsHoldingSingleItem &&
-            inventory.CurrentHeldItem != null &&
-            inventory.CurrentHeldItem.RequiresCooking)
-        {
-            return true;
-        }
-
-        for (int i = 0; i < PlayerInventory.SlotCount; i++)
-        {
-            InventorySlot slot = inventory.GetSlot(i);
-            if (slot.IsIngredient &&
-                slot.amount == PlayerInventory.SingleItemAmount &&
-                slot.ingredient.RequiresCooking)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return inventory.TryGetSelectedSingleIngredient(out _, ingredient => ingredient.RequiresCooking);
     }
 
     public bool CanPickupCookedIngredient()
@@ -142,37 +131,32 @@ public class Stove : MonoBehaviour, IInteractable
 
     private void StartCookingProcess()
     {
-        if (cookingCoroutine != null)
-            StopCoroutine(cookingCoroutine);
-
         isCooking = true;
         stationAnimator?.SetStage(KitchenPrepStage.Frying);
         GameAudioManager.Instance?.StartStoveSizzle();
         OnCookingStarted?.Invoke();
-        cookingCoroutine = StartCoroutine(CookingCoroutine());
+        OnProgressUpdated?.Invoke(GetCookingProgressNormalized());
+        StoveCookingRunner.EnsureExists().Register(this);
     }
 
-    private IEnumerator CookingCoroutine()
+    public void TickCooking(float deltaTime)
     {
-        while (cookingElapsed < cookingTotalTime)
+        if (burnedClearAt > 0f && Time.time >= burnedClearAt)
         {
-            if (!isCooking || rawIngredientOnStove == null)
-                yield break;
-
-            if (GameStateMachine.Instance == null ||
-                GameStateMachine.Instance.CurrentState == GameStateMachine.GameState.Gameplay)
-            {
-                cookingElapsed += Time.deltaTime;
-            }
-
-            OnProgressUpdated?.Invoke(Mathf.Clamp01(cookingElapsed / cookingTotalTime));
-            yield return null;
+            burnedClearAt = -1f;
+            ResetStove();
+            return;
         }
 
-        if (isCooking && rawIngredientOnStove != null)
-            BurnFromTimeout();
+        if (!isCooking || rawIngredientOnStove == null)
+            return;
 
-        cookingCoroutine = null;
+        cookingElapsed += deltaTime;
+        float progress = GetCookingProgressNormalized();
+        OnProgressUpdated?.Invoke(progress);
+
+        if (cookingElapsed >= cookingTotalTime)
+            BurnFromTimeout();
     }
 
     private void TryPickupCookedIngredient(PlayerInventory inventory)
@@ -187,25 +171,10 @@ public class Stove : MonoBehaviour, IInteractable
         if (!inventory.TryAddIngredient(cooked, PlayerInventory.SingleItemAmount))
             return;
 
-        SelectSlotWithIngredient(inventory, cooked);
-
         GameAudioManager.Instance?.PlayTake();
         GameAudioManager.Instance?.PlayStoveDone();
         stationAnimator?.SetStage(KitchenPrepStage.Done);
         ResetStove();
-    }
-
-    private static void SelectSlotWithIngredient(PlayerInventory inventory, IngredientData ingredient)
-    {
-        for (int i = 0; i < PlayerInventory.SlotCount; i++)
-        {
-            InventorySlot slot = inventory.GetSlot(i);
-            if (!slot.IsIngredient || slot.ingredient != ingredient)
-                continue;
-
-            inventory.SelectSlot(i);
-            return;
-        }
     }
 
     private bool IsWithinPickupWindow()
@@ -232,28 +201,19 @@ public class Stove : MonoBehaviour, IInteractable
         OnProgressUpdated?.Invoke(1f);
 
         surfaceVisual?.HideIngredient();
-        StartCoroutine(ClearBurnedAfterDelay(0.6f));
-    }
-
-    private IEnumerator ClearBurnedAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        ResetStove();
+        burnedClearAt = Time.time + 0.6f;
     }
 
     private void ResetStove()
     {
-        if (cookingCoroutine != null)
-        {
-            StopCoroutine(cookingCoroutine);
-            cookingCoroutine = null;
-        }
+        StoveCookingRunner.Instance?.Unregister(this);
 
         rawIngredientOnStove = null;
         isCooking = false;
         isBurned = false;
         cookingElapsed = 0f;
         cookingTotalTime = 0f;
+        burnedClearAt = -1f;
 
         GameAudioManager.Instance?.StopStoveSizzle();
         stationAnimator?.ResetToIdle();
@@ -265,30 +225,6 @@ public class Stove : MonoBehaviour, IInteractable
 
     private static bool TryResolveCookableSingleItem(PlayerInventory inventory, out IngredientData ingredient)
     {
-        ingredient = null;
-
-        if (inventory.IsHoldingSingleItem &&
-            inventory.CurrentHeldItem != null &&
-            inventory.CurrentHeldItem.RequiresCooking)
-        {
-            ingredient = inventory.CurrentHeldItem;
-            return true;
-        }
-
-        for (int i = 0; i < PlayerInventory.SlotCount; i++)
-        {
-            InventorySlot slot = inventory.GetSlot(i);
-            if (!slot.IsIngredient || slot.amount != PlayerInventory.SingleItemAmount)
-                continue;
-
-            if (!slot.ingredient.RequiresCooking)
-                continue;
-
-            inventory.SelectSlot(i);
-            ingredient = slot.ingredient;
-            return true;
-        }
-
-        return false;
+        return inventory.TryGetSelectedSingleIngredient(out ingredient, item => item.RequiresCooking);
     }
 }

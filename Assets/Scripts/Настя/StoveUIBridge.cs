@@ -32,9 +32,10 @@ public class StoveUIBridge : MonoBehaviour
     private void OnEnable()
     {
         TrySubscribe();
+        SyncFromStove();
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         Unsubscribe();
     }
@@ -141,8 +142,23 @@ public class StoveUIBridge : MonoBehaviour
 
     private void HideBar()
     {
+        if (targetStove != null && targetStove.IsCooking)
+            return;
+
         ResetBarVisual();
         gameObject.SetActive(false);
+    }
+
+    private void SyncFromStove()
+    {
+        if (targetStove == null)
+            return;
+
+        if (!targetStove.IsCooking)
+            return;
+
+        ShowBar();
+        UpdateProgressBar(targetStove.GetCookingProgressNormalized());
     }
 
     private void UpdateProgressBar(float progress)

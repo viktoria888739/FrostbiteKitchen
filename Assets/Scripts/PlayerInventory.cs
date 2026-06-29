@@ -104,6 +104,22 @@ public class PlayerInventory : MonoBehaviour
     public bool IsEmpty => SelectedSlot.IsEmpty;
     public bool IsHoldingWarehousePack => SelectedSlot.IsIngredient && SelectedSlot.amount == WarehousePackSize;
     public bool IsHoldingSingleItem => SelectedSlot.IsIngredient && SelectedSlot.amount == SingleItemAmount;
+    public bool HasEmptySelectedSlot => SelectedSlot.IsEmpty;
+
+    public bool TryGetSelectedSingleIngredient(out IngredientData ingredient, System.Predicate<IngredientData> predicate = null)
+    {
+        ingredient = null;
+        InventorySlot slot = SelectedSlot;
+
+        if (!slot.IsIngredient || slot.amount != SingleItemAmount)
+            return false;
+
+        if (predicate != null && !predicate(slot.ingredient))
+            return false;
+
+        ingredient = slot.ingredient;
+        return true;
+    }
 
     public InventorySlot GetSlot(int index)
     {
@@ -126,46 +142,20 @@ public class PlayerInventory : MonoBehaviour
 
     public bool TryAddIngredient(IngredientData item, int amount)
     {
-        if (item == null || amount <= 0)
+        if (item == null || amount <= 0 || !SelectedSlot.IsEmpty)
             return false;
 
-        if (slots[selectedSlotIndex].IsEmpty)
-        {
-            SetSlot(selectedSlotIndex, InventorySlot.FromIngredient(item, amount));
-            return true;
-        }
-
-        int emptySlot = FindEmptySlotIndex();
-        if (emptySlot >= 0)
-        {
-            SetSlot(emptySlot, InventorySlot.FromIngredient(item, amount));
-            SelectSlot(emptySlot);
-            return true;
-        }
-
-        return false;
+        SetSlot(selectedSlotIndex, InventorySlot.FromIngredient(item, amount));
+        return true;
     }
 
     public bool TryAddDish(DishData item)
     {
-        if (item == null)
+        if (item == null || !SelectedSlot.IsEmpty)
             return false;
 
-        if (slots[selectedSlotIndex].IsEmpty)
-        {
-            SetSlot(selectedSlotIndex, InventorySlot.FromDish(item));
-            return true;
-        }
-
-        int emptySlot = FindEmptySlotIndex();
-        if (emptySlot >= 0)
-        {
-            SetSlot(emptySlot, InventorySlot.FromDish(item));
-            SelectSlot(emptySlot);
-            return true;
-        }
-
-        return false;
+        SetSlot(selectedSlotIndex, InventorySlot.FromDish(item));
+        return true;
     }
 
     public void SetHeldItem(IngredientData item, int amount)
@@ -238,6 +228,11 @@ public class PlayerInventory : MonoBehaviour
         }
 
         return -1;
+    }
+
+    public bool HasAnyEmptySlot()
+    {
+        return FindEmptySlotIndex() >= 0;
     }
 
     private void SetSlot(int index, InventorySlot slot)

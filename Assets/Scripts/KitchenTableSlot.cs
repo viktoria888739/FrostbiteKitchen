@@ -58,7 +58,7 @@ public class KitchenTableSlot : MonoBehaviour, IInteractable
 
     private bool TryTakeSingleItemForCooking(PlayerInventory inventory)
     {
-        if (currentCount <= 0)
+        if (currentCount <= 0 || !inventory.HasEmptySelectedSlot)
             return false;
 
         currentCount--;
@@ -80,19 +80,10 @@ public class KitchenTableSlot : MonoBehaviour, IInteractable
         if (inventory.CurrentHeldDish != null || inventory.IsHoldingWarehousePack || currentCount > 0)
             return false;
 
-        bool hasMatchingIngredient = false;
-        for (int i = 0; i < PlayerInventory.SlotCount; i++)
-        {
-            InventorySlot slot = inventory.GetSlot(i);
-            if (!slot.IsIngredient || slot.ingredient != allowedIngredient)
-                continue;
+        if (!inventory.TryGetSelectedSingleIngredient(out IngredientData ingredient))
+            return false;
 
-            inventory.SelectSlot(i);
-            hasMatchingIngredient = true;
-            break;
-        }
-
-        if (!hasMatchingIngredient || AssemblyTable.Instance == null)
+        if (ingredient != allowedIngredient || AssemblyTable.Instance == null)
             return false;
 
         AssemblyTable.Instance.Interact();
