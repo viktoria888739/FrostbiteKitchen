@@ -238,7 +238,7 @@ public class IssueWindowCustomerPresenter : MonoBehaviour, IInteractable
             dialogueText.gameObject.SetActive(true);
         }
 
-        PlayCustomerVoice(activeCustomer.greetingVoice);
+        PlayCustomerVoice(activeCustomer);
     }
 
     private void HandleOrderFinished()
@@ -289,10 +289,11 @@ public class IssueWindowCustomerPresenter : MonoBehaviour, IInteractable
         return validProfiles[UnityEngine.Random.Range(0, validProfiles.Count)];
     }
 
-    private void PlayCustomerVoice(AudioClip clip)
+    private void PlayCustomerVoice(CustomerProfile customer)
     {
-        if (clip == null && GameAudioManager.Instance != null)
-            clip = GameAudioManager.Instance.GetRandomCustomerVoice();
+        AudioClip clip = null;
+        if (GameAudioManager.Instance != null)
+            clip = GameAudioManager.Instance.GetCustomerVoice(customer);
 
         EnsureVoiceSource();
 

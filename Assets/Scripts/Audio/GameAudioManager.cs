@@ -236,6 +236,45 @@ public class GameAudioManager : MonoBehaviour
         return primary != null ? primary : fallback;
     }
 
+    public AudioClip GetCustomerVoice(CustomerProfile profile)
+    {
+        if (profile == null)
+            return GetRandomCustomerVoice();
+
+        if (profile.greetingVoice != null)
+            return profile.greetingVoice;
+
+        string customerKey = GetCustomerKey(profile);
+        if (UsesFemaleCustomerVoice(customerKey))
+            return GetFemaleCustomerVoice();
+
+        if (UsesMaleCustomerVoice(customerKey))
+            return GetMaleCustomerVoice();
+
+        return GetRandomCustomerVoice();
+    }
+
+    public static string GetCustomerKey(CustomerProfile profile)
+    {
+        if (profile == null)
+            return null;
+
+        if (!string.IsNullOrWhiteSpace(profile.displayName))
+            return profile.displayName.Trim();
+
+        return profile.portrait != null ? profile.portrait.name : null;
+    }
+
+    public static bool UsesFemaleCustomerVoice(string customerKey)
+    {
+        return customerKey == "person 1" || customerKey == "person 4";
+    }
+
+    public static bool UsesMaleCustomerVoice(string customerKey)
+    {
+        return customerKey == "person 2" || customerKey == "person 3" || customerKey == "person 5";
+    }
+
     public AudioClip GetMaleCustomerVoice() => library?.maleCustomerVoice;
     public AudioClip GetFemaleCustomerVoice() => library?.femaleCustomerVoice;
 
