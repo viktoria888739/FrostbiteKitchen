@@ -42,12 +42,11 @@ public class SessionResultEvaluator : MonoBehaviour
     {
         CurrentResult = SessionStatus.GameOverByMonster;
         Debug.LogError("[SessionResultEvaluator] 💀 ИГРОК УБИТ МОНСТРОМ. Кулинарные расчеты прекращены!");
-        GameAudioManager.Instance?.PlaySessionGameOver();
+
+        OrderManager.Instance?.StopManager();
 
         if (GameStateMachine.Instance != null)
-        {
-            GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Results);
-        }
+            GameStateMachine.Instance.ChangeState(GameStateMachine.GameState.Screamer);
     }
     public void EvaluateSessionResult()
     {
