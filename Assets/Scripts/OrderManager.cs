@@ -16,7 +16,8 @@ public class OrderManager : MonoBehaviour
     [SerializeField] private RecipeCatalog recipeCatalog;
     [SerializeField] private List<RecipeData> availableRecipes;
     [SerializeField] private float orderSpawnInterval = 15f;
-    [SerializeField] private float delayBeforeNextOrder = 2f;
+    [SerializeField] private float minDelayBeforeNextOrder = 3f;
+    [SerializeField] private float maxDelayBeforeNextOrder = 5f;
 
     private readonly List<RecipeData> runtimeRecipes = new List<RecipeData>();
 
@@ -188,7 +189,7 @@ public class OrderManager : MonoBehaviour
             SessionOrderTracker.Instance?.RegisterFailedOrder();
         }
 
-        if (isManagerActive && delayBeforeNextOrder > 0f)
+        if (isManagerActive && maxDelayBeforeNextOrder > 0f)
         {
             StartCoroutine(SpawnNextOrderAfterDelay());
         }
@@ -196,7 +197,9 @@ public class OrderManager : MonoBehaviour
 
     private IEnumerator SpawnNextOrderAfterDelay()
     {
-        yield return new WaitForSeconds(delayBeforeNextOrder);
+        float minDelay = Mathf.Max(0f, minDelayBeforeNextOrder);
+        float maxDelay = Mathf.Max(minDelay, maxDelayBeforeNextOrder);
+        yield return new WaitForSeconds(UnityEngine.Random.Range(minDelay, maxDelay));
 
         if (CanSpawnOrder())
         {
