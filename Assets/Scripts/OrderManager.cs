@@ -70,10 +70,22 @@ public class OrderManager : MonoBehaviour
 
     private void Start()
     {
+        ApplyOrderDelaysFromSettings();
+
         if (isManagerActive)
         {
             spawnRoutine = StartCoroutine(OrderSpawnRoutine());
         }
+    }
+
+    private void ApplyOrderDelaysFromSettings()
+    {
+        if (SettingsLoader.Instance?.CurrentSettings == null)
+            return;
+
+        GameSettingsData settings = SettingsLoader.Instance.CurrentSettings;
+        minDelayBeforeNextOrder = Mathf.Max(0f, settings.minTimeBetweenOrdersSeconds);
+        maxDelayBeforeNextOrder = Mathf.Max(minDelayBeforeNextOrder, settings.maxTimeBetweenOrdersSeconds);
     }
 
     private void Update()

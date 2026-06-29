@@ -126,6 +126,13 @@ public class ThreatManager : MonoBehaviour
         if (!isThreatActive)
             return;
 
+        if (GameStateMachine.Instance != null &&
+            GameStateMachine.Instance.CurrentState != GameStateMachine.GameState.Gameplay)
+        {
+            CancelActiveThreatSilently();
+            return;
+        }
+
         ThreatSpawner2 spawner = activeSpawner;
         isThreatActive = false;
         activeSpawner = null;
@@ -175,6 +182,31 @@ public class ThreatManager : MonoBehaviour
         SessionStatistics.Instance?.AddDefendedThreat();
         Debug.Log("<color=green>[THREAT] Угроза отражена</color>");
 
+        OnThreatCleared?.Invoke();
+
+        if (activeThreatCoroutine != null)
+        {
+            StopCoroutine(activeThreatCoroutine);
+            activeThreatCoroutine = null;
+        }
+    }
+
+    public void CancelSessionThreats()
+    {
+        StopThreatSpawning();
+        CancelActiveThreatSilently();
+    }
+
+    private void CancelActiveThreatSilently()
+    {
+        if (!isThreatActive)
+            return;
+
+        ThreatSpawner2 spawner = activeSpawner;
+        isThreatActive = false;
+        activeSpawner = null;
+
+        spawner?.DeactivateThreat();
         OnThreatCleared?.Invoke();
 
         if (activeThreatCoroutine != null)

@@ -1,10 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Legacy-обёртка для кнопок на экране результатов.
-/// Вся логика показа и паузы — в GameStateMachine + GameOverDisplay.
-/// </summary>
 public class GameOverManager : MonoBehaviour
 {
     public static GameOverManager Instance { get; private set; }
@@ -23,7 +19,6 @@ public class GameOverManager : MonoBehaviour
 
     public void PrepareForNewSession()
     {
-        // Сброс внутреннего состояния после рестарта или выхода в меню.
     }
 
     public void RestartGame()
