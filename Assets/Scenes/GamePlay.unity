@@ -5966,14 +5966,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 555555555, guid: 0718293a4b5c6d7e8f90112233445566, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 111111111, guid: 0718293a4b5c6d7e8f90112233445566, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 933889811}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0718293a4b5c6d7e8f90112233445566, type: 3}
 --- !u!1 &730087694
 GameObject:
@@ -6860,6 +6856,7 @@ GameObject:
   - component: {fileID: 909166592}
   - component: {fileID: 909166593}
   - component: {fileID: 909166594}
+  - component: {fileID: 909166595}
   m_Layer: 0
   m_Name: _ThreatManager
   m_TagString: Untagged
@@ -6895,8 +6892,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisualWarningManager
   warningImage: {fileID: 175371625}
-  blinkSpeed: 2
-  steadyAlpha: 0.4
+  blinkSpeed: 3
+  hiddenAlpha: 0
+  blinkMinAlpha: 0.25
+  blinkMaxAlpha: 1
 --- !u!114 &909166594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6917,6 +6916,20 @@ MonoBehaviour:
   - {fileID: 835583830}
   - {fileID: 1283880216}
   - {fileID: 605506320}
+--- !u!114 &909166595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909166590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c7a9e2b1d4f5a6b8c0d1e2f3a4b5c6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ThreatCoordinator
+  leftThreatHandler: {fileID: 933889812}
+  blindsToggle: {fileID: 0}
 --- !u!1 &911498946
 GameObject:
   m_ObjectHideFlags: 0
@@ -7142,19 +7155,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 222222222, guid: 0718293a4b5c6d7e8f90112233445566, type: 3}
   m_PrefabInstance: {fileID: 721861106}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &933889811
+--- !u!114 &933889812 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 555555555, guid: 0718293a4b5c6d7e8f90112233445566, type: 3}
+  m_PrefabInstance: {fileID: 721861106}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 933889806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 935295f0aed367444881ed52847a20f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b2aeb8ea51ad7348807f19f007662e4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FlashlightToggle
-  leftThreatHandler: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::LeftThreatHandler
 --- !u!1 &937595619
 GameObject:
   m_ObjectHideFlags: 0
@@ -8467,19 +8478,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1103949665}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1103949667}
-        m_TargetAssemblyTypeName: FlashlightToggle, Assembly-CSharp
-        m_MethodName: ToggleFlashlight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1103949665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8530,7 +8529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 935295f0aed367444881ed52847a20f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlashlightToggle
-  leftThreatHandler: {fileID: 0}
+  leftThreatHandler: {fileID: 933889812}
 --- !u!114 &1103949668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11925,7 +11924,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1615904561
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11942,10 +11941,10 @@ RectTransform:
   - {fileID: 349413312}
   - {fileID: 756000003}
   - {fileID: 1240232347}
-  - {fileID: 78999961}
   - {fileID: 1717078054}
   - {fileID: 2099565477}
   - {fileID: 1875259556}
+  - {fileID: 78999961}
   m_Father: {fileID: 730087695}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

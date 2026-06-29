@@ -1,35 +1,38 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
 
-public class FlashlightToggle : MonoBehaviour, IInteractable, IPointerClickHandler
+public class FlashlightToggle : MonoBehaviour, IInteractable
 {
     [SerializeField] private LeftThreatHandler leftThreatHandler;
 
-    private void Awake()
-    {
-        if (leftThreatHandler == null)
-            leftThreatHandler = Object.FindFirstObjectByType<LeftThreatHandler>();
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        ToggleFlashlight();
-    }
+    private int lastInteractFrame = -1;
 
     public void Interact()
     {
+        if (Time.frameCount == lastInteractFrame)
+            return;
+
+        lastInteractFrame = Time.frameCount;
         ToggleFlashlight();
     }
 
     public void ToggleFlashlight()
     {
-        if (leftThreatHandler == null)
-            leftThreatHandler = Object.FindFirstObjectByType<LeftThreatHandler>();
-
-        if (leftThreatHandler != null)
-            leftThreatHandler.ToggleFlashlight();
+        LeftThreatHandler handler = ResolveHandler();
+        if (handler != null)
+            handler.ToggleFlashlight();
         else
             Debug.LogWarning("[ФОНАРИК] LeftThreatHandler не найден на сцене.");
+    }
+
+    private LeftThreatHandler ResolveHandler()
+    {
+        if (leftThreatHandler != null)
+            return leftThreatHandler;
+
+        if (LeftThreatHandler.Instance != null)
+            return LeftThreatHandler.Instance;
+
+        return Object.FindFirstObjectByType<LeftThreatHandler>(FindObjectsInactive.Include);
     }
 }

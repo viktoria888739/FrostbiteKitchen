@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using FrostbiteKitchen.Gameplay;
 
 public class FireExtinguisher : MonoBehaviour, IInteractable
@@ -7,19 +6,27 @@ public class FireExtinguisher : MonoBehaviour, IInteractable
     [Header("Настройки")]
     [SerializeField] private ParticleSystem sprayEffect;
 
+    private int lastInteractFrame = -1;
+
     public void Interact()
     {
-        if (!gameObject.activeInHierarchy) return;
+        if (!gameObject.activeInHierarchy)
+            return;
 
-        Debug.Log("<color=#FF3333>[ОГНЕТУШИТЕЛЬ] Применён! Угроза нейтрализована.</color>");
+        if (Time.frameCount == lastInteractFrame)
+            return;
+
+        lastInteractFrame = Time.frameCount;
 
         if (sprayEffect != null)
             sprayEffect.Play();
 
         GameAudioManager.Instance?.PlayExtinguisherSpray();
 
-        if (ThreatManager.Instance != null)
-            ThreatManager.Instance.PlayerDefendedThreat(KitchenSide.Back);
-
+        if (ThreatManager.Instance != null && ThreatManager.Instance.IsActiveThreatOn(KitchenSide.Right))
+        {
+            Debug.Log("<color=#FF3333>[ОГНЕТУШИТЕЛЬ] Угроза на кухне нейтрализована.</color>");
+            ThreatManager.Instance.PlayerDefendedThreat(KitchenSide.Right);
+        }
     }
 }
