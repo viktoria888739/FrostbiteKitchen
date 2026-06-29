@@ -3,48 +3,191 @@ using UnityEngine.UI;
 
 public class StoveUIBridge : MonoBehaviour
 {
-    [Header("Ссылки")]
+    private const string BackgroundChildName = "Image";
+    private const string FillChildName = "Fill";
+
     [SerializeField] private Stove targetStove;
+    [SerializeField] private Image backgroundImage;
     [SerializeField] private Image fillImage;
 
-    [Header("Цвета из префаба Василисы")]
     [SerializeField] private Color greenColor = Color.green;
     [SerializeField] private Color yellowColor = Color.yellow;
     [SerializeField] private Color redColor = Color.red;
 
+    private bool isSubscribed;
+
+    private void Awake()
+    {
+        RemoveLegacyProgressBarComponent();
+        ResolveReferences();
+        PrepareFillImage();
+        gameObject.SetActive(false);
+    }
+
+    private void Start()
+    {
+        WireToStove(GetComponentInParent<Stove>());
+    }
+
     private void OnEnable()
     {
-        if (targetStove != null)
+        TrySubscribe();
+        SyncFromStove();
+    }
+
+    private void OnDestroy()
+    {
+        Unsubscribe();
+    }
+
+    public void WireToStove(Stove stove)
+    {
+        if (stove == null)
+            stove = GetComponentInParent<Stove>();
+
+        if (stove == null)
+            return;
+
+        Unsubscribe();
+        targetStove = stove;
+        TrySubscribe();
+    }
+
+    public void BringToFront()
+    {
+        transform.SetAsLastSibling();
+
+        if (transform.parent != null)
+            transform.parent.SetAsLastSibling();
+    }
+
+    private void RemoveLegacyProgressBarComponent()
+    {
+        ProgressBar legacyBar = GetComponent<ProgressBar>();
+        if (legacyBar == null)
+            return;
+
+        if (Application.isPlaying)
+            Destroy(legacyBar);
+        else
+            DestroyImmediate(legacyBar);
+    }
+
+    private void ResolveReferences()
+    {
+        if (targetStove == null)
+            targetStove = GetComponentInParent<Stove>();
+
+        if (backgroundImage == null)
         {
-            // Подписываемся на событие прогресса жарки плиты
-            targetStove.OnProgressUpdated += UpdateProgressBar;
+            Transform backgroundTransform = transform.Find(BackgroundChildName);
+            if (backgroundTransform != null)
+                backgroundImage = backgroundTransform.GetComponent<Image>();
+        }
+
+        if (fillImage == null)
+        {
+            Transform fillTransform = transform.Find(FillChildName);
+            if (fillTransform != null)
+                fillImage = fillTransform.GetComponent<Image>();
         }
     }
 
-    private void OnDisable()
+    private void PrepareFillImage()
     {
-        if (targetStove != null)
-        {
-            // Отписываемся при выключении объекта во избежание утечек памяти
-            targetStove.OnProgressUpdated -= UpdateProgressBar;
-        }
+        if (fillImage == null)
+            return;
+
+        fillImage.type = Image.Type.Filled;
+        fillImage.fillMethod = Image.FillMethod.Horizontal;
+        fillImage.fillOrigin = (int)Image.OriginHorizontal.Left;
+        fillImage.fillAmount = 1f;
+        fillImage.raycastTarget = false;
+
+        if (backgroundImage != null)
+            backgroundImage.raycastTarget = false;
+    }
+
+    private void TrySubscribe()
+    {
+        if (isSubscribed || targetStove == null)
+            return;
+
+        targetStove.OnProgressUpdated += UpdateProgressBar;
+        targetStove.OnCookingStarted += ShowBar;
+        targetStove.OnIngredientBurned += HideBar;
+        targetStove.OnStoveCleared += HideBar;
+        isSubscribed = true;
+    }
+
+    private void Unsubscribe()
+    {
+        if (!isSubscribed || targetStove == null)
+            return;
+
+        targetStove.OnProgressUpdated -= UpdateProgressBar;
+        targetStove.OnCookingStarted -= ShowBar;
+        targetStove.OnIngredientBurned -= HideBar;
+        targetStove.OnStoveCleared -= HideBar;
+        isSubscribed = false;
+    }
+
+    private void ShowBar()
+    {
+        ResolveReferences();
+        BringToFront();
+        gameObject.SetActive(true);
+        ResetBarVisual();
+    }
+
+    private void HideBar()
+    {
+        if (targetStove != null && targetStove.IsCooking)
+            return;
+
+        ResetBarVisual();
+        gameObject.SetActive(false);
+    }
+
+    private void SyncFromStove()
+    {
+        if (targetStove == null)
+            return;
+
+        if (!targetStove.IsCooking)
+            return;
+
+        ShowBar();
+        UpdateProgressBar(targetStove.GetCookingProgressNormalized());
     }
 
     private void UpdateProgressBar(float progress)
     {
-        if (fillImage == null) return;
+        if (fillImage == null)
+            ResolveReferences();
 
-        // Задаем заполнение полоски (слайдера)
-        fillImage.fillAmount = Mathf.Clamp01(progress);
+        if (fillImage == null)
+            return;
 
-        // Интерполяция цвета в зависимости от этапа готовки (красный -> желтый -> зеленый)
-        if (progress > 0.5f)
-        {
-            fillImage.color = Color.Lerp(yellowColor, greenColor, (progress - 0.5f) * 2f);
-        }
+        float elapsed = Mathf.Clamp01(progress);
+        float remaining = 1f - elapsed;
+
+        fillImage.fillAmount = remaining;
+        gameObject.SetActive(true);
+        BringToFront();
+
+        if (remaining > 0.5f)
+            fillImage.color = Color.Lerp(yellowColor, greenColor, (remaining - 0.5f) * 2f);
         else
-        {
-            fillImage.color = Color.Lerp(redColor, yellowColor, progress * 2f);
-        }
+            fillImage.color = Color.Lerp(redColor, yellowColor, remaining * 2f);
+    }
+
+    private void ResetBarVisual()
+    {
+        if (fillImage == null)
+            return;
+
+        fillImage.fillAmount = 1f;
+        fillImage.color = greenColor;
     }
 }

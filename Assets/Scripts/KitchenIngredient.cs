@@ -23,14 +23,14 @@ public class KitchenIngredient : MonoBehaviour, IInteractable
 
         var inventory = PlayerInventory.Instance;
 
-        if (inventory.CurrentHeldItem != null && inventory.CurrentHeldItem != ingredientData)
+        if (!inventory.TryAddIngredient(ingredientData, PlayerInventory.SingleItemAmount))
         {
-            Debug.Log("<color=yellow>[КУХНЯ]</color> Руки заняты другим предметом! Сначала освободи их.");
+            Debug.Log("<color=yellow>[КУХНЯ]</color> Инвентарь полон! Освободи слот.");
             return;
         }
 
-        inventory.SetHeldItem(ingredientData, 1);
+        GameAudioManager.Instance?.PlayTake();
 
-        Debug.Log($"<color=orange>[КУХНЯ]</color> Взят в руки ингредиент: <b>{ingredientData.displayName}</b>");
+        Debug.Log($"<color=orange>[КУХНЯ]</color> Взят ингредиент: <b>{ingredientData.displayName}</b>");
     }
 }

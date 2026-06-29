@@ -1,188 +1,230 @@
-using System.Collections;
 using UnityEngine;
 using FrostbiteKitchen.Data;
 using FrostbiteKitchen.Gameplay;
+using FrostbiteKitchen.KitchenAnimation;
+using FrostbiteKitchen.KitchenStation;
 
 public class Stove : MonoBehaviour, IInteractable
 {
-    [Header("Состояние плиты")]
-    [SerializeField] private IngredientData currentIngredientOnStove;
-    [SerializeField] private bool isCooking = false;
-    [SerializeField] private bool isBurned = false;
+    [SerializeField] private KitchenStationAnimator stationAnimator;
+    [SerializeField] private StoveSurfaceVisual surfaceVisual;
+    [SerializeField] private float pickupWindowSeconds = 3f;
 
-    [Header("Анимация")]
-    [SerializeField] private Animator animator;
+    private IngredientData rawIngredientOnStove;
+    private bool isCooking;
+    private bool isBurned;
+    private float cookingElapsed;
+    private float cookingTotalTime;
+    private float burnedClearAt = -1f;
+    private int lastInteractFrame = -1;
 
-    [Header("Порча во время угрозы")]
-    [Tooltip("Через сколько секунд блюдо начинает подгорать")]
-    [SerializeField] private float criticalOvercookTime = 6f;
+    public bool IsCooking => isCooking;
+    public bool HasIngredientOnStove => rawIngredientOnStove != null || isBurned;
 
-    [Tooltip("Через сколько секунд блюдо полностью сгорает")]
-    [SerializeField] private float burnTime = 11f;
+    public float GetCookingProgressNormalized()
+    {
+        if (cookingTotalTime <= 0f)
+            return 0f;
 
-    private float overcookTimer = 0f;
-    private bool isUnderThreat = false;
-    private Coroutine cookingCoroutine;
+        return Mathf.Clamp01(cookingElapsed / cookingTotalTime);
+    }
 
     public event System.Action<float> OnProgressUpdated;
-    public event System.Action OnDishBurned;
-    public event System.Action OnCookingFinished;
+    public event System.Action OnCookingStarted;
+    public event System.Action OnIngredientBurned;
+    public event System.Action OnStoveCleared;
 
     private void Awake()
     {
-        if (animator == null)
-            animator = GetComponent<Animator>();
+        if (stationAnimator == null)
+            stationAnimator = GetComponent<KitchenStationAnimator>();
+
+        if (surfaceVisual == null)
+            surfaceVisual = StoveSurfaceVisual.EnsureOnStove(this);
+
+        ImageRaycastHelper.EnsureRaycastTarget(gameObject);
     }
 
-    private void OnEnable()
+    private void Start()
     {
-        GameStateMachine.OnStateChanged += HandleGameStateChanged;
-    }
-
-    private void OnDisable()
-    {
-        GameStateMachine.OnStateChanged -= HandleGameStateChanged;
-    }
-
-    private void Update()
-    {
-        if (!isCooking && currentIngredientOnStove != null && isUnderThreat && !isBurned)
-        {
-            HandleOvercooking();
-        }
-    }
-
-    public void SetThreatState(bool underThreat)
-    {
-        isUnderThreat = underThreat;
-
-        if (animator != null)
-            animator.SetBool("IsUnderThreat", underThreat);
-
-        if (!underThreat)
-            overcookTimer = 0f;
+        surfaceVisual?.WireProgressBridges(this);
+        ResetStove();
     }
 
     public void Interact()
     {
-        if (currentIngredientOnStove == null) return;
+        if (Time.frameCount == lastInteractFrame)
+            return;
 
-        PlayerInventory.Instance.SetHeldItem(currentIngredientOnStove, 1);
-        ResetStove();
+        lastInteractFrame = Time.frameCount;
+
+        PlayerInventory inventory = PlayerInventory.Instance;
+        if (inventory == null)
+            return;
+
+        if (isBurned)
+        {
+            ResetStove();
+            return;
+        }
+
+        if (rawIngredientOnStove != null)
+        {
+            if (isCooking)
+                TryPickupCookedIngredient(inventory);
+
+            return;
+        }
+
+        TryPlaceHeldIngredientOnStove(inventory);
+    }
+
+    public static bool IsHoldingCookableSingleItem()
+    {
+        PlayerInventory inventory = PlayerInventory.Instance;
+        if (inventory == null)
+            return false;
+
+        return inventory.TryGetSelectedSingleIngredient(out _, ingredient => ingredient.RequiresCooking);
+    }
+
+    public bool CanPickupCookedIngredient()
+    {
+        return isCooking && IsWithinPickupWindow();
+    }
+
+    private void TryPlaceHeldIngredientOnStove(PlayerInventory inventory)
+    {
+        if (!TryResolveCookableSingleItem(inventory, out IngredientData heldItem))
+        {
+            if (inventory.CurrentHeldItem != null && !inventory.CurrentHeldItem.RequiresCooking)
+                AssemblyTable.Instance?.Interact();
+
+            return;
+        }
+
+        if (!TryPlaceIngredient(heldItem))
+            return;
+
+        inventory.TryUseOneItem();
     }
 
     public bool TryPlaceIngredient(IngredientData ingredient)
     {
-        if (currentIngredientOnStove != null || isCooking || ingredient == null) return false;
-        if (!ingredient.RequiresCooking) return false;
+        if (rawIngredientOnStove != null || isCooking || ingredient == null)
+            return false;
 
-        currentIngredientOnStove = ingredient;
+        if (!ingredient.RequiresCooking)
+            return false;
+
+        rawIngredientOnStove = ingredient;
         isBurned = false;
+        cookingElapsed = 0f;
+        cookingTotalTime = Mathf.Max(0.01f, ingredient.CookingTime);
+
+        surfaceVisual?.ShowIngredient(ingredient.icon);
+        surfaceVisual?.SetProgressBarVisible(true);
+        GameAudioManager.Instance?.PlayPlace();
         StartCookingProcess();
         return true;
     }
 
     private void StartCookingProcess()
     {
-        if (cookingCoroutine != null)
-            StopCoroutine(cookingCoroutine);
-
         isCooking = true;
-        if (animator != null) animator.SetTrigger("StartCooking");
-
-        cookingCoroutine = StartCoroutine(CookingCoroutine(currentIngredientOnStove));
+        stationAnimator?.SetStage(KitchenPrepStage.Frying);
+        GameAudioManager.Instance?.StartStoveSizzle();
+        OnCookingStarted?.Invoke();
+        OnProgressUpdated?.Invoke(GetCookingProgressNormalized());
+        StoveCookingRunner.EnsureExists().Register(this);
     }
 
-    private IEnumerator CookingCoroutine(IngredientData rawIngredient)
+    public void TickCooking(float deltaTime)
     {
-        float elapsed = 0f;
-        float targetTime = rawIngredient.CookingTime;
-
-        while (elapsed < targetTime)
+        if (burnedClearAt > 0f && Time.time >= burnedClearAt)
         {
-            if (!isCooking || currentIngredientOnStove == null)
-                yield break;
-
-            if (GameStateMachine.Instance != null && GameStateMachine.Instance.CurrentState != GameStateMachine.GameState.Gameplay)
-            {
-                yield return null;
-                continue;
-            }
-
-            elapsed += Time.deltaTime;
-            float progress = Mathf.Clamp01(elapsed / targetTime);
-            OnProgressUpdated?.Invoke(progress);
-            yield return null;
+            burnedClearAt = -1f;
+            ResetStove();
+            return;
         }
 
-        if (rawIngredient.CookedVersion != null && isCooking)
-        {
-            currentIngredientOnStove = rawIngredient.CookedVersion;
-            if (animator != null) animator.SetTrigger("CookingDone");
-            OnCookingFinished?.Invoke();
-        }
+        if (!isCooking || rawIngredientOnStove == null)
+            return;
 
-        isCooking = false;
-        cookingCoroutine = null;
-        OnProgressUpdated?.Invoke(1f);
+        cookingElapsed += deltaTime;
+        float progress = GetCookingProgressNormalized();
+        OnProgressUpdated?.Invoke(progress);
+
+        if (cookingElapsed >= cookingTotalTime)
+            BurnFromTimeout();
     }
 
-    private void HandleOvercooking()
+    private void TryPickupCookedIngredient(PlayerInventory inventory)
     {
-        overcookTimer += Time.deltaTime;
+        if (!IsWithinPickupWindow())
+            return;
 
-        if (overcookTimer >= criticalOvercookTime && overcookTimer < burnTime)
-        {
-            if (overcookTimer < criticalOvercookTime + 0.5f)
-            {
-                Debug.Log("<color=orange>[ПЛИТА] Блюдо начинает подгорать...</color>");
-            }
-        }
+        IngredientData cooked = rawIngredientOnStove != null ? rawIngredientOnStove.CookedVersion : null;
+        if (cooked == null)
+            return;
 
-        if (overcookTimer >= burnTime)
-        {
-            BurnDish();
-        }
+        if (!inventory.TryAddIngredient(cooked, PlayerInventory.SingleItemAmount))
+            return;
+
+        GameAudioManager.Instance?.PlayTake();
+        GameAudioManager.Instance?.PlayStoveDone();
+        stationAnimator?.SetStage(KitchenPrepStage.Done);
+        ResetStove();
     }
 
-    private void BurnDish()
+    private bool IsWithinPickupWindow()
     {
-        if (currentIngredientOnStove == null) return;
+        if (!isCooking || rawIngredientOnStove == null)
+            return false;
+
+        float pickupStartTime = Mathf.Max(0f, cookingTotalTime - pickupWindowSeconds);
+        return cookingElapsed >= pickupStartTime && cookingElapsed < cookingTotalTime;
+    }
+
+    private void BurnFromTimeout()
+    {
+        if (rawIngredientOnStove == null)
+            return;
 
         isBurned = true;
         isCooking = false;
-        cookingCoroutine = null;
 
-        Debug.Log($"<color=red>[ПЛИТА] 🔥 БЛЮДО СГОРЕЛО: {currentIngredientOnStove.displayName}</color>");
+        GameAudioManager.Instance?.StopStoveSizzle();
+        SessionStatistics.Instance?.AddSpoiledDish();
+        stationAnimator?.SetStage(KitchenPrepStage.Burned);
+        OnIngredientBurned?.Invoke();
+        OnProgressUpdated?.Invoke(1f);
 
-        if (SessionStatistics.Instance != null)
-            SessionStatistics.Instance.AddFailedOrder();
-
-        if (animator != null) animator.SetTrigger("Burned");
-        OnDishBurned?.Invoke();
+        surfaceVisual?.HideIngredient();
+        burnedClearAt = Time.time + 0.6f;
     }
 
     private void ResetStove()
     {
-        if (cookingCoroutine != null)
-        {
-            StopCoroutine(cookingCoroutine);
-            cookingCoroutine = null;
-        }
+        StoveCookingRunner.Instance?.Unregister(this);
 
-        currentIngredientOnStove = null;
+        rawIngredientOnStove = null;
         isCooking = false;
         isBurned = false;
-        overcookTimer = 0f;
+        cookingElapsed = 0f;
+        cookingTotalTime = 0f;
+        burnedClearAt = -1f;
+
+        GameAudioManager.Instance?.StopStoveSizzle();
+        stationAnimator?.ResetToIdle();
+        surfaceVisual?.HideIngredient();
+        surfaceVisual?.SetProgressBarVisible(false);
         OnProgressUpdated?.Invoke(0f);
+        OnStoveCleared?.Invoke();
     }
 
-    private void HandleGameStateChanged(GameStateMachine.GameState newState)
+    private static bool TryResolveCookableSingleItem(PlayerInventory inventory, out IngredientData ingredient)
     {
-        isUnderThreat = (newState != GameStateMachine.GameState.Gameplay);
-
-        if (animator != null)
-            animator.SetBool("IsUnderThreat", isUnderThreat);
-
+        return inventory.TryGetSelectedSingleIngredient(out ingredient, item => item.RequiresCooking);
     }
 }

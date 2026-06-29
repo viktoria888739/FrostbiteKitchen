@@ -1,9 +1,0 @@
-namespace FrostbiteKitchen.Core
-{
-    public interface IGameState
-    {
-        void Enter();
-        void Update();
-        void Exit();
-    }
-}

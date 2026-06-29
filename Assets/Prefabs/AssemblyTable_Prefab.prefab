@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxIngredients: 6
-  tableVisual: {fileID: 0}
+  tableVisual: {fileID: 4961209242219837759}
 --- !u!1 &2956423641977401422
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,4 +181,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FrostbiteKitchen.KitchenStation.AssemblyTableVisual
   tableSlotImage: {fileID: 7881562255079609716}
   emptyPlateSprite: {fileID: 0}
-  combinedDishSprite: {fileID: 0}
+  spoiledDishSprite: {fileID: 21300000, guid: e7d3bee8bfd1d3c4e97205da64e41798, type: 3}
+  recipeCatalog: {fileID: 11400000, guid: 15aafa0478d90de4e9d1d8d1eb03a1b3, type: 2}

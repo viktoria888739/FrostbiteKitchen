@@ -23,7 +23,6 @@ public class PauseMenuController : MonoBehaviour
         if (resumeButton != null) resumeButton.onClick.AddListener(TogglePauseState);
         if (exitButton != null) exitButton.onClick.AddListener(OnExitPressed);
 
-        // Подписываем новые кнопки
         if (settingsButton != null) settingsButton.onClick.AddListener(OpenSettings);
         if (closeSettingsButton != null) closeSettingsButton.onClick.AddListener(CloseSettings);
 

@@ -1,57 +1,100 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using FrostbiteKitchen.Gameplay;
 
 namespace FrostbiteKitchen.Threats
 {
-    public class BlindsToggle : MonoBehaviour, IPointerClickHandler, IInteractable
+    public class BlindsToggle : MonoBehaviour, IInteractable
     {
-        private RectTransform rectTransform;
-        private bool isClosed = false;
+        [Header("Спрайты жалюзи")]
+        [SerializeField] private Image blindsImage;
+        [SerializeField] private Sprite openSprite;
+        [SerializeField] private Sprite closedSprite;
 
-        [Header("Высота жалюзи")]
+        [Header("Размер UI (ширина берётся из сцены)")]
         [SerializeField] private float openHeight = 60f;
         [SerializeField] private float closedHeight = 450f;
 
-        private void Start()
+        private RectTransform rectTransform;
+        private float fixedWidth;
+        private bool isClosed;
+        private int lastInteractFrame = -1;
+
+        public bool IsClosed => isClosed;
+
+        private void Awake()
         {
-            rectTransform = GetComponent<RectTransform>();
-            SetBlindsHeight(openHeight);
+            if (blindsImage == null)
+                blindsImage = GetComponent<Image>();
+
+            rectTransform = blindsImage != null ? blindsImage.rectTransform : GetComponent<RectTransform>();
+            if (rectTransform != null)
+                fixedWidth = rectTransform.sizeDelta.x;
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        private void Start()
         {
-            Interact();
+            ApplyVisual(closed: false);
         }
 
         public void Interact()
         {
-            isClosed = !isClosed;
+            if (Time.frameCount == lastInteractFrame)
+                return;
 
-            if (isClosed)
-            {
-                SetBlindsHeight(closedHeight);
-                Debug.Log("<color=red>[ЖАЛЮЗИ] Окно ЗАКРЫТО — вращение заблокировано</color>");
-
-                ViewRotationBlocker.SetBlock(true);
-
-                if (ThreatManager.Instance != null)
-                    ThreatManager.Instance.PlayerDefendedThreat(null);
-            }
-            else
-            {
-                SetBlindsHeight(openHeight);
-                Debug.Log("<color=green>[ЖАЛЮЗИ] Окно ОТКРЫТО — вращение разрешено</color>");
-
-                ViewRotationBlocker.SetBlock(false);
-            }
+            lastInteractFrame = Time.frameCount;
+            SetBlindsState(!isClosed);
         }
 
-        private void SetBlindsHeight(float height)
+        public void SetBlindsState(bool closed)
         {
+            if (isClosed == closed)
+                return;
+
+            if (closed)
+            {
+                isClosed = true;
+                ApplyVisual(true);
+                ViewRotationBlocker.PushBlock();
+                GameAudioManager.Instance?.PlayBlindsClose();
+
+                if (ThreatManager.Instance != null && ThreatManager.Instance.IsActiveThreatOn(KitchenSide.Front))
+                    ThreatManager.Instance.PlayerDefendedThreat(KitchenSide.Front);
+
+                Debug.Log("<color=red>[ЖАЛЮЗИ] Окно закрыто</color>");
+                return;
+            }
+
+            isClosed = false;
+            ApplyVisual(false);
+            ViewRotationBlocker.PopBlock();
+            GameAudioManager.Instance?.PlayBlindsOpen();
+            Debug.Log("<color=green>[ЖАЛЮЗИ] Окно открыто</color>");
+        }
+
+        public void ForceOpen()
+        {
+            if (!isClosed)
+                return;
+
+            isClosed = false;
+            ApplyVisual(false);
+            ViewRotationBlocker.PopBlock();
+        }
+
+        private void ApplyVisual(bool closed)
+        {
+            if (blindsImage != null)
+            {
+                Sprite targetSprite = closed ? closedSprite : openSprite;
+                if (targetSprite != null)
+                    blindsImage.sprite = targetSprite;
+            }
+
             if (rectTransform != null)
             {
-                rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, height);
+                float targetHeight = closed ? closedHeight : openHeight;
+                rectTransform.sizeDelta = new Vector2(fixedWidth, targetHeight);
             }
         }
     }

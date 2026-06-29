@@ -1,109 +1,104 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class VisualWarningManager : MonoBehaviour
 {
-    [Header("UI Элементы")]
-    [SerializeField] private Image warningImage; // Ссылка на ваш UI Image
-    [SerializeField] private float blinkSpeed = 5f; // Скорость мигания (сделаем быстрее для опасности)
-    [SerializeField] private float steadyAlpha = 0.4f; // Прозрачность индикатора, когда он просто горит (от 0 до 1)
+    [SerializeField] private Image warningImage;
+    [SerializeField] private float blinkSpeed = 3f;
+    [SerializeField] private float hiddenAlpha = 0f;
+    [SerializeField] private float blinkMinAlpha = 0.25f;
+    [SerializeField] private float blinkMaxAlpha = 1f;
 
-    private bool hasActiveThreat = false;
-    private KitchenSide currentThreatLocation;
-    private KitchenSide currentPlayerView;
+    private bool isWarningActive;
+    private bool isPlayerFacingThreat;
+    private float blinkTimer;
 
-    private Coroutine blinkCoroutine;
-    private Color originalColor;
-
-    private void Start()
+    private void Awake()
     {
-        if (warningImage != null)
+        if (warningImage == null)
+            warningImage = GetComponent<Image>();
+
+        HideWarning();
+    }
+
+    private void OnEnable()
+    {
+        ThreatManager.OnThreatStarted += HandleThreatStarted;
+        ThreatManager.OnThreatCleared += HideWarning;
+        ThreatManager.OnThreatFailed += HideWarning;
+    }
+
+    private void OnDisable()
+    {
+        ThreatManager.OnThreatStarted -= HandleThreatStarted;
+        ThreatManager.OnThreatCleared -= HideWarning;
+        ThreatManager.OnThreatFailed -= HideWarning;
+    }
+
+    private void Update()
+    {
+        if (!isWarningActive || warningImage == null)
+            return;
+
+        if (isPlayerFacingThreat)
         {
-            originalColor = warningImage.color;
-            warningImage.gameObject.SetActive(false);
+            SetAlpha(hiddenAlpha);
+            return;
         }
+
+        blinkTimer += Time.deltaTime * blinkSpeed;
+        float alpha = Mathf.Lerp(blinkMinAlpha, blinkMaxAlpha, (Mathf.Sin(blinkTimer) + 1f) * 0.5f);
+        SetAlpha(alpha);
     }
 
-    /// <summary>
-    /// Включает предупреждение и запоминает, где монстр
-    /// </summary>
-    public void ShowWarning(KitchenSide threatLocation)
+    public void UpdatePlayerView(KitchenSide currentSide)
     {
-        hasActiveThreat = true;
-        currentThreatLocation = threatLocation;
+        if (!isWarningActive || ThreatManager.Instance == null)
+            return;
 
-        UpdateWarningState();
+        isPlayerFacingThreat = ThreatManager.Instance.ActiveSide == currentSide;
+        blinkTimer = 0f;
     }
 
-    /// <summary>
-    /// Выключает предупреждение
-    /// </summary>
+    private void HandleThreatStarted(KitchenSide side)
+    {
+        ShowWarning(side);
+
+        KitchenRotation rotation = Object.FindFirstObjectByType<KitchenRotation>();
+        if (rotation != null)
+            UpdatePlayerView(rotation.CurrentSide);
+    }
+
+    public void ShowWarning(KitchenSide side)
+    {
+        isWarningActive = true;
+        isPlayerFacingThreat = false;
+        blinkTimer = 0f;
+
+        if (warningImage != null)
+            warningImage.gameObject.SetActive(true);
+    }
+
     public void HideWarning()
     {
-        hasActiveThreat = false;
-
-        if (blinkCoroutine != null) StopCoroutine(blinkCoroutine);
+        isWarningActive = false;
+        isPlayerFacingThreat = false;
+        blinkTimer = 0f;
 
         if (warningImage != null)
         {
+            SetAlpha(hiddenAlpha);
             warningImage.gameObject.SetActive(false);
         }
     }
 
-    /// <summary>
-    /// Этот метод нужно вызывать из вашего скрипта поворота камер, когда игрок меняет обзор!
-    /// </summary>
-    public void UpdatePlayerView(KitchenSide newView)
+    private void SetAlpha(float alpha)
     {
-        currentPlayerView = newView;
+        if (warningImage == null)
+            return;
 
-        // Если в игре сейчас есть монстр, проверяем состояние заново при каждом повороте
-        if (hasActiveThreat)
-        {
-            UpdateWarningState();
-        }
-    }
-
-    /// <summary>
-    /// Проверяет, совпадает ли взгляд игрока с монстром, и выбирает режим (мигание или покой)
-    /// </summary>
-    private void UpdateWarningState()
-    {
-        if (warningImage == null) return;
-
-        warningImage.gameObject.SetActive(true);
-
-        // Если игрок смотрит ТУДА ЖЕ, где монстр — запускаем мигание
-        if (currentPlayerView == currentThreatLocation)
-        {
-            if (blinkCoroutine == null)
-            {
-                blinkCoroutine = StartCoroutine(BlinkRoutine());
-            }
-        }
-        else // Если монстр на другой стороне — индикатор просто горит
-        {
-            if (blinkCoroutine != null)
-            {
-                StopCoroutine(blinkCoroutine);
-                blinkCoroutine = null;
-            }
-            // Устанавливаем фиксированную невысокую прозрачность
-            warningImage.color = new Color(originalColor.r, originalColor.g, originalColor.b, steadyAlpha);
-        }
-    }
-
-    /// <summary>
-    /// Корутина мигания
-    /// </summary>
-    private IEnumerator BlinkRoutine()
-    {
-        while (true)
-        {
-            float alpha = Mathf.PingPong(Time.time * blinkSpeed, 1f);
-            warningImage.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-            yield return null;
-        }
+        Color color = warningImage.color;
+        color.a = alpha;
+        warningImage.color = color;
     }
 }
