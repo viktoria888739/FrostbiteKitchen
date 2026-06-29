@@ -141,6 +141,9 @@ public class IssueWindowCustomerPresenter : MonoBehaviour, IInteractable
 
         voiceAudioSource.playOnAwake = false;
         voiceAudioSource.spatialBlend = 0f;
+
+        if (GameAudioManager.Instance != null && GameAudioManager.Instance.SfxMixerGroup != null)
+            voiceAudioSource.outputAudioMixerGroup = GameAudioManager.Instance.SfxMixerGroup;
     }
 
     private void EnsureClickableTargets()
@@ -290,6 +293,8 @@ public class IssueWindowCustomerPresenter : MonoBehaviour, IInteractable
     {
         if (clip == null && GameAudioManager.Instance != null)
             clip = GameAudioManager.Instance.GetRandomCustomerVoice();
+
+        EnsureVoiceSource();
 
         if (clip == null || voiceAudioSource == null)
             return;

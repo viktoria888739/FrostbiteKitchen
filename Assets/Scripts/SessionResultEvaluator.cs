@@ -50,7 +50,11 @@ public class SessionResultEvaluator : MonoBehaviour
     }
     public void EvaluateSessionResult()
     {
-        if (CurrentResult == SessionStatus.GameOverByMonster) return;
+        if (CurrentResult == SessionStatus.GameOverByMonster)
+        {
+            GameAudioManager.Instance?.PlaySessionGameOver();
+            return;
+        }
 
         int completed = SessionStatistics.Instance != null ? SessionStatistics.Instance.completedOrders : 0;
         int failed = SessionStatistics.Instance != null ? SessionStatistics.Instance.failedOrders : 0;

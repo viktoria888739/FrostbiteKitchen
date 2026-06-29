@@ -105,6 +105,7 @@ public class ThreatManager : MonoBehaviour
 
         chosenSpawner.ActivateThreat();
         OnThreatStarted?.Invoke(activeSide);
+        GameAudioManager.Instance?.PlayThreatSpawn(activeSide);
 
         if (activeThreatCoroutine != null)
             StopCoroutine(activeThreatCoroutine);

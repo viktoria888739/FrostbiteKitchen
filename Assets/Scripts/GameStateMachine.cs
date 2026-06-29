@@ -192,6 +192,7 @@ public class GameStateMachine : MonoBehaviour
         }
 
         screamer.SetActive(true);
+        GameAudioManager.Instance?.PlayJumpscare();
         Debug.Log("[GameStateMachine] Показан экран скримера.");
 
         float duration = Mathf.Max(0f, UnityEngine.Random.Range(screamerMinDuration, screamerMaxDuration));

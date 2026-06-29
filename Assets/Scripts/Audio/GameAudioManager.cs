@@ -1,12 +1,19 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 [DefaultExecutionOrder(-50)]
 public class GameAudioManager : MonoBehaviour
 {
     public static GameAudioManager Instance { get; private set; }
 
+    private const string SavedVolumeKey = "SavedMasterVolume";
+    private const string MasterVolumeParam = "MasterVolume";
+
     [SerializeField] private GameAudioLibrary library;
+    [SerializeField] private AudioMixer mainMixer;
     [SerializeField] private AudioMixerGroup sfxMixerGroup;
     [SerializeField] private AudioMixerGroup musicMixerGroup;
     [SerializeField] private AudioMixerGroup ambientMixerGroup;
@@ -15,6 +22,9 @@ public class GameAudioManager : MonoBehaviour
     private AudioSource musicSource;
     private AudioSource ambientSource;
     private AudioSource loopSource;
+    private readonly HashSet<Button> wiredUiButtons = new HashSet<Button>();
+
+    public AudioMixerGroup SfxMixerGroup => sfxMixerGroup;
 
     private void Awake()
     {
@@ -30,10 +40,88 @@ public class GameAudioManager : MonoBehaviour
         if (library == null)
             library = Resources.Load<GameAudioLibrary>("GameAudioLibrary");
 
+        ResolveMixerGroups();
+        ApplySavedMasterVolume();
+
         sfxSource = CreateSource("SFX", sfxMixerGroup);
         musicSource = CreateSource("Music", musicMixerGroup, loop: true);
         ambientSource = CreateSource("Ambient", ambientMixerGroup, loop: true);
         loopSource = CreateSource("Loop", sfxMixerGroup, loop: true);
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += HandleSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= HandleSceneLoaded;
+    }
+
+    private void Start()
+    {
+        WireUiButtonSounds();
+    }
+
+    private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        WireUiButtonSounds();
+    }
+
+    private void ResolveMixerGroups()
+    {
+        if (mainMixer == null)
+            return;
+
+        AudioMixerGroup[] groups = mainMixer.FindMatchingGroups(string.Empty);
+        foreach (AudioMixerGroup group in groups)
+        {
+            if (group == null)
+                continue;
+
+            switch (group.name)
+            {
+                case "SFX" when sfxMixerGroup == null:
+                    sfxMixerGroup = group;
+                    break;
+                case "Music" when musicMixerGroup == null:
+                    musicMixerGroup = group;
+                    break;
+                case "Ambient" when ambientMixerGroup == null:
+                    ambientMixerGroup = group;
+                    break;
+            }
+        }
+
+        if (ambientMixerGroup == null)
+            ambientMixerGroup = musicMixerGroup;
+    }
+
+    private void ApplySavedMasterVolume()
+    {
+        if (mainMixer == null)
+            return;
+
+        float savedVolume = PlayerPrefs.GetFloat(SavedVolumeKey, 0.5f);
+        float dbValue = savedVolume > 0.0001f ? Mathf.Log10(savedVolume) * 20f : -80f;
+        mainMixer.SetFloat(MasterVolumeParam, dbValue);
+    }
+
+    private void WireUiButtonSounds()
+    {
+        Button[] buttons = Object.FindObjectsByType<Button>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
+
+        foreach (Button button in buttons)
+        {
+            if (button == null || wiredUiButtons.Contains(button))
+                continue;
+
+            button.onClick.AddListener(PlayUiClick);
+            wiredUiButtons.Add(button);
+        }
     }
 
     private AudioSource CreateSource(string name, AudioMixerGroup group, bool loop = false)
